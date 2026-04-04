@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MAMTTODA Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fraunces:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../css/admin_dashboard.css">
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <span class="logo">MAMTTODA ADMIN</span>
+  <div class="nav-links">
+    <button>Announcements</button>
+    <button>Fare List</button>
+    <button>Meeting Schedule</button>
+    <button>Driver Coding</button>
+  </div>
+  <div class="spacer"></div>
+  <div class="search-wrap">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" placeholder="Quick search…"/>
+  </div>
+  <button class="icon-btn" title="Notifications">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+  </button>
+  <button class="icon-btn" title="Settings">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+  </button>
+  <div class="avatar">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+  </div>
+  <button class="btn-logout">Logout</button>
+</nav>
+
+<!-- APP BODY -->
+<div class="app-body">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">
+        <svg width="20" height="20" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="12" rx="2"/><path d="M7 17v2M17 17v2M2 10h20"/></svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">Admin Portal</span>
+        <span class="brand-sub">The Civic Editorial</span>
+      </div>
+    </div>
+
+    <button class="nav-item active" data-page="dashboard">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </button>
+    <button class="nav-item" data-page="members">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Members
+    </button>
+    <button class="nav-item">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Contributions
+    </button>
+    <button class="nav-item">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      Lost &amp; Found
+    </button>
+    <button class="nav-item">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      Reports
+    </button>
+
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-help">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Help Center
+    </div>
+    <button class="btn-new-entry">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      New Entry
+    </button>
+  </aside>
+
+  <!-- MAIN AREA -->
+  <main class="main">
+
+    <!-- ── DASHBOARD PAGE ── -->
+    <div id="page-dashboard">
+      <div class="page-header">
+        <h1>Admin Dashboard</h1>
+        <div class="meta"><span class="status-dot"></span> Monday, Oct 24 &nbsp;•&nbsp; System Operational</div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="card contrib">
+          <div class="contrib-label">Total Contributions</div>
+          <div class="contrib-amount">₱142,850.00</div>
+          <div class="contrib-note">Weekly collection report for Oct 17–Oct 23. Up 12.5% from last month's average performance.</div>
+        </div>
+        <div class="side-cards">
+          <div class="card drivers">
+            <div class="stat-label">Active Drivers</div>
+            <div class="stat-num">248</div>
+            <div class="stat-sub">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Currently Plying Routes
+            </div>
+          </div>
+          <div class="card lost">
+            <div class="stat-label">Lost Items</div>
+            <div class="stat-num">14</div>
+            <div class="stat-link" onclick="switchPage('members')">Review submissions →</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-grid">
+        <div class="card">
+          <div class="section-title">Recent Activity</div>
+          <div class="section-sub">Latest system events and admin actions</div>
+          <div class="activity-list">
+            <div class="activity-item">
+              <div class="act-icon">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+              </div>
+              <div class="act-info">
+                <div class="act-title">Fare List Updated</div>
+                <div class="act-desc">Admin Juan Dela Cruz modified route Zone 4</div>
+              </div>
+              <div class="act-time">14:20 PM</div>
+            </div>
+            <div class="activity-item">
+              <div class="act-icon">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <div class="act-info">
+                <div class="act-title">New Driver Registered</div>
+                <div class="act-desc">Unit #8822 approved for service</div>
+              </div>
+              <div class="act-time">11:05 AM</div>
+            </div>
+            <div class="activity-item">
+              <div class="act-icon">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+              <div class="act-info">
+                <div class="act-title">Emergency Announcement</div>
+                <div class="act-desc">Road closure broadcast sent to all drivers</div>
+              </div>
+              <div class="act-time">09:45 AM</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="promo-card">
+          <div class="hex-bg"></div>
+          <div class="plus-btn">+</div>
+          <div class="promo-headline">Civic Excellence<br>Every Single Day.</div>
+          <div class="promo-desc">Manage driver schedules and community notices with the MAMTTODA editorial standard.</div>
+          <div class="promo-btns">
+            <button class="promo-btn white">Broadcast Notice</button>
+            <button class="promo-btn dark">Edit Coding</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MEMBERS PAGE ── -->
+    <div id="page-members">
+      <div class="page-header">
+        <div class="meta" style="margin-bottom:4px">Member Registry</div>
+        <h1>The Fleet<br><em>Ledger.</em></h1>
+      </div>
+
+      <div class="members-stats">
+        <div class="mstat total">
+          <div class="mstat-label">Total Members</div>
+          <div style="display:flex;align-items:flex-end;gap:10px">
+            <div class="mstat-num">400</div>
+            <svg class="silhouette" width="90" height="70" viewBox="0 0 90 70" fill="none"><ellipse cx="45" cy="20" rx="18" ry="18" fill="currentColor"/><path d="M10 68c0-19.33 15.67-35 35-35s35 15.67 35 35" fill="currentColor"/></svg>
+          </div>
+          <div class="mstat-badge">↑ 12%</div>
+        </div>
+        <div class="mstat">
+          <div class="mstat-label">Active</div>
+          <div class="mstat-num" style="color:#15803d">250</div>
+        </div>
+        <div class="mstat">
+          <div class="mstat-label">Inactive</div>
+          <div class="mstat-num" style="color:var(--text-muted)">50</div>
+        </div>
+        <div class="mstat suspended">
+          <div class="mstat-label">Suspended</div>
+          <div class="mstat-num">100</div>
+          <div class="mstat-note">Requires administrative review of coding violations.</div>
+          <div class="mstat-link">View Appeals →</div>
+        </div>
+      </div>
+
+      <div class="roster-section">
+        <div class="roster-header">
+          <div>
+            <div class="roster-title">Active Roster</div>
+            <div class="roster-sub">Managing 400 authorized transport personnel.</div>
+          </div>
+          <div class="roster-controls">
+            <button class="filter-btn">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+              Status: All
+            </button>
+            <div class="search-field">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <input type="text" placeholder="Search name or body no…" id="member-search"/>
+            </div>
+          </div>
+        </div>
+
+        <table class="roster-table">
+          <thead>
+            <tr>
+              <th>Member Identity</th>
+              <th>Body Number</th>
+              <th>Status</th>
+              <th>Last Contribution</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="roster-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal">
+    <div class="modal-tag">Administrative Control</div>
+    <div class="modal-title-row">
+      <div class="modal-title">Edit Member Profile</div>
+      <div class="modal-edt">EDT</div>
+    </div>
+    <div class="modal-sub">Updating records for <strong id="modal-name">Juan Dela Cruz (#2055)</strong></div>
+
+    <div class="modal-field">
+      <label class="modal-label">Update Member Status</label>
+      <div class="select-wrap">
+        <select class="modal-select" id="modal-status">
+          <option>Active</option>
+          <option>Inactive</option>
+          <option selected>Suspended (Violation)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="modal-row">
+      <div class="modal-field">
+        <label class="modal-label">Body Number</label>
+        <div class="input-prefix">
+          <span>#</span>
+          <input class="modal-input" id="modal-body" type="text" value="2055"/>
+        </div>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Last Contribution (PHP)</label>
+        <div class="input-prefix">
+          <span>₱</span>
+          <input class="modal-input" id="modal-contrib" type="text" value="250.00"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-note">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <p>Changes to status will be logged in the system ledger. Suspension status prevents member participation in upcoming quarterly meetings.</p>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" id="modal-cancel">Cancel</button>
+      <button class="btn-save" id="modal-save">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Save Member Profile
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/admin_dashboad.js"></script>
+</body>
+</html>

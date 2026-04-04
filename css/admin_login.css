@@ -1,0 +1,360 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --crimson:       #8B0000;
+    --crimson-deep:  #6A0000;
+    --crimson-light: #B22222;
+    --crimson-glow:  rgba(139,0,0,0.18);
+    --blush:         #F5EDED;
+    --blush-mid:     #EDD9D9;
+    --cream:         #FAF6F6;
+    --text-dark:     #2C1A1A;
+    --text-mid:      #6B4040;
+    --text-muted:    #A07070;
+    --white:         #FFFFFF;
+    --card-shadow:   0 8px 40px rgba(139,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
+}
+
+html, body {
+    height: 100%;
+    font-family: 'Barlow', sans-serif;
+}
+
+body {
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ── Split background ── */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+    linear-gradient(135deg, var(--blush) 0%, var(--cream) 55%, var(--blush-mid) 100%);
+    z-index: 0;
+}
+
+/* Subtle bus-route lines in background */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+    repeating-linear-gradient(
+        -30deg,
+        transparent,
+        transparent 60px,
+        rgba(139,0,0,0.035) 60px,
+        rgba(139,0,0,0.035) 61px
+    );
+    z-index: 0;
+}
+
+/* Decorative circle blobs */
+.blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(60px);
+    z-index: 0;
+    pointer-events: none;
+}
+.blob-1 {
+    width: 420px; height: 420px;
+    background: radial-gradient(circle, rgba(139,0,0,0.12), transparent 70%);
+    top: -100px; right: -60px;
+}
+.blob-2 {
+    width: 340px; height: 340px;
+    background: radial-gradient(circle, rgba(176,80,80,0.10), transparent 70%);
+    bottom: -80px; left: -60px;
+}
+
+/* ── Main wrapper ── */
+.page-wrapper {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 520px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+
+/* ── Header / Branding ── */
+.branding {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+    animation: fadeDown 0.7s ease both;
+}
+
+.icon-wrap {
+    width: 68px; height: 68px;
+    background: var(--white);
+    border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 24px rgba(139,0,0,0.18), 0 1px 4px rgba(0,0,0,0.08);
+    position: relative;
+    overflow: hidden;
+}
+.icon-wrap::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(245,237,237,0.7));
+}
+.icon-wrap svg {
+    position: relative;
+    z-index: 1;
+}
+
+.brand-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.7rem;
+    letter-spacing: 0.18em;
+    color: var(--text-dark);
+}
+
+.brand-sub {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.78rem;
+    color: var(--text-mid);
+    letter-spacing: 0.04em;
+    margin-top: -10px;
+    text-align: center;
+}
+
+/* ── Card ── */
+.card {
+    width: 100%;
+    background: var(--white);
+    border-radius: 20px;
+    padding: 40px 44px 44px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid rgba(139,0,0,0.07);
+    animation: fadeUp 0.75s 0.1s ease both;
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--crimson-deep), var(--crimson-light), var(--crimson-deep));
+    border-radius: 20px 20px 0 0;
+}
+
+/* ── Field group ── */
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--text-mid);
+    text-transform: uppercase;
+}
+
+.input-wrap {
+    position: relative;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 13px 16px 13px 44px;
+    background: var(--blush);
+    border: 1.5px solid transparent;
+    border-radius: 10px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.92rem;
+    color: var(--text-dark);
+    outline: none;
+    transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+}
+
+input[type="text"]::placeholder,
+input[type="password"]::placeholder {
+    color: var(--text-muted);
+    font-style: italic;
+    font-size: 0.85rem;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: var(--crimson);
+    background: var(--white);
+    box-shadow: 0 0 0 3px var(--crimson-glow);
+}
+
+.input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+    transition: color 0.25s;
+}
+
+.input-wrap:focus-within .input-icon {
+    color: var(--crimson);
+}
+
+/* eye toggle */
+.eye-toggle {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+}
+.eye-toggle:hover { color: var(--crimson); }
+
+/* ── Login button ── */
+.btn-login {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(160deg, var(--crimson-light) 0%, var(--crimson-deep) 100%);
+    color: var(--white);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.18s, box-shadow 0.18s;
+    box-shadow: 0 4px 20px rgba(139,0,0,0.35);
+}
+
+.btn-login::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.12) 50%, transparent 100%);
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+}
+
+.btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(139,0,0,0.45);
+}
+
+.btn-login:hover::after {
+    transform: translateX(100%);
+}
+
+.btn-login:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 12px rgba(139,0,0,0.3);
+}
+
+.btn-login.loading {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+/* spinner inside button */
+.spinner {
+    display: none;
+    width: 18px; height: 18px;
+    border: 2.5px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin: 0 auto;
+}
+.btn-login.loading .btn-text { display: none; }
+.btn-login.loading .spinner  { display: block; }
+
+/* ── Error message ── */
+.error-msg {
+    display: none;
+    margin-top: 16px;
+    padding: 10px 14px;
+    background: rgba(139,0,0,0.06);
+    border-left: 3px solid var(--crimson);
+    border-radius: 0 8px 8px 0;
+    font-size: 0.82rem;
+    color: var(--crimson);
+    font-family: 'Barlow', sans-serif;
+    animation: shake 0.4s ease;
+}
+.error-msg.visible { display: block; }
+
+/* ── Footer ── */
+.footer {
+    margin-top: 28px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    animation: fadeUp 0.8s 0.25s ease both;
+}
+
+.footer-line {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+/* ── Keyframes ── */
+@keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25%       { transform: translateX(-6px); }
+    75%       { transform: translateX(6px); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+    .card { padding: 32px 24px 36px; }
+}
