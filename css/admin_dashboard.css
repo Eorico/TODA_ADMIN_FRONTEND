@@ -71,14 +71,6 @@ body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--te
 .sidebar-spacer { flex: 1; }
 .sidebar-help { display: flex; align-items: center; gap: 8px; padding: 8px 10px; font-size: 12px; color: var(--text-muted); cursor: pointer; }
 .sidebar-help:hover { color: var(--text-dark); }
-.btn-new-entry {
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  width: 100%; padding: 10px; background: var(--crimson); color: white;
-  border: none; border-radius: 10px; font-family: 'Barlow Condensed', sans-serif;
-  font-size: 14px; font-weight: 700; letter-spacing: .5px; cursor: pointer; margin-top: 8px;
-  transition: background .2s;
-}
-.btn-new-entry:hover { background: var(--crimson-deep); }
 
 /* ── MAIN ── */
 .main { margin-left: var(--sidebar-w); flex: 1; padding: 32px 36px; }
