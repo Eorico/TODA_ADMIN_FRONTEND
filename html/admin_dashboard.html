@@ -58,17 +58,29 @@
       <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       Members
     </button>
-    <button class="nav-item">
+    <button class="nav-item" data-page="contributions">
       <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
       Contributions
     </button>
-    <button class="nav-item">
+    <button class="nav-item" data-page="lostfound">
       <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       Lost &amp; Found
     </button>
-    <button class="nav-item">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-      Reports
+    <button class="nav-item" data-page="drivers">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="12" rx="2"/><path d="M7 17v2M17 17v2M2 10h20"/></svg>
+      Drivers Registry
+    </button>
+    <button class="nav-item" data-page="announcements">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      Announcements
+    </button>
+    <button class="nav-item" data-page="officers">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      Officers
+    </button>
+    <button class="nav-item" data-page="coding">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+      Tricycle Coding
     </button>
 
     <div class="sidebar-spacer"></div>
@@ -85,8 +97,8 @@
   <!-- MAIN AREA -->
   <main class="main">
 
-    <!-- ── DASHBOARD PAGE ── -->
-    <div id="page-dashboard">
+    <!-- DASHBOARD PAGE -->
+    <div id="page-dashboard" class="active">
       <div class="page-header">
         <h1>Admin Dashboard</h1>
         <div class="meta"><span class="status-dot"></span> Monday, Oct 24 &nbsp;•&nbsp; System Operational</div>
@@ -110,7 +122,7 @@
           <div class="card lost">
             <div class="stat-label">Lost Items</div>
             <div class="stat-num">14</div>
-            <div class="stat-link" onclick="switchPage('members')">Review submissions →</div>
+            <div class="stat-link" onclick="switchPage('lostfound')">Review submissions →</div>
           </div>
         </div>
       </div>
@@ -166,7 +178,7 @@
       </div>
     </div>
 
-    <!-- ── MEMBERS PAGE ── -->
+    <!-- MEMBERS PAGE -->
     <div id="page-members">
       <div class="page-header">
         <div class="meta" style="margin-bottom:4px">Member Registry</div>
@@ -231,7 +243,1118 @@
       </div>
     </div>
 
+    <!-- LOST & FOUND PAGE -->
+    <div id="page-lostfound">
+
+      <!-- LEFT COLUMN -->
+      <div class="lf-left">
+
+        <!-- Header -->
+        <div class="lf-header">
+          <div class="lf-icon-wrap">
+            <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          </div>
+          <div class="lf-header-text">
+            <div class="lf-title">Post Lost &amp; Found Item</div>
+            <div class="lf-subtitle">Help Reunite Passengers With Their Belongings</div>
+          </div>
+        </div>
+
+        <!-- Post Form Card -->
+        <div class="lf-form-card">
+          <div class="lf-section-label">Item Photo</div>
+          <div class="lf-photo-area" id="lf-photo-area" onclick="document.getElementById('lf-file-input').click()">
+            <svg class="photo-icon" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <div class="photo-tap">Tap to upload or take a photo</div>
+            <div class="photo-hint">High Resolution Preferred</div>
+            <div class="photo-overlay"><span>Change Photo</span></div>
+          </div>
+          <input type="file" id="lf-file-input" accept="image/*"/>
+
+          <div class="lf-field">
+            <label class="lf-label">Item Name</label>
+            <input class="lf-input" id="lf-item-name" type="text" placeholder="e.g., Black Leather Wallet"/>
+          </div>
+
+          <div class="lf-row">
+            <div class="lf-field">
+              <label class="lf-label">Tricycle Body #</label>
+              <input class="lf-input" id="lf-body-num" type="text" placeholder="e.g., 2045"/>
+            </div>
+            <div class="lf-field">
+              <label class="lf-label">Date Found</label>
+              <input class="lf-input" id="lf-date" type="date"/>
+            </div>
+          </div>
+
+          <button class="lf-submit" onclick="submitLostFound()">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            POST ITEM TO BULLETIN
+          </button>
+          <div class="lf-submit-note">Once posted, this will be visible to all members and on the public dashboard.</div>
+        </div>
+
+        <!-- Posted Items List -->
+        <div class="lf-items-list">
+          <div class="lf-items-title">Active Submissions</div>
+          <div class="lf-items-sub">14 items currently on bulletin — pending claim or return.</div>
+
+          <div id="lf-items-container">
+            <div class="lf-item-row">
+              <div class="lf-item-thumb">
+                <svg width="22" height="22" fill="none" stroke="#ccc" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+              </div>
+              <div class="lf-item-info">
+                <div class="lf-item-name">Black Leather Wallet</div>
+                <div class="lf-item-meta">Body #2045 &nbsp;•&nbsp; Found Oct 22</div>
+              </div>
+              <div class="lf-item-status status-pending">Pending</div>
+            </div>
+
+            <div class="lf-item-row">
+              <div class="lf-item-thumb">
+                <svg width="22" height="22" fill="none" stroke="#ccc" stroke-width="1.5" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+              </div>
+              <div class="lf-item-info">
+                <div class="lf-item-name">Samsung Galaxy A54</div>
+                <div class="lf-item-meta">Body #1138 &nbsp;•&nbsp; Found Oct 20</div>
+              </div>
+              <div class="lf-item-status status-claimed">Claimed</div>
+            </div>
+
+            <div class="lf-item-row">
+              <div class="lf-item-thumb">
+                <svg width="22" height="22" fill="none" stroke="#ccc" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              </div>
+              <div class="lf-item-info">
+                <div class="lf-item-name">Child's Red Backpack</div>
+                <div class="lf-item-meta">Body #3301 &nbsp;•&nbsp; Found Oct 19</div>
+              </div>
+              <div class="lf-item-status status-pending">Pending</div>
+            </div>
+
+            <div class="lf-item-row">
+              <div class="lf-item-thumb">
+                <svg width="22" height="22" fill="none" stroke="#ccc" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              </div>
+              <div class="lf-item-info">
+                <div class="lf-item-name">Silver Wristwatch</div>
+                <div class="lf-item-meta">Body #0892 &nbsp;•&nbsp; Found Oct 18</div>
+              </div>
+              <div class="lf-item-status status-pending">Pending</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT SIDEBAR -->
+      <div class="lf-sidebar">
+
+        <!-- General Assembly Card -->
+        <div class="lf-assembly-card">
+          <div class="lf-assembly-header">
+            <div class="assembly-icon">
+              <svg width="18" height="18" fill="none" stroke="#888" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div>
+              <div class="assembly-title">General Assembly</div>
+              <div class="assembly-sub">Upcoming Meetings &amp; Agendas</div>
+            </div>
+          </div>
+
+          <div class="meeting-item">
+            <div class="meeting-date">
+              <div class="meeting-month">OCT</div>
+              <div class="meeting-day">24</div>
+            </div>
+            <div class="meeting-info">
+              <div class="meeting-title">Election of Officers 2024 <span class="meeting-badge">MANDATORY</span></div>
+              <div class="meeting-venue">Venue: Brgy. Hall Multi-Purpose Court | 09:00 AM</div>
+            </div>
+          </div>
+
+          <div class="meeting-item">
+            <div class="meeting-date">
+              <div class="meeting-month">NOV</div>
+              <div class="meeting-day">07</div>
+            </div>
+            <div class="meeting-info">
+              <div class="meeting-title">Q4 Contribution Review</div>
+              <div class="meeting-venue">Venue: MAMTTODA Office | 02:00 PM</div>
+            </div>
+          </div>
+
+          <div class="meeting-item">
+            <div class="meeting-date">
+              <div class="meeting-month">NOV</div>
+              <div class="meeting-day">15</div>
+            </div>
+            <div class="meeting-info">
+              <div class="meeting-title">Route Expansion Discussion <span class="meeting-badge">MANDATORY</span></div>
+              <div class="meeting-venue">Venue: Brgy. Hall | 10:00 AM</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Emergency Alert Card -->
+        <div class="lf-emergency-card">
+          <div class="emergency-label">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            Emergency Alert
+          </div>
+          <div class="emergency-title">Road Maintenance:<br>J. Rizal Ave.</div>
+          <div class="emergency-desc">Expect heavy traffic due to drainage repairs starting Oct 20. Drivers are advised to take alternative routes via Mabini St.</div>
+          <div class="emergency-link">
+            View Map Redirects
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- DRIVERS REGISTRY PAGE -->
+    <div id="page-drivers">
+      <div class="dr-breadcrumb">Organization &nbsp;/&nbsp; Driver Management</div>
+      <div class="dr-page-header">
+        <div>
+          <h1 class="dr-title">Drivers Registry</h1>
+          <p class="dr-desc">Manage the active fleet of TODA Sovereign members. Track member status, vehicle assignments, and contact records in real-time.</p>
+        </div>
+        <div class="dr-header-actions">
+          <button class="dr-filter-btn">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+            Advanced Filters
+          </button>
+          <button class="dr-add-btn" onclick="openDriverModal()">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+            Add New Driver
+          </button>
+        </div>
+      </div>
+
+      <div class="dr-table-card">
+        <table class="dr-table">
+          <thead>
+            <tr>
+              <th>Member Info</th>
+              <th>Body Number</th>
+              <th>Account Status</th>
+              <th>Contact Info</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="driver-table-body"></tbody>
+        </table>
+        <div class="dr-pagination-row">
+          <div class="dr-showing" id="dr-showing">Showing 1 – 4 of 142 total members</div>
+          <div class="dr-pages">
+            <button class="dr-pg-btn" id="dr-prev" onclick="drChangePage(-1)">&#8249;</button>
+            <span id="dr-page-btns"></span>
+            <button class="dr-pg-btn" id="dr-next" onclick="drChangePage(1)">&#8250;</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dr-stats-row">
+        <div class="dr-stat-card dr-stat-dark">
+          <div class="dr-stat-bg-icon">
+            <svg width="60" height="60" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="dr-stat-label">Active Force</div>
+          <div class="dr-stat-num">128</div>
+          <div class="dr-stat-sub">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            +4% from last month
+          </div>
+        </div>
+        <div class="dr-stat-card dr-stat-olive">
+          <div class="dr-stat-bg-icon">
+            <svg width="60" height="60" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div class="dr-stat-label">Pending Reviews</div>
+          <div class="dr-stat-num">14</div>
+          <div class="dr-stat-sub">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Awaiting dispatch clearance
+          </div>
+        </div>
+        <div class="dr-stat-card dr-stat-light">
+          <div class="dr-stat-label" style="color:var(--text-muted)">Fleet Coverage</div>
+          <div class="dr-stat-num" style="color:var(--crimson);font-size:42px">94.2%</div>
+          <div class="dr-coverage-bar"><div class="dr-coverage-fill" style="width:94.2%"></div></div>
+          <div class="dr-stat-sub" style="color:var(--text-muted);margin-top:8px">Routes currently covered</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANNOUNCEMENTS PAGE -->
+    <div id="page-announcements">
+      <div class="ann-breadcrumb">Official Bulletins</div>
+      <h1 class="ann-title">Announcements &amp; Operations</h1>
+      <p class="ann-desc">Real-time updates on association protocols, driver schedules, and community notices for the TODA Sovereign ecosystem.</p>
+
+      <div class="ann-layout">
+
+        <!-- LEFT COLUMN -->
+        <div>
+
+          <!-- Weekly Coding Scheme -->
+          <div class="ann-coding-card">
+            <div class="ann-coding-header">
+              <div style="display:flex;align-items:flex-start;gap:16px;flex:1">
+                <div class="ann-coding-icon">
+                  <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </div>
+                <div class="ann-coding-meta">
+                  <div class="ann-coding-name">Weekly Coding Scheme</div>
+                  <div class="ann-coding-sub">Operational Windows Per Body Number</div>
+                  <div class="ann-coding-date">Last Updated: Oct 12, 2024</div>
+                </div>
+              </div>
+              <div class="ann-coding-btns">
+                <div class="ann-protocol-badge"><span class="dot"></span> Active Protocol</div>
+                <button class="ann-manage-btn">
+                  <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Manage Scheme
+                </button>
+              </div>
+            </div>
+
+            <div class="coding-grid">
+              <div class="coding-day">
+                <div class="coding-day-label">Mon / Wed</div>
+                <div class="coding-day-nums">0 – 2</div>
+                <div class="coding-day-foot">Ending Body No.</div>
+              </div>
+              <div class="coding-day highlight">
+                <div class="coding-day-label">Tue / Thu</div>
+                <div class="coding-day-nums">3 – 5</div>
+                <div class="coding-day-foot" style="color:rgba(255,255,255,.6)">Ending Body No.</div>
+              </div>
+              <div class="coding-day">
+                <div class="coding-day-label">Friday</div>
+                <div class="coding-day-nums">6 – 7</div>
+                <div class="coding-day-foot">Ending Body No.</div>
+              </div>
+              <div class="coding-day">
+                <div class="coding-day-label">Saturday</div>
+                <div class="coding-day-nums">8 – 9</div>
+                <div class="coding-day-foot">Ending Body No.</div>
+              </div>
+              <div class="coding-day open-win">
+                <div class="coding-day-label">Sunday</div>
+                <div class="coding-day-nums">ALL</div>
+                <div class="coding-day-foot" style="color:#7a6000">Open Window</div>
+              </div>
+            </div>
+
+            <div class="coding-note">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span><strong>Note:</strong> Coding is suspended during official holidays and extreme weather conditions (Signal No. 2 or higher). Violators are subject to TODA Administrative penalties as per Article IV, Section 12.</span>
+            </div>
+          </div>
+
+          <!-- Membership Activity -->
+          <div class="ann-activity-card">
+            <div class="ann-activity-header">
+              <div>
+                <div class="ann-activity-title">Membership Activity</div>
+                <div class="ann-activity-sub">Recent status changes and driver activity</div>
+              </div>
+              <div class="ann-activity-actions">
+                <button class="ann-act-btn">
+                  <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                  Filter
+                </button>
+                <button class="ann-act-btn">
+                  <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  Export
+                </button>
+              </div>
+            </div>
+            <table class="activity-table">
+              <thead>
+                <tr>
+                  <th>Driver Name</th>
+                  <th>Body Number</th>
+                  <th>Route Group</th>
+                  <th>Last Activity</th>
+                  <th>Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="ma-name-cell"><div class="ma-avatar">RJ</div><div class="ma-name">Ricardo Jose</div></div></td>
+                  <td>#345</span></td>
+                  <td>Northbound Express</span></td>
+                  <td>Oct 24, 14:22</span></td>
+                  <td><div class="dr-status"><div class="dr-status-dot active"></div><div class="dr-status-label active">Active</div></div></span></td>
+                  <td class="ma-chevron">›</span></td>
+                </tr>
+                <tr>
+                  <td><div class="ma-name-cell"><div class="ma-avatar">AS</div><div class="ma-name">Antonio Santos</div></div></span></td>
+                  <td>#112</span></td>
+                  <td>Central Loop</span></td>
+                  <td>Oct 23, 09:15</span></td>
+                  <td><div class="dr-status"><div class="dr-status-dot inactive"></div><div class="dr-status-label inactive">Inactive</div></div></span></td>
+                  <td class="ma-chevron">›</span></td>
+                </tr>
+                <tr>
+                  <td><div class="ma-name-cell"><div class="ma-avatar">EM</div><div class="ma-name">Eduardo Manuel</div></div></span></td>
+                  <td>#088</span></td>
+                  <td>South Market</span></td>
+                  <td>Oct 21, 11:45</span></td>
+                  <td><div class="dr-status"><div class="dr-status-dot suspended"></div><div class="dr-status-label suspended">Suspended</div></div></span></td>
+                  <td class="ma-chevron">›</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Banner CTAs -->
+          <div class="ann-banner-grid">
+            <div class="ann-banner broadcast" onclick="document.getElementById('broadcast-panel-wrap').scrollIntoView({behavior:'smooth'})">
+              <div class="ann-banner-icon">
+                <svg width="22" height="22" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              </div>
+              <div class="ann-banner-text">
+                <div class="ann-banner-title">Broadcast<br>Announcements</div>
+                <div class="ann-banner-sub">Send alerts to driver apps</div>
+              </div>
+            </div>
+            <div class="ann-banner compliance">
+              <div class="ann-banner-icon">
+                <svg width="22" height="22" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              </div>
+              <div class="ann-banner-text">
+                <div class="ann-banner-title">Regulatory<br>Compliance Reports</div>
+                <div class="ann-banner-sub">Generate monthly audit data</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Posted Announcements -->
+          <div class="ann-posts-section">
+            <div class="ann-posts-header">
+              <div class="ann-posts-title">Posted Bulletins</div>
+              <div class="ann-post-count" id="ann-count">4 active</div>
+            </div>
+            <div id="ann-posts-list"></div>
+          </div>
+
+          <!-- Footer -->
+          <div class="ann-footer">
+            <div class="ann-footer-title">Sovereign TODA Administrative Control Suite V2.4.0</div>
+            <div class="ann-footer-copy">© 2023 Central Command. Authorized Personnel Only.</div>
+          </div>
+        </div>
+
+        <!-- RIGHT SIDEBAR -->
+        <div>
+
+          <!-- Fare Guide -->
+          <div class="fare-card">
+            <div class="fare-header">
+              <div class="fare-header-left">
+                <div class="fare-icon">
+                  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/><path d="M12 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg>
+                </div>
+                <div>
+                  <div class="fare-title">Fare Guide</div>
+                  <div class="fare-updated">Updated Oct 01</div>
+                </div>
+              </div>
+              <div class="fare-edit-btn" title="Edit Fare">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </div>
+            </div>
+
+            <div class="fare-item">
+              <div><div class="fare-item-name">Base Fare</div><div class="fare-item-desc">First 2 Kilometers</div></div>
+              <div class="fare-item-price"><div class="fare-price-num">₱15.00</div><div class="fare-price-label">Per Passenger</div></div>
+            </div>
+            <div class="fare-item">
+              <div><div class="fare-item-name">Town Proper to Hi-Way</div><div class="fare-item-desc">Direct Route</div></div>
+              <div class="fare-item-price"><div class="fare-price-num">₱25.00</div><div class="fare-price-label">Flat Rate</div></div>
+            </div>
+            <div class="fare-item">
+              <div><div class="fare-item-name">Special Trip</div><div class="fare-item-desc">Direct / Private</div></div>
+              <div class="fare-item-price"><div class="fare-price-num negotiable">₱50.00+</div><div class="fare-price-label">Negotiable</div></div>
+            </div>
+
+            <div class="fare-discount-row">
+              <div class="fare-discount-label">Students &amp; Seniors</div>
+              <div class="fare-discount-val">-20% Discount</div>
+            </div>
+            <button class="fare-modify-btn">Modify Rates</button>
+          </div>
+
+          <!-- Broadcast Panel -->
+          <div class="broadcast-panel" id="broadcast-panel-wrap">
+            <div class="bp-title">Post New Announcement</div>
+            <div class="bp-sub">Compose and publish to the bulletin board</div>
+            <input type="text" class="lf-input" id="ann-new-title" placeholder="Announcement title…" style="margin-bottom:8px"/>
+            <textarea class="bp-textarea" id="ann-new-body" placeholder="Write your announcement here…"></textarea>
+            <div class="bp-row">
+              <select class="bp-type-select" id="ann-new-type">
+                <option value="general">General</option>
+                <option value="emergency">Emergency</option>
+                <option value="operational">Operational</option>
+                <option value="meeting">Meeting</option>
+              </select>
+              <button class="bp-send-btn" onclick="postAnnouncement()">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                Post
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div><!-- /page-announcements -->
+
+    <!-- OFFICERS MANAGEMENT PAGE -->
+    <div id="page-officers">
+
+      <!-- Header Row -->
+      <div class="off-header-row">
+        <div class="off-title-block">
+          <div class="off-term-badge">
+            <span class="off-term-dot"></span>
+            Term: 2023 – 2025 &nbsp;|&nbsp; Active
+          </div>
+          <div class="off-page-title">Officers Management</div>
+          <div class="off-page-sub">Curating the leadership of Sovereign TODA with precision and administrative excellence.</div>
+        </div>
+        <div class="off-header-right">
+          <div class="off-total-badge">
+            <div class="off-total-label">Total Force</div>
+            <div class="off-total-num" id="off-total-num">0</div>
+            <div class="off-total-unit">Officers</div>
+          </div>
+          <button class="btn-download-roster">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Official Roster
+          </button>
+        </div>
+      </div>
+
+      <!-- Action Cards -->
+      <div class="off-action-row">
+        <div class="off-action-card crimson">
+          <div class="off-card-text">
+            <div class="off-card-title">Expand Council</div>
+            <div class="off-card-sub">Register a new official into the current term.</div>
+          </div>
+          <button class="btn-off-action white-btn" onclick="openOfficerModal()">Add New Officer</button>
+        </div>
+        <div class="off-action-card olive">
+          <div class="off-card-text">
+            <div class="off-card-title">Broadcast Hub</div>
+            <div class="off-card-sub">Send emergency or general alerts to all officers.</div>
+          </div>
+          <button class="btn-off-action dark-btn" onclick="showToast('Broadcasting message to all officers…')">Message All</button>
+        </div>
+      </div>
+
+      <!-- Council Members Grid -->
+      <div class="off-council-header">
+        <div class="off-council-title">Council Members</div>
+        <div class="off-view-toggle">
+          <button class="off-view-btn active" id="off-grid-btn" onclick="setOfficerView('grid')" title="Grid View">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          </button>
+          <button class="off-view-btn" id="off-list-btn" onclick="setOfficerView('list')" title="List View">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="off-grid" id="off-grid-container"></div>
+
+      <!-- Leadership Archives -->
+      <div class="off-archives-section">
+        <div class="off-archives-header">
+          <div class="off-archives-title">
+            <svg width="22" height="22" fill="none" stroke="var(--crimson)" stroke-width="2" viewBox="0 0 24 24"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+            Leadership Archives
+          </div>
+          <div class="off-archives-sub">Honoring the previous administrators of Sovereign TODA.</div>
+        </div>
+        <table class="off-archives-table">
+          <thead>
+            <tr>
+              <th>Term Period</th>
+              <th>Lead Executive</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>2021 – 2023</span></td>
+              <td><div class="off-arch-lead"><div class="off-arch-initials" style="background:#7a0c0c">RM</div><div class="off-arch-name">Pres. Roberto V. Macaspac</div></div></span></td>
+              <td><span class="off-arch-badge">Archived</span></span></td>
+              <td><span class="off-arch-link">View Records →</span></span></td>
+            </tr>
+            <tr>
+              <td>2019 – 2021</span></td>
+              <td><div class="off-arch-lead"><div class="off-arch-initials" style="background:#2980b9">DC</div><div class="off-arch-name">Pres. Danilo C. Santos</div></div></span></td>
+              <td><span class="off-arch-badge">Archived</span></span></td>
+              <td><span class="off-arch-link">View Records →</span></span></td>
+            </tr>
+            <tr>
+              <td>2017 – 2019</span></td>
+              <td><div class="off-arch-lead"><div class="off-arch-initials" style="background:#27ae60">EG</div><div class="off-arch-name">Pres. Estela G. Garcia</div></div></span></td>
+              <td><span class="off-arch-badge">Archived</span></span></td>
+              <td><span class="off-arch-link">View Records →</span></span></td>
+            </tr>
+          </tbody>
+        </table>
+        <button class="btn-view-roll">View Complete Historical Roll</button>
+      </div>
+
+    </div><!-- /page-officers -->
+
+    <!-- TRICYCLE CODING PAGE -->
+    <div id="page-coding">
+      <div class="tc-page-header">
+        <div class="tc-breadcrumb">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+          LTO Philippines — Tricycle Coding
+        </div>
+        <div class="tc-page-title">Tricycle Coding<br><em style="font-style:italic;color:var(--crimson)">Schedule.</em></div>
+        <div class="tc-page-sub">Number coding scheme based on LTO Philippines regulations. Manages operational windows per body number ending to decongest traffic.</div>
+      </div>
+
+      <div class="tc-stats-row">
+        <div class="tc-stat tc-stat-dark">
+          <div class="tc-stat-label">Total Schedules</div>
+          <div class="tc-stat-num" id="tc-total">0</div>
+          <div class="tc-stat-sub">Active coding windows</div>
+        </div>
+        <div class="tc-stat tc-stat-olive">
+          <div class="tc-stat-label">Active Today</div>
+          <div class="tc-stat-num" id="tc-active-today">—</div>
+          <div class="tc-stat-sub">Body nos. restricted</div>
+        </div>
+        <div class="tc-stat tc-stat-light">
+          <div class="tc-stat-label">Violations (Oct)</div>
+          <div class="tc-stat-num" style="color:var(--crimson)">7</div>
+          <div class="tc-stat-sub" style="color:var(--text-muted)">Pending penalties</div>
+        </div>
+      </div>
+
+      <div class="tc-layout">
+        <!-- LEFT: Schedule table -->
+        <div>
+          <div class="tc-main-card">
+            <div class="tc-card-header">
+              <div>
+                <div class="tc-card-title">Coding Schedule</div>
+                <div class="tc-card-sub">Weekly body number operational windows</div>
+              </div>
+              <button class="btn-tc-add" onclick="openCodingModal()">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add Schedule
+              </button>
+            </div>
+            <table class="tc-table">
+              <thead>
+                <tr>
+                  <th>Day / Period</th>
+                  <th>Body No. Ending</th>
+                  <th>Restriction Time</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tc-table-body"></tbody>
+            </table>
+          </div>
+
+          <!-- Violations log -->
+          <div class="tc-vio-card">
+            <div class="tc-card-header" style="border-bottom:1px solid var(--border-light)">
+              <div>
+                <div class="tc-card-title">Violation Log</div>
+                <div class="tc-card-sub">Recorded coding violations this month</div>
+              </div>
+            </div>
+            <table class="tc-vio-table">
+              <thead>
+                <tr><th>Driver</th><th>Body No.</th><th>Date</th><th>Violation</th><th>Penalty</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="tc-vio-name">Antonio Santos</div><div class="tc-vio-body">ID-2024-0089</div></span></td>
+                  <td><strong>#345</strong></span></td>
+                  <td>Oct 22</span></td>
+                  <td>Operating during restricted hours</span></td>
+                  <td><span class="tc-penalty fine">₱500.00 Fine</span></span></td>
+                </tr>
+                <tr>
+                  <td><div class="tc-vio-name">Ricardo Gomez</div><div class="tc-vio-body">ID-2023-1102</div></span></td>
+                  <td><strong>#556</strong></span></td>
+                  <td>Oct 20</span></td>
+                  <td>No coding sticker displayed</span></td>
+                  <td><span class="tc-penalty warn">Warning</span></span></td>
+                </tr>
+                <tr>
+                  <td><div class="tc-vio-name">Rodrigo Estrada</div><div class="tc-vio-body">ID-2022-1045</div></span></td>
+                  <td><strong>#678</strong></span></td>
+                  <td>Oct 18</span></td>
+                  <td>Operating during restricted hours</span></td>
+                  <td><span class="tc-penalty fine">₱500.00 Fine</span></span></td>
+                </tr>
+                <tr>
+                  <td><div class="tc-vio-name">Juan Dela Cruz</div><div class="tc-vio-body">ID-2024-0211</div></span></td>
+                  <td><strong>#088</strong></span></td>
+                  <td>Oct 15</span></td>
+                  <td>Route deviation during coding</span></td>
+                  <td><span class="tc-penalty warn">Warning</span></span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- RIGHT sidebar -->
+        <div class="tc-right">
+          <div class="tc-info-card">
+            <div class="tc-info-title">LTO Coding Basis</div>
+            <div class="tc-info-sub">Republic Act No. 4136 — Land Transportation and Traffic Code</div>
+            <div class="tc-lto-row">
+              <div class="tc-lto-icon"><svg width="14" height="14" fill="none" stroke="var(--crimson)" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+              <div><div class="tc-lto-label">Coding Basis</div><div class="tc-lto-value">MMDA Resolution No. 02-28 & LTO MC 2019-2219</div></div>
+            </div>
+            <div class="tc-lto-row">
+              <div class="tc-lto-icon"><svg width="14" height="14" fill="none" stroke="var(--crimson)" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+              <div><div class="tc-lto-label">Standard Window</div><div class="tc-lto-value">7:00 AM – 7:00 PM (Mon–Sat)</div></div>
+            </div>
+            <div class="tc-lto-row">
+              <div class="tc-lto-icon"><svg width="14" height="14" fill="none" stroke="var(--crimson)" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+              <div><div class="tc-lto-label">Exemptions</div><div class="tc-lto-value">Holidays, PAGASA Signal 2+, Medical emergencies</div></div>
+            </div>
+            <div class="tc-lto-row">
+              <div class="tc-lto-icon"><svg width="14" height="14" fill="none" stroke="var(--crimson)" stroke-width="2" viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></div>
+              <div><div class="tc-lto-label">Required Document</div><div class="tc-lto-value">LTO-issued Coding Sticker on windshield</div></div>
+            </div>
+          </div>
+
+          <div class="tc-penalty-card">
+            <div class="tc-penalty-title">Penalty Schedule</div>
+            <div class="tc-penalty-item"><span class="tc-penalty-offense">1st Offense (Warning)</span><span class="tc-penalty-amount">₱0</span></div>
+            <div class="tc-penalty-item"><span class="tc-penalty-offense">2nd Offense</span><span class="tc-penalty-amount">₱500</span></div>
+            <div class="tc-penalty-item"><span class="tc-penalty-offense">3rd Offense</span><span class="tc-penalty-amount">₱1,000</span></div>
+            <div class="tc-penalty-item"><span class="tc-penalty-offense">4th+ / Suspension</span><span class="tc-penalty-amount">₱2,000+</span></div>
+          </div>
+
+          <div class="tc-info-card">
+            <div class="tc-info-title">Today's Restriction</div>
+            <div class="tc-info-sub" id="tc-today-label">Loading…</div>
+            <div id="tc-today-detail" style="font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:var(--crimson);line-height:1;margin-top:4px;"></div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:8px;" id="tc-today-time"></div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /page-coding -->
+
+    <!-- CONTRIBUTIONS PAGE -->
+    <div id="page-contributions">
+      <div class="cn-page-header">
+        <div class="meta" style="margin-bottom:6px">
+          <span class="status-dot"></span> Q4 2024 &nbsp;•&nbsp; Oct 1 – Dec 31
+        </div>
+        <div class="cn-page-title">Driver<br><em style="font-style:italic;color:var(--crimson)">Contributions.</em></div>
+        <div class="cn-page-sub">Track and manage weekly/monthly contributions from all tricycle drivers in the TODA registry.</div>
+      </div>
+
+      <div class="cn-summary-row">
+        <div class="cn-sum-card cn-sum-main">
+          <div class="cn-sum-label">Total Collected (Oct)</div>
+          <div class="cn-sum-num" id="cn-total-amount">₱0.00</div>
+          <div class="cn-sum-sub">From <span id="cn-paid-count">0</span> paid drivers this period</div>
+        </div>
+        <div class="cn-sum-card cn-sum-light">
+          <div class="cn-sum-label">Paid</div>
+          <div class="cn-sum-num" id="cn-paid-num" style="color:#15803d">0</div>
+          <div class="cn-sum-sub">Drivers settled</div>
+        </div>
+        <div class="cn-sum-card cn-sum-light">
+          <div class="cn-sum-label">Partial</div>
+          <div class="cn-sum-num" id="cn-partial-num" style="color:#d97706">0</div>
+          <div class="cn-sum-sub">Need follow-up</div>
+        </div>
+        <div class="cn-sum-card cn-sum-light">
+          <div class="cn-sum-label">Unpaid</div>
+          <div class="cn-sum-num" id="cn-unpaid-num" style="color:var(--crimson)">0</div>
+          <div class="cn-sum-sub">Overdue</div>
+        </div>
+      </div>
+
+      <div class="cn-toolbar">
+        <div class="cn-toolbar-left">
+          <div class="cn-search">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="text" placeholder="Search driver name or body no…" id="cn-search-input" oninput="cnFilterRender()"/>
+          </div>
+          <select class="cn-filter-select" id="cn-filter-status" onchange="cnFilterRender()">
+            <option value="">All Status</option>
+            <option value="paid">Paid</option>
+            <option value="partial">Partial</option>
+            <option value="unpaid">Unpaid</option>
+          </select>
+          <select class="cn-filter-select" id="cn-filter-period" onchange="cnFilterRender()">
+            <option value="">All Periods</option>
+            <option value="Oct 2024">Oct 2024</option>
+            <option value="Sep 2024">Sep 2024</option>
+            <option value="Aug 2024">Aug 2024</option>
+          </select>
+        </div>
+        <button class="btn-cn-add" onclick="openCnModal()">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Contribution
+        </button>
+      </div>
+
+      <div class="cn-table-card">
+        <table class="cn-table">
+          <thead>
+            <tr>
+              <th>Driver</th>
+              <th>Body No.</th>
+              <th>Amount</th>
+              <th>Period</th>
+              <th>Date Paid</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="cn-table-body"></tbody>
+        </table>
+        <div class="cn-pagination">
+          <div class="cn-showing" id="cn-showing"></div>
+          <div class="cn-pages">
+            <button class="cn-pg-btn" id="cn-prev" onclick="cnChangePage(-1)">‹</button>
+            <div id="cn-page-btns" style="display:flex;gap:4px"></div>
+            <button class="cn-pg-btn" id="cn-next" onclick="cnChangePage(1)">›</button>
+          </div>
+        </div>
+      </div>
+    </div><!-- /page-contributions -->
+
   </main>
+</div>
+
+<!-- OFFICER ADD/EDIT MODAL -->
+<div class="off-modal-overlay" id="officer-modal">
+  <div class="off-modal">
+    <div class="off-modal-tag">Officers Management</div>
+    <div class="off-modal-title" id="off-modal-title">Add New Officer</div>
+    <div class="off-modal-sub" id="off-modal-sub">Register a new official into the current term.</div>
+
+    <div class="off-modal-section">Personal Information</div>
+    <div class="off-modal-row">
+      <div class="off-modal-field">
+        <label class="off-modal-label">First Name</label>
+        <input class="off-modal-input" id="off-fname" type="text" placeholder="e.g., Roberto"/>
+      </div>
+      <div class="off-modal-field">
+        <label class="off-modal-label">Middle Initial</label>
+        <input class="off-modal-input" id="off-mi" type="text" placeholder="e.g., V." maxlength="5"/>
+      </div>
+    </div>
+    <div class="off-modal-row">
+      <div class="off-modal-field">
+        <label class="off-modal-label">Last Name</label>
+        <input class="off-modal-input" id="off-lname" type="text" placeholder="e.g., Macaspac"/>
+      </div>
+      <div class="off-modal-field">
+        <label class="off-modal-label">Officer ID</label>
+        <input class="off-modal-input" id="off-id" type="text" placeholder="Auto-generated" readonly style="opacity:.6;cursor:not-allowed"/>
+      </div>
+    </div>
+
+    <div class="off-modal-section">Role & Status</div>
+    <div class="off-modal-row">
+      <div class="off-modal-field">
+        <label class="off-modal-label">Position / Role</label>
+        <select class="off-modal-select" id="off-role">
+          <option value="President">President</option>
+          <option value="Vice President">Vice President</option>
+          <option value="Secretary">Secretary</option>
+          <option value="Treasurer">Treasurer</option>
+          <option value="Auditor">Auditor</option>
+          <option value="PRO">PRO</option>
+          <option value="Sergeant-at-Arms">Sergeant-at-Arms</option>
+          <option value="Board Member">Board Member</option>
+        </select>
+      </div>
+      <div class="off-modal-field">
+        <label class="off-modal-label">Duty Status</label>
+        <select class="off-modal-select" id="off-status">
+          <option value="on-duty">On-Duty</option>
+          <option value="in-office">In Office</option>
+          <option value="off-duty">Off-Duty</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="off-modal-section">Contact Details</div>
+    <div class="off-modal-row">
+      <div class="off-modal-field">
+        <label class="off-modal-label">Phone Number</label>
+        <input class="off-modal-input" id="off-phone" type="text" placeholder="e.g., 917 555 1234"/>
+      </div>
+      <div class="off-modal-field">
+        <label class="off-modal-label">Email Address</label>
+        <input class="off-modal-input" id="off-email" type="email" placeholder="e.g., officer@toda.ph"/>
+      </div>
+    </div>
+
+    <div class="off-modal-actions">
+      <button class="off-modal-cancel" onclick="closeOfficerModal()">Cancel</button>
+      <button class="off-modal-save" onclick="saveOfficer()">
+        <span id="off-save-label">Register Officer</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- OFFICER DELETE CONFIRM -->
+<div class="off-confirm-overlay" id="officer-confirm">
+  <div class="off-confirm-box">
+    <div class="off-confirm-icon">
+      <svg width="24" height="24" fill="none" stroke="var(--crimson)" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+    </div>
+    <div class="off-confirm-title">Remove Officer</div>
+    <div class="off-confirm-sub" id="off-confirm-sub">Are you sure you want to remove this officer from the current term? This action cannot be undone.</div>
+    <div class="off-confirm-btns">
+      <button class="off-confirm-cancel" onclick="closeOfficerConfirm()">Cancel</button>
+      <button class="off-confirm-del" onclick="confirmDeleteOfficer()">Remove Officer</button>
+    </div>
+  </div>
+</div>
+
+<!-- TRICYCLE CODING MODAL -->
+<div class="tc-modal-overlay" id="coding-modal">
+  <div class="tc-modal">
+    <div class="tc-modal-tag">Tricycle Coding</div>
+    <div class="tc-modal-title" id="tc-modal-title">Add Coding Schedule</div>
+    <div class="tc-modal-sub" id="tc-modal-sub">Define an operational window for a body number range.</div>
+    <div class="tc-modal-row">
+      <div class="tc-modal-field">
+        <label class="tc-modal-label">Day(s)</label>
+        <select class="tc-modal-select" id="tc-day">
+          <option>Monday</option>
+          <option>Tuesday</option>
+          <option>Wednesday</option>
+          <option>Thursday</option>
+          <option>Friday</option>
+          <option>Saturday</option>
+          <option>Sunday</option>
+          <option>Mon / Wed</option>
+          <option>Tue / Thu</option>
+          <option>Mon – Fri</option>
+        </select>
+      </div>
+      <div class="tc-modal-field">
+        <label class="tc-modal-label">Status</label>
+        <select class="tc-modal-select" id="tc-status">
+          <option value="active">Active</option>
+          <option value="suspended">Suspended</option>
+          <option value="open-win">Open Window</option>
+        </select>
+      </div>
+    </div>
+    <div class="tc-modal-row">
+      <div class="tc-modal-field">
+        <label class="tc-modal-label">Body No. Ending (e.g. 1–2 or ALL)</label>
+        <input class="tc-modal-input" id="tc-body-range" type="text" placeholder="e.g. 0 – 2"/>
+      </div>
+      <div class="tc-modal-field">
+        <label class="tc-modal-label">Restriction Time</label>
+        <input class="tc-modal-input" id="tc-time" type="text" placeholder="e.g. 7:00 AM – 7:00 PM"/>
+      </div>
+    </div>
+    <div class="tc-modal-row">
+      <div class="tc-modal-field">
+        <label class="tc-modal-label">Route / Zone</label>
+        <input class="tc-modal-input" id="tc-route" type="text" placeholder="e.g. All Routes"/>
+      </div>
+      <div class="tc-modal-field">
+        <label class="tc-modal-label">Effectivity Date</label>
+        <input class="tc-modal-input" id="tc-effectivity" type="date"/>
+      </div>
+    </div>
+    <div class="tc-modal-actions">
+      <button class="tc-modal-cancel" onclick="closeCodingModal()">Cancel</button>
+      <button class="tc-modal-save" onclick="saveCodingSchedule()"><span id="tc-save-label">Add Schedule</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- CODING DELETE CONFIRM -->
+<div class="gen-confirm-overlay" id="coding-confirm">
+  <div class="gen-confirm-box">
+    <div class="gen-confirm-icon">
+      <svg width="24" height="24" fill="none" stroke="var(--crimson)" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+    </div>
+    <div class="gen-confirm-title">Remove Schedule</div>
+    <div class="gen-confirm-sub" id="coding-confirm-sub">Are you sure you want to delete this coding schedule?</div>
+    <div class="gen-confirm-btns">
+      <button class="gen-confirm-cancel" onclick="closeCodingConfirm()">Cancel</button>
+      <button class="gen-confirm-del" onclick="confirmDeleteCoding()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONTRIBUTION ADD/EDIT MODAL -->
+<div class="cn-modal-overlay" id="cn-modal">
+  <div class="cn-modal">
+    <div class="cn-modal-tag">Contributions</div>
+    <div class="cn-modal-title" id="cn-modal-title">Add Contribution</div>
+    <div class="cn-modal-sub" id="cn-modal-sub">Record a driver's contribution for the period.</div>
+    <div class="cn-modal-section">Driver Information</div>
+    <div class="cn-modal-row">
+      <div class="cn-modal-field" style="margin-bottom:0">
+        <label class="cn-modal-label">First Name</label>
+        <input class="cn-modal-input" id="cn-fname" type="text" placeholder="e.g., Juan"/>
+      </div>
+      <div class="cn-modal-field" style="margin-bottom:0">
+        <label class="cn-modal-label">Last Name</label>
+        <input class="cn-modal-input" id="cn-lname" type="text" placeholder="e.g., Dela Cruz"/>
+      </div>
+    </div>
+    <div class="cn-modal-row" style="margin-top:16px">
+      <div class="cn-modal-field" style="margin-bottom:0">
+        <label class="cn-modal-label">Body Number</label>
+        <input class="cn-modal-input" id="cn-body" type="text" placeholder="e.g., 345"/>
+      </div>
+      <div class="cn-modal-field" style="margin-bottom:0">
+        <label class="cn-modal-label">Driver ID</label>
+        <input class="cn-modal-input" id="cn-driverid" type="text" placeholder="e.g., ID-2024-0089"/>
+      </div>
+    </div>
+    <div class="cn-modal-section">Contribution Details</div>
+    <div class="cn-modal-row">
+      <div class="cn-modal-field" style="margin-bottom:0">
+        <label class="cn-modal-label">Amount</label>
+        <div class="cn-modal-peso">
+          <span>₱</span>
+          <input type="number" id="cn-amount" placeholder="250.00" step="0.01" min="0"/>
+        </div>
+      </div>
+      <div class="cn-modal-field" style="margin-bottom:0">
+        <label class="cn-modal-label">Period</label>
+        <select class="cn-modal-select" id="cn-period">
+          <option>Oct 2024</option>
+          <option>Sep 2024</option>
+          <option>Aug 2024</option>
+          <option>Jul 2024</option>
+          <option>Q4 2024</option>
+          <option>Q3 2024</option>
+        </select>
+      </div>
+    </div>
+    <div class="cn-modal-row" style="margin-top:16px">
+      <div class="cn-modal-field" style="margin-bottom:0">
+        <label class="cn-modal-label">Date Paid</label>
+        <input class="cn-modal-input" id="cn-date" type="date"/>
+      </div>
+      <div class="cn-modal-field" style="margin-bottom:0">
+        <label class="cn-modal-label">Payment Status</label>
+        <select class="cn-modal-select" id="cn-paystatus">
+          <option value="paid">Paid</option>
+          <option value="partial">Partial</option>
+          <option value="unpaid">Unpaid</option>
+        </select>
+      </div>
+    </div>
+    <div class="cn-modal-field" style="margin-top:16px">
+      <label class="cn-modal-label">Notes (optional)</label>
+      <input class="cn-modal-input" id="cn-notes" type="text" placeholder="e.g., Late payment, installment…"/>
+    </div>
+    <div class="cn-modal-actions">
+      <button class="cn-modal-cancel" onclick="closeCnModal()">Cancel</button>
+      <button class="cn-modal-save" onclick="saveCnRecord()"><span id="cn-save-label">Save Record</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- CONTRIBUTION DELETE CONFIRM -->
+<div class="gen-confirm-overlay" id="cn-confirm">
+  <div class="gen-confirm-box">
+    <div class="gen-confirm-icon">
+      <svg width="24" height="24" fill="none" stroke="var(--crimson)" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+    </div>
+    <div class="gen-confirm-title">Delete Record</div>
+    <div class="gen-confirm-sub" id="cn-confirm-sub">Are you sure you want to delete this contribution record?</div>
+    <div class="gen-confirm-btns">
+      <button class="gen-confirm-cancel" onclick="closeCnConfirm()">Cancel</button>
+      <button class="gen-confirm-del" onclick="confirmDeleteCn()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- DRIVER ADD/EDIT MODAL -->
+<div class="modal-overlay" id="driver-modal">
+  <div class="modal" style="width:520px">
+    <div class="modal-tag">Driver Management</div>
+    <div class="modal-title-row">
+      <div class="modal-title" id="driver-modal-title">Add New Driver</div>
+      <div class="modal-edt">DRV</div>
+    </div>
+    <div class="modal-sub" id="driver-modal-sub">Fill in the details to register a new fleet member.</div>
+
+    <div class="modal-row" style="margin-top:0">
+      <div class="modal-field">
+        <label class="modal-label">First Name</label>
+        <input class="modal-input" id="drv-fname" type="text" placeholder="e.g., Antonio" style="border:1px solid var(--border);border-radius:8px;width:100%;padding:10px 12px"/>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Last Name</label>
+        <input class="modal-input" id="drv-lname" type="text" placeholder="e.g., Santos" style="border:1px solid var(--border);border-radius:8px;width:100%;padding:10px 12px"/>
+      </div>
+    </div>
+    <div class="modal-row">
+      <div class="modal-field">
+        <label class="modal-label">Body Number</label>
+        <div class="input-prefix">
+          <span>#</span>
+          <input class="modal-input" id="drv-body" type="text" placeholder="345"/>
+        </div>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Contact Number</label>
+        <div class="input-prefix">
+          <span>+63</span>
+          <input class="modal-input" id="drv-contact" type="text" placeholder="917 555 1234"/>
+        </div>
+      </div>
+    </div>
+    <div class="modal-field" style="margin-bottom:16px">
+      <label class="modal-label">Account Status</label>
+      <div class="select-wrap">
+        <select class="modal-select" id="drv-status">
+          <option>Active</option>
+          <option>Inactive</option>
+          <option>Suspended</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="document.getElementById('driver-modal').classList.remove('open')">Cancel</button>
+      <button class="btn-save" onclick="saveDriver()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Save Driver
+      </button>
+    </div>
+  </div>
 </div>
 
 <!-- EDIT MODAL -->
@@ -243,7 +1366,6 @@
       <div class="modal-edt">EDT</div>
     </div>
     <div class="modal-sub">Updating records for <strong id="modal-name">Juan Dela Cruz (#2055)</strong></div>
-
     <div class="modal-field">
       <label class="modal-label">Update Member Status</label>
       <div class="select-wrap">
@@ -254,7 +1376,6 @@
         </select>
       </div>
     </div>
-
     <div class="modal-row">
       <div class="modal-field">
         <label class="modal-label">Body Number</label>
@@ -271,12 +1392,10 @@
         </div>
       </div>
     </div>
-
     <div class="modal-note">
       <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       <p>Changes to status will be logged in the system ledger. Suspension status prevents member participation in upcoming quarterly meetings.</p>
     </div>
-
     <div class="modal-actions">
       <button class="btn-cancel" id="modal-cancel">Cancel</button>
       <button class="btn-save" id="modal-save">
@@ -285,6 +1404,12 @@
       </button>
     </div>
   </div>
+</div>
+
+<!-- TOAST -->
+<div class="lf-toast" id="lf-toast">
+  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="lf-toast-msg">Item posted to bulletin!</span>
 </div>
 
 <script src="../js/admin_dashboad.js"></script>
