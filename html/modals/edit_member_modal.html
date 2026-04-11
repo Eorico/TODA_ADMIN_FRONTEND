@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- EDIT MODAL MODAL  -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal">
+    <div class="modal-tag">Administrative Control</div>
+    <div class="modal-title-row">
+      <div class="modal-title">Edit Member Profile</div>
+      <div class="modal-edt">EDT</div>
+    </div>
+    <div class="modal-sub">Updating records for <strong id="modal-name">Juan Dela Cruz (#2055)</strong></div>
+    <div class="modal-field">
+      <label class="modal-label">Update Member Status</label>
+      <div class="select-wrap">
+        <select class="modal-select" id="modal-status">
+          <option>Active</option>
+          <option>Inactive</option>
+          <option selected>Suspended (Violation)</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-row">
+      <div class="modal-field">
+        <label class="modal-label">Body Number</label>
+        <div class="input-prefix">
+          <span>#</span>
+          <input class="modal-input" id="modal-body" type="text" value="2055"/>
+        </div>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Last Contribution (PHP)</label>
+        <div class="input-prefix">
+          <span>₱</span>
+          <input class="modal-input" id="modal-contrib" type="text" value="250.00"/>
+        </div>
+      </div>
+    </div>
+    <div class="modal-note">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <p>Changes to status will be logged in the system ledger. Suspension status prevents member participation in upcoming quarterly meetings.</p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="modal-cancel" onclick="closeEditModal()">Cancel</button>
+      <button class="btn-save" id="modal-save" onclick="saveMember()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Save Member Profile
+      </button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- MEMBERS PAGE -->
+    <div id="page-members">
+      <div class="page-header">
+        <div class="meta" style="margin-bottom:4px">Member Registry</div>
+        <h1>The Fleet<br><em>Ledger.</em></h1>
+      </div>
+
+      <div class="members-stats">
+        <div class="mstat total">
+          <div class="mstat-label">Total Members</div>
+          <div style="display:flex;align-items:flex-end;gap:10px">
+            <div class="mstat-num">400</div>
+            <svg class="silhouette" width="90" height="70" viewBox="0 0 90 70" fill="none"><ellipse cx="45" cy="20" rx="18" ry="18" fill="currentColor"/><path d="M10 68c0-19.33 15.67-35 35-35s35 15.67 35 35" fill="currentColor"/></svg>
+          </div>
+          <div class="mstat-badge">↑ 12%</div>
+        </div>
+        <div class="mstat">
+          <div class="mstat-label">Active</div>
+          <div class="mstat-num" style="color:#15803d">250</div>
+        </div>
+        <div class="mstat">
+          <div class="mstat-label">Inactive</div>
+          <div class="mstat-num" style="color:var(--text-muted)">50</div>
+        </div>
+        <div class="mstat suspended">
+          <div class="mstat-label">Suspended</div>
+          <div class="mstat-num">100</div>
+          <div class="mstat-note">Requires administrative review of coding violations.</div>
+          <div class="mstat-link">View Appeals →</div>
+        </div>
+      </div>
+
+      <div class="roster-section">
+        <div class="roster-header">
+          <div>
+            <div class="roster-title">Active Roster</div>
+            <div class="roster-sub">Managing 400 authorized transport personnel.</div>
+          </div>
+          <div class="roster-controls">
+            <button class="filter-btn">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+              Status: All
+            </button>
+            <div class="search-field">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <input type="text" placeholder="Search name or body no…" id="member-search"/>
+            </div>
+          </div>
+        </div>
+
+        <table class="roster-table">
+          <thead>
+            <tr>
+              <th>Member Identity</th>
+              <th>Body Number</th>
+              <th>Status</th>
+              <th>Last Contribution</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="roster-body"></tbody>
+        </table>
+      </div>
+    </div>
+</body>
+</html>

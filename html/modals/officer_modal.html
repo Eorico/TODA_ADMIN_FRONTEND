@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <!-- OFFICER ADD/EDIT MODAL -->
+<div class="off-modal-overlay" id="officer-modal">
+  <div class="off-modal">
+    <div class="off-modal-tag">Officers Management</div>
+    <div class="off-modal-title" id="off-modal-title">Add New Officer</div>
+    <div class="off-modal-sub" id="off-modal-sub">Register a new official into the current term.</div>
+
+    <div class="off-modal-section">Personal Information</div>
+    <div class="off-modal-row">
+      <div class="off-modal-field">
+        <label class="off-modal-label">First Name</label>
+        <input class="off-modal-input" id="off-fname" type="text" placeholder="e.g., Roberto"/>
+      </div>
+      <div class="off-modal-field">
+        <label class="off-modal-label">Middle Initial</label>
+        <input class="off-modal-input" id="off-mi" type="text" placeholder="e.g., V." maxlength="5"/>
+      </div>
+    </div>
+    <div class="off-modal-row">
+      <div class="off-modal-field">
+        <label class="off-modal-label">Last Name</label>
+        <input class="off-modal-input" id="off-lname" type="text" placeholder="e.g., Macaspac"/>
+      </div>
+      <div class="off-modal-field">
+        <label class="off-modal-label">Officer ID</label>
+        <input class="off-modal-input" id="off-id" type="text" placeholder="Auto-generated" readonly style="opacity:.6;cursor:not-allowed"/>
+      </div>
+    </div>
+
+    <div class="off-modal-section">Role & Status</div>
+    <div class="off-modal-row">
+      <div class="off-modal-field">
+        <label class="off-modal-label">Position / Role</label>
+        <select class="off-modal-select" id="off-role">
+          <option value="President">President</option>
+          <option value="Vice President">Vice President</option>
+          <option value="Secretary">Secretary</option>
+          <option value="Treasurer">Treasurer</option>
+          <option value="Auditor">Auditor</option>
+          <option value="PRO">PRO</option>
+          <option value="Sergeant-at-Arms">Sergeant-at-Arms</option>
+          <option value="Board Member">Board Member</option>
+        </select>
+      </div>
+      <div class="off-modal-field">
+        <label class="off-modal-label">Duty Status</label>
+        <select class="off-modal-select" id="off-status">
+          <option value="on-duty">On-Duty</option>
+          <option value="in-office">In Office</option>
+          <option value="off-duty">Off-Duty</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="off-modal-section">Contact Details</div>
+    <div class="off-modal-row">
+      <div class="off-modal-field">
+        <label class="off-modal-label">Phone Number</label>
+        <input class="off-modal-input" id="off-phone" type="text" placeholder="e.g., 917 555 1234"/>
+      </div>
+      <div class="off-modal-field">
+        <label class="off-modal-label">Email Address</label>
+        <input class="off-modal-input" id="off-email" type="email" placeholder="e.g., officer@toda.ph"/>
+      </div>
+    </div>
+
+    <div class="off-modal-actions">
+      <button class="off-modal-cancel" onclick="closeOfficerModal()">Cancel</button>
+      <button class="off-modal-save" onclick="saveOfficer()">
+        <span id="off-save-label">Register Officer</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- OFFICER DELETE CONFIRM -->
+<div class="off-confirm-overlay" id="officer-confirm">
+  <div class="off-confirm-box">
+    <div class="off-confirm-icon">
+      <svg width="24" height="24" fill="none" stroke="var(--crimson)" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+    </div>
+    <div class="off-confirm-title">Remove Officer</div>
+    <div class="off-confirm-sub" id="off-confirm-sub">Are you sure you want to remove this officer from the current term? This action cannot be undone.</div>
+    <div class="off-confirm-btns">
+      <button class="off-confirm-cancel" onclick="closeOfficerConfirm()">Cancel</button>
+      <button class="off-confirm-del" onclick="confirmDeleteOfficer()">Remove Officer</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

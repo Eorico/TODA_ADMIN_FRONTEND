@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- TRICYCLE CODING PAGE -->
+    <div id="page-coding">
+      <div class="tc-page-header">
+        <div class="tc-breadcrumb">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+          LTO Philippines — Tricycle Coding
+        </div>
+        <div class="tc-page-title">Tricycle Coding<br><em style="font-style:italic;color:var(--crimson)">Schedule.</em></div>
+        <div class="tc-page-sub">Number coding scheme based on LTO Philippines regulations. Manages operational windows per body number ending to decongest traffic.</div>
+      </div>
+
+      <div class="tc-stats-row">
+        <div class="tc-stat tc-stat-dark">
+          <div class="tc-stat-label">Total Schedules</div>
+          <div class="tc-stat-num" id="tc-total">0</div>
+          <div class="tc-stat-sub">Active coding windows</div>
+        </div>
+        <div class="tc-stat tc-stat-olive">
+          <div class="tc-stat-label">Active Today</div>
+          <div class="tc-stat-num" id="tc-active-today">—</div>
+          <div class="tc-stat-sub">Body nos. restricted</div>
+        </div>
+        <div class="tc-stat tc-stat-light">
+          <div class="tc-stat-label">Violations (Oct)</div>
+          <div class="tc-stat-num" style="color:var(--crimson)">7</div>
+          <div class="tc-stat-sub" style="color:var(--text-muted)">Pending penalties</div>
+        </div>
+      </div>
+
+      <div class="tc-layout">
+        <!-- LEFT: Schedule table -->
+        <div>
+          <div class="tc-main-card">
+            <div class="tc-card-header">
+              <div>
+                <div class="tc-card-title">Coding Schedule</div>
+                <div class="tc-card-sub">Weekly body number operational windows</div>
+              </div>
+              <button class="btn-tc-add" onclick="openCodingModal()">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add Schedule
+              </button>
+            </div>
+            <table class="tc-table">
+              <thead>
+                <tr>
+                  <th>Day / Period</th>
+                  <th>Body No. Ending</th>
+                  <th>Restriction Time</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tc-table-body"></tbody>
+            </table>
+          </div>
+
+          <!-- Violations log -->
+          <div class="tc-vio-card">
+            <div class="tc-card-header" style="border-bottom:1px solid var(--border-light)">
+              <div>
+                <div class="tc-card-title">Violation Log</div>
+                <div class="tc-card-sub">Recorded coding violations this month</div>
+              </div>
+            </div>
+            <table class="tc-vio-table">
+              <thead>
+                <tr><th>Driver</th><th>Body No.</th><th>Date</th><th>Violation</th><th>Penalty</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="tc-vio-name">Antonio Santos</div><div class="tc-vio-body">ID-2024-0089</div></span></td>
+                  <td><strong>#345</strong></span></td>
+                  <td>Oct 22</span></td>
+                  <td>Operating during restricted hours</span></td>
+                  <td><span class="tc-penalty fine">₱500.00 Fine</span></span></td>
+                </tr>
+                <tr>
+                  <td><div class="tc-vio-name">Ricardo Gomez</div><div class="tc-vio-body">ID-2023-1102</div></span></td>
+                  <td><strong>#556</strong></span></td>
+                  <td>Oct 20</span></td>
+                  <td>No coding sticker displayed</span></td>
+                  <td><span class="tc-penalty warn">Warning</span></span></td>
+                </tr>
+                <tr>
+                  <td><div class="tc-vio-name">Rodrigo Estrada</div><div class="tc-vio-body">ID-2022-1045</div></span></td>
+                  <td><strong>#678</strong></span></td>
+                  <td>Oct 18</span></td>
+                  <td>Operating during restricted hours</span></td>
+                  <td><span class="tc-penalty fine">₱500.00 Fine</span></span></td>
+                </tr>
+                <tr>
+                  <td><div class="tc-vio-name">Juan Dela Cruz</div><div class="tc-vio-body">ID-2024-0211</div></span></td>
+                  <td><strong>#088</strong></span></td>
+                  <td>Oct 15</span></td>
+                  <td>Route deviation during coding</span></td>
+                  <td><span class="tc-penalty warn">Warning</span></span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- RIGHT sidebar -->
+        <div class="tc-right">
+          <div class="tc-info-card">
+            <div class="tc-info-title">LTO Coding Basis</div>
+            <div class="tc-info-sub">Republic Act No. 4136 — Land Transportation and Traffic Code</div>
+            <div class="tc-lto-row">
+              <div class="tc-lto-icon"><svg width="14" height="14" fill="none" stroke="var(--crimson)" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+              <div><div class="tc-lto-label">Coding Basis</div><div class="tc-lto-value">MMDA Resolution No. 02-28 & LTO MC 2019-2219</div></div>
+            </div>
+            <div class="tc-lto-row">
+              <div class="tc-lto-icon"><svg width="14" height="14" fill="none" stroke="var(--crimson)" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+              <div><div class="tc-lto-label">Standard Window</div><div class="tc-lto-value">7:00 AM – 7:00 PM (Mon–Sat)</div></div>
+            </div>
+            <div class="tc-lto-row">
+              <div class="tc-lto-icon"><svg width="14" height="14" fill="none" stroke="var(--crimson)" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+              <div><div class="tc-lto-label">Exemptions</div><div class="tc-lto-value">Holidays, PAGASA Signal 2+, Medical emergencies</div></div>
+            </div>
+            <div class="tc-lto-row">
+              <div class="tc-lto-icon"><svg width="14" height="14" fill="none" stroke="var(--crimson)" stroke-width="2" viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></div>
+              <div><div class="tc-lto-label">Required Document</div><div class="tc-lto-value">LTO-issued Coding Sticker on windshield</div></div>
+            </div>
+          </div>
+
+          <div class="tc-penalty-card">
+            <div class="tc-penalty-title">Penalty Schedule</div>
+            <div class="tc-penalty-item"><span class="tc-penalty-offense">1st Offense (Warning)</span><span class="tc-penalty-amount">₱0</span></div>
+            <div class="tc-penalty-item"><span class="tc-penalty-offense">2nd Offense</span><span class="tc-penalty-amount">₱500</span></div>
+            <div class="tc-penalty-item"><span class="tc-penalty-offense">3rd Offense</span><span class="tc-penalty-amount">₱1,000</span></div>
+            <div class="tc-penalty-item"><span class="tc-penalty-offense">4th+ / Suspension</span><span class="tc-penalty-amount">₱2,000+</span></div>
+          </div>
+
+          <div class="tc-info-card">
+            <div class="tc-info-title">Today's Restriction</div>
+            <div class="tc-info-sub" id="tc-today-label">Loading…</div>
+            <div id="tc-today-detail" style="font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:var(--crimson);line-height:1;margin-top:4px;"></div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:8px;" id="tc-today-time"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+</body>
+</html>

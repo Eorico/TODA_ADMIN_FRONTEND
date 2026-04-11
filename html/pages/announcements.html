@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+     <!-- ANNOUNCEMENTS PAGE -->
+    <div id="page-announcements">
+      <div class="ann-breadcrumb">Official Bulletins</div>
+      <h1 class="ann-title">Announcements &amp; Operations</h1>
+      <p class="ann-desc">Real-time updates on association protocols, driver schedules, and community notices for the TODA Sovereign ecosystem.</p>
+
+      <div class="ann-layout">
+
+        <!-- LEFT COLUMN -->
+        <div>
+
+          <!-- Weekly Coding Scheme -->
+          <div class="ann-coding-card">
+            <div class="ann-coding-header">
+              <div style="display:flex;align-items:flex-start;gap:16px;flex:1">
+                <div class="ann-coding-icon">
+                  <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </div>
+                <div class="ann-coding-meta">
+                  <div class="ann-coding-name">Weekly Coding Scheme</div>
+                  <div class="ann-coding-sub">Operational Windows Per Body Number</div>
+                  <div class="ann-coding-date">Last Updated: Oct 12, 2024</div>
+                </div>
+              </div>
+              <div class="ann-coding-btns">
+                <div class="ann-protocol-badge"><span class="dot"></span> Active Protocol</div>
+                <button class="ann-manage-btn">
+                  <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Manage Scheme
+                </button>
+              </div>
+            </div>
+
+            <div class="coding-grid">
+              <div class="coding-day">
+                <div class="coding-day-label">Mon / Wed</div>
+                <div class="coding-day-nums">0 – 2</div>
+                <div class="coding-day-foot">Ending Body No.</div>
+              </div>
+              <div class="coding-day highlight">
+                <div class="coding-day-label">Tue / Thu</div>
+                <div class="coding-day-nums">3 – 5</div>
+                <div class="coding-day-foot" style="color:rgba(255,255,255,.6)">Ending Body No.</div>
+              </div>
+              <div class="coding-day">
+                <div class="coding-day-label">Friday</div>
+                <div class="coding-day-nums">6 – 7</div>
+                <div class="coding-day-foot">Ending Body No.</div>
+              </div>
+              <div class="coding-day">
+                <div class="coding-day-label">Saturday</div>
+                <div class="coding-day-nums">8 – 9</div>
+                <div class="coding-day-foot">Ending Body No.</div>
+              </div>
+              <div class="coding-day open-win">
+                <div class="coding-day-label">Sunday</div>
+                <div class="coding-day-nums">ALL</div>
+                <div class="coding-day-foot" style="color:#7a6000">Open Window</div>
+              </div>
+            </div>
+
+            <div class="coding-note">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span><strong>Note:</strong> Coding is suspended during official holidays and extreme weather conditions (Signal No. 2 or higher). Violators are subject to TODA Administrative penalties as per Article IV, Section 12.</span>
+            </div>
+          </div>
+
+          <!-- Membership Activity -->
+          <div class="ann-activity-card">
+            <div class="ann-activity-header">
+              <div>
+                <div class="ann-activity-title">Membership Activity</div>
+                <div class="ann-activity-sub">Recent status changes and driver activity</div>
+              </div>
+              <div class="ann-activity-actions">
+                <button class="ann-act-btn">
+                  <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                  Filter
+                </button>
+                <button class="ann-act-btn">
+                  <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  Export
+                </button>
+              </div>
+            </div>
+            <table class="activity-table">
+              <thead>
+                <tr>
+                  <th>Driver Name</th>
+                  <th>Body Number</th>
+                  <th>Route Group</th>
+                  <th>Last Activity</th>
+                  <th>Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="ma-name-cell"><div class="ma-avatar">RJ</div><div class="ma-name">Ricardo Jose</div></div></td>
+                  <td>#345</span></td>
+                  <td>Northbound Express</span></td>
+                  <td>Oct 24, 14:22</span></td>
+                  <td><div class="dr-status"><div class="dr-status-dot active"></div><div class="dr-status-label active">Active</div></div></span></td>
+                  <td class="ma-chevron">›</span></td>
+                </tr>
+                <tr>
+                  <td><div class="ma-name-cell"><div class="ma-avatar">AS</div><div class="ma-name">Antonio Santos</div></div></span></td>
+                  <td>#112</span></td>
+                  <td>Central Loop</span></td>
+                  <td>Oct 23, 09:15</span></td>
+                  <td><div class="dr-status"><div class="dr-status-dot inactive"></div><div class="dr-status-label inactive">Inactive</div></div></span></td>
+                  <td class="ma-chevron">›</span></td>
+                </tr>
+                <tr>
+                  <td><div class="ma-name-cell"><div class="ma-avatar">EM</div><div class="ma-name">Eduardo Manuel</div></div></span></td>
+                  <td>#088</span></td>
+                  <td>South Market</span></td>
+                  <td>Oct 21, 11:45</span></td>
+                  <td><div class="dr-status"><div class="dr-status-dot suspended"></div><div class="dr-status-label suspended">Suspended</div></div></span></td>
+                  <td class="ma-chevron">›</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Banner CTAs -->
+          <div class="ann-banner-grid">
+            <div class="ann-banner broadcast" onclick="document.getElementById('broadcast-panel-wrap').scrollIntoView({behavior:'smooth'})">
+              <div class="ann-banner-icon">
+                <svg width="22" height="22" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              </div>
+              <div class="ann-banner-text">
+                <div class="ann-banner-title">Broadcast<br>Announcements</div>
+                <div class="ann-banner-sub">Send alerts to driver apps</div>
+              </div>
+            </div>
+            <div class="ann-banner compliance">
+              <div class="ann-banner-icon">
+                <svg width="22" height="22" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              </div>
+              <div class="ann-banner-text">
+                <div class="ann-banner-title">Regulatory<br>Compliance Reports</div>
+                <div class="ann-banner-sub">Generate monthly audit data</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Posted Announcements -->
+          <div class="ann-posts-section">
+            <div class="ann-posts-header">
+              <div class="ann-posts-title">Posted Bulletins</div>
+              <div class="ann-post-count" id="ann-count">4 active</div>
+            </div>
+            <div id="ann-posts-list"></div>
+          </div>
+
+          <!-- Footer -->
+          <div class="ann-footer">
+            <div class="ann-footer-title">Sovereign TODA Administrative Control Suite V2.4.0</div>
+            <div class="ann-footer-copy">© 2023 Central Command. Authorized Personnel Only.</div>
+          </div>
+        </div>
+
+        <!-- RIGHT SIDEBAR -->
+        <div>
+
+          <!-- Fare Guide -->
+          <div class="fare-card">
+            <div class="fare-header">
+              <div class="fare-header-left">
+                <div class="fare-icon">
+                  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/><path d="M12 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg>
+                </div>
+                <div>
+                  <div class="fare-title">Fare Guide</div>
+                  <div class="fare-updated">Updated Oct 01</div>
+                </div>
+              </div>
+              <div class="fare-edit-btn" title="Edit Fare">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </div>
+            </div>
+
+            <div class="fare-item">
+              <div><div class="fare-item-name">Base Fare</div><div class="fare-item-desc">First 2 Kilometers</div></div>
+              <div class="fare-item-price"><div class="fare-price-num">₱15.00</div><div class="fare-price-label">Per Passenger</div></div>
+            </div>
+            <div class="fare-item">
+              <div><div class="fare-item-name">Town Proper to Hi-Way</div><div class="fare-item-desc">Direct Route</div></div>
+              <div class="fare-item-price"><div class="fare-price-num">₱25.00</div><div class="fare-price-label">Flat Rate</div></div>
+            </div>
+            <div class="fare-item">
+              <div><div class="fare-item-name">Special Trip</div><div class="fare-item-desc">Direct / Private</div></div>
+              <div class="fare-item-price"><div class="fare-price-num negotiable">₱50.00+</div><div class="fare-price-label">Negotiable</div></div>
+            </div>
+
+            <div class="fare-discount-row">
+              <div class="fare-discount-label">Students &amp; Seniors</div>
+              <div class="fare-discount-val">-20% Discount</div>
+            </div>
+            <button class="fare-modify-btn">Modify Rates</button>
+          </div>
+
+          <!-- Broadcast Panel -->
+          <div class="broadcast-panel" id="broadcast-panel-wrap">
+            <div class="bp-title">Post New Announcement</div>
+            <div class="bp-sub">Compose and publish to the bulletin board</div>
+            <input type="text" class="lf-input" id="ann-new-title" placeholder="Announcement title…" style="margin-bottom:8px"/>
+            <textarea class="bp-textarea" id="ann-new-body" placeholder="Write your announcement here…"></textarea>
+            <div class="bp-row">
+              <select class="bp-type-select" id="ann-new-type">
+                <option value="general">General</option>
+                <option value="emergency">Emergency</option>
+                <option value="operational">Operational</option>
+                <option value="meeting">Meeting</option>
+              </select>
+              <button class="bp-send-btn" onclick="postAnnouncement()">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                Post
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    
+</body>
+</html>

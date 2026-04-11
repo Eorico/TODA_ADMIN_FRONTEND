@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+     <!-- DASHBOARD PAGE -->
+    <div id="page-dashboard" class="active">
+      <div class="page-header">
+        <h1>Admin Dashboard</h1>
+        <div class="meta"><span class="status-dot"></span> Monday, Oct 24 &nbsp;•&nbsp; System Operational</div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="card contrib">
+          <div class="contrib-label">Total Contributions</div>
+          <div class="contrib-amount">₱142,850.00</div>
+          <div class="contrib-note">Weekly collection report for Oct 17–Oct 23. Up 12.5% from last month's average performance.</div>
+        </div>
+        <div class="side-cards">
+          <div class="card drivers">
+            <div class="stat-label">Active Drivers</div>
+            <div class="stat-num">248</div>
+            <div class="stat-sub">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Currently Plying Routes
+            </div>
+          </div>
+          <div class="card lost">
+            <div class="stat-label">Lost Items</div>
+            <div class="stat-num">14</div>
+            <div class="stat-link" onclick="switchPage('lostfound')">Review submissions →</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-grid">
+        <div class="card">
+          <div class="section-title">Recent Activity</div>
+          <div class="section-sub">Latest system events and admin actions</div>
+          <div class="activity-list">
+            <div class="activity-item">
+              <div class="act-icon">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+              </div>
+              <div class="act-info">
+                <div class="act-title">Fare List Updated</div>
+                <div class="act-desc">Admin Juan Dela Cruz modified route Zone 4</div>
+              </div>
+              <div class="act-time">14:20 PM</div>
+            </div>
+            <div class="activity-item">
+              <div class="act-icon">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <div class="act-info">
+                <div class="act-title">New Driver Registered</div>
+                <div class="act-desc">Unit #8822 approved for service</div>
+              </div>
+              <div class="act-time">11:05 AM</div>
+            </div>
+            <div class="activity-item">
+              <div class="act-icon">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+              <div class="act-info">
+                <div class="act-title">Emergency Announcement</div>
+                <div class="act-desc">Road closure broadcast sent to all drivers</div>
+              </div>
+              <div class="act-time">09:45 AM</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="promo-card">
+          <div class="hex-bg"></div>
+          <div class="plus-btn">+</div>
+          <div class="promo-headline">Civic Excellence<br>Every Single Day.</div>
+          <div class="promo-desc">Manage driver schedules and community notices with the MAMTTODA editorial standard.</div>
+          <div class="promo-btns">
+            <button class="promo-btn white">Broadcast Notice</button>
+            <button class="promo-btn dark">Edit Coding</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<script src="../../js/admin_dashboad.js"></script>
+</body>
+</html>

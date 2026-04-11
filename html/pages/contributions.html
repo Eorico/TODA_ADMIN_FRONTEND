@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- CONTRIBUTIONS PAGE -->
+    <div id="page-contributions">
+      <div class="cn-page-header">
+        <div class="meta" style="margin-bottom:6px">
+          <span class="status-dot"></span> Q4 2024 &nbsp;•&nbsp; Oct 1 – Dec 31
+        </div>
+        <div class="cn-page-title">Driver<br><em style="font-style:italic;color:var(--crimson)">Contributions.</em></div>
+        <div class="cn-page-sub">Track and manage weekly/monthly contributions from all tricycle drivers in the TODA registry.</div>
+      </div>
+
+      <div class="cn-summary-row">
+        <div class="cn-sum-card cn-sum-main">
+          <div class="cn-sum-label">Total Collected (Oct)</div>
+          <div class="cn-sum-num" id="cn-total-amount">₱0.00</div>
+          <div class="cn-sum-sub">From <span id="cn-paid-count">0</span> paid drivers this period</div>
+        </div>
+        <div class="cn-sum-card cn-sum-light">
+          <div class="cn-sum-label">Paid</div>
+          <div class="cn-sum-num" id="cn-paid-num" style="color:#15803d">0</div>
+          <div class="cn-sum-sub">Drivers settled</div>
+        </div>
+        <div class="cn-sum-card cn-sum-light">
+          <div class="cn-sum-label">Partial</div>
+          <div class="cn-sum-num" id="cn-partial-num" style="color:#d97706">0</div>
+          <div class="cn-sum-sub">Need follow-up</div>
+        </div>
+        <div class="cn-sum-card cn-sum-light">
+          <div class="cn-sum-label">Unpaid</div>
+          <div class="cn-sum-num" id="cn-unpaid-num" style="color:var(--crimson)">0</div>
+          <div class="cn-sum-sub">Overdue</div>
+        </div>
+      </div>
+
+      <div class="cn-toolbar">
+        <div class="cn-toolbar-left">
+          <div class="cn-search">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="text" placeholder="Search driver name or body no…" id="cn-search-input" oninput="cnFilterRender()"/>
+          </div>
+          <select class="cn-filter-select" id="cn-filter-status" onchange="cnFilterRender()">
+            <option value="">All Status</option>
+            <option value="paid">Paid</option>
+            <option value="partial">Partial</option>
+            <option value="unpaid">Unpaid</option>
+          </select>
+          <select class="cn-filter-select" id="cn-filter-period" onchange="cnFilterRender()">
+            <option value="">All Periods</option>
+            <option value="Oct 2024">Oct 2024</option>
+            <option value="Sep 2024">Sep 2024</option>
+            <option value="Aug 2024">Aug 2024</option>
+          </select>
+        </div>
+        <button class="btn-cn-add" onclick="openCnModal()">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Contribution
+        </button>
+      </div>
+
+      <div class="cn-table-card">
+        <table class="cn-table">
+          <thead>
+            <tr>
+              <th>Driver</th>
+              <th>Body No.</th>
+              <th>Amount</th>
+              <th>Period</th>
+              <th>Date Paid</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="cn-table-body"></tbody>
+        </table>
+        <div class="cn-pagination">
+          <div class="cn-showing" id="cn-showing"></div>
+          <div class="cn-pages">
+            <button class="cn-pg-btn" id="cn-prev" onclick="cnChangePage(-1)">‹</button>
+            <div id="cn-page-btns" style="display:flex;gap:4px"></div>
+            <button class="cn-pg-btn" id="cn-next" onclick="cnChangePage(1)">›</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<script src="../../js/admin_dashboad.js"></script>
+</body>
+</html>

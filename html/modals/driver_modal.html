@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- DRIVER ADD/EDIT MODAL -->
+<div class="modal-overlay" id="driver-modal">
+  <div class="modal" style="width:520px">
+    <div class="modal-tag">Driver Management</div>
+    <div class="modal-title-row">
+      <div class="modal-title" id="driver-modal-title">Add New Driver</div>
+      <div class="modal-edt">DRV</div>
+    </div>
+    <div class="modal-sub" id="driver-modal-sub">Fill in the details to register a new fleet member.</div>
+
+    <div class="modal-row" style="margin-top:0">
+      <div class="modal-field">
+        <label class="modal-label">First Name</label>
+        <input class="modal-input" id="drv-fname" type="text" placeholder="e.g., Antonio" style="border:1px solid var(--border);border-radius:8px;width:100%;padding:10px 12px"/>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Last Name</label>
+        <input class="modal-input" id="drv-lname" type="text" placeholder="e.g., Santos" style="border:1px solid var(--border);border-radius:8px;width:100%;padding:10px 12px"/>
+      </div>
+    </div>
+    <div class="modal-row">
+      <div class="modal-field">
+        <label class="modal-label">Body Number</label>
+        <div class="input-prefix">
+          <span>#</span>
+          <input class="modal-input" id="drv-body" type="text" placeholder="345"/>
+        </div>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Contact Number</label>
+        <div class="input-prefix">
+          <span>+63</span>
+          <input class="modal-input" id="drv-contact" type="text" placeholder="917 555 1234"/>
+        </div>
+      </div>
+    </div>
+    <div class="modal-field" style="margin-bottom:16px">
+      <label class="modal-label">Account Status</label>
+      <div class="select-wrap">
+        <select class="modal-select" id="drv-status">
+          <option>Active</option>
+          <option>Inactive</option>
+          <option>Suspended</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeDriverModal()">Cancel</button>
+      <button class="btn-save" onclick="saveDriver()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Save Driver
+      </button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

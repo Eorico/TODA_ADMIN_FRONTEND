@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- DRIVERS REGISTRY PAGE -->
+    <div id="page-drivers">
+      <div class="dr-breadcrumb">Organization &nbsp;/&nbsp; Driver Management</div>
+      <div class="dr-page-header">
+        <div>
+          <h1 class="dr-title">Drivers Registry</h1>
+          <p class="dr-desc">Manage the active fleet of TODA Sovereign members. Track member status, vehicle assignments, and contact records in real-time.</p>
+        </div>
+        <div class="dr-header-actions">
+          <button class="dr-filter-btn">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+            Advanced Filters
+          </button>
+          <button class="dr-add-btn" onclick="openDriverModal()">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+            Add New Driver
+          </button>
+        </div>
+      </div>
+
+      <div class="dr-table-card">
+        <table class="dr-table">
+          <thead>
+            <tr>
+              <th>Member Info</th>
+              <th>Body Number</th>
+              <th>Account Status</th>
+              <th>Contact Info</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="driver-table-body"></tbody>
+        </table>
+        <div class="dr-pagination-row">
+          <div class="dr-showing" id="dr-showing">Showing 1 – 4 of 142 total members</div>
+          <div class="dr-pages">
+            <button class="dr-pg-btn" id="dr-prev" onclick="drChangePage(-1)">&#8249;</button>
+            <span id="dr-page-btns"></span>
+            <button class="dr-pg-btn" id="dr-next" onclick="drChangePage(1)">&#8250;</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dr-stats-row">
+        <div class="dr-stat-card dr-stat-dark">
+          <div class="dr-stat-bg-icon">
+            <svg width="60" height="60" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="dr-stat-label">Active Force</div>
+          <div class="dr-stat-num">128</div>
+          <div class="dr-stat-sub">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            +4% from last month
+          </div>
+        </div>
+        <div class="dr-stat-card dr-stat-olive">
+          <div class="dr-stat-bg-icon">
+            <svg width="60" height="60" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div class="dr-stat-label">Pending Reviews</div>
+          <div class="dr-stat-num">14</div>
+          <div class="dr-stat-sub">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Awaiting dispatch clearance
+          </div>
+        </div>
+        <div class="dr-stat-card dr-stat-light">
+          <div class="dr-stat-label" style="color:var(--text-muted)">Fleet Coverage</div>
+          <div class="dr-stat-num" style="color:var(--crimson);font-size:42px">94.2%</div>
+          <div class="dr-coverage-bar"><div class="dr-coverage-fill" style="width:94.2%"></div></div>
+          <div class="dr-stat-sub" style="color:var(--text-muted);margin-top:8px">Routes currently covered</div>
+        </div>
+      </div>
+    </div>
+</body>
+</html>

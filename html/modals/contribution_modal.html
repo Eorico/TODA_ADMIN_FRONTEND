@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- CONTRIBUTION ADD/EDIT MODAL -->
+<div class="cn-modal-overlay" id="cn-modal">
+  <div class="cn-modal">
+    <div class="cn-modal-tag">Contributions</div>
+    <div class="cn-modal-title" id="cn-modal-title">Add Contribution</div>
+    <div class="cn-modal-sub" id="cn-modal-sub">Record a driver's contribution for the period.</div>
+    <div class="cn-modal-section">Driver Information</div>
+    <div class="cn-modal-row">
+      <div class="cn-modal-field" style="margin-bottom:0">
+        <label class="cn-modal-label">First Name</label>
+        <input class="cn-modal-input" id="cn-fname" type="text" placeholder="e.g., Juan"/>
+      </div>
+      <div class="cn-modal-field" style="margin-bottom:0">
+        <label class="cn-modal-label">Last Name</label>
+        <input class="cn-modal-input" id="cn-lname" type="text" placeholder="e.g., Dela Cruz"/>
+      </div>
+    </div>
+    <div class="cn-modal-row" style="margin-top:16px">
+      <div class="cn-modal-field" style="margin-bottom:0">
+        <label class="cn-modal-label">Body Number</label>
+        <input class="cn-modal-input" id="cn-body" type="text" placeholder="e.g., 345"/>
+      </div>
+      <div class="cn-modal-field" style="margin-bottom:0">
+        <label class="cn-modal-label">Driver ID</label>
+        <input class="cn-modal-input" id="cn-driverid" type="text" placeholder="e.g., ID-2024-0089"/>
+      </div>
+    </div>
+    <div class="cn-modal-section">Contribution Details</div>
+    <div class="cn-modal-row">
+      <div class="cn-modal-field" style="margin-bottom:0">
+        <label class="cn-modal-label">Amount</label>
+        <div class="cn-modal-peso">
+          <span>₱</span>
+          <input type="number" id="cn-amount" placeholder="250.00" step="0.01" min="0"/>
+        </div>
+      </div>
+      <div class="cn-modal-field" style="margin-bottom:0">
+        <label class="cn-modal-label">Period</label>
+        <select class="cn-modal-select" id="cn-period">
+          <option>Oct 2024</option>
+          <option>Sep 2024</option>
+          <option>Aug 2024</option>
+          <option>Jul 2024</option>
+          <option>Q4 2024</option>
+          <option>Q3 2024</option>
+        </select>
+      </div>
+    </div>
+    <div class="cn-modal-row" style="margin-top:16px">
+      <div class="cn-modal-field" style="margin-bottom:0">
+        <label class="cn-modal-label">Date Paid</label>
+        <input class="cn-modal-input" id="cn-date" type="date"/>
+      </div>
+      <div class="cn-modal-field" style="margin-bottom:0">
+        <label class="cn-modal-label">Payment Status</label>
+        <select class="cn-modal-select" id="cn-paystatus">
+          <option value="paid">Paid</option>
+          <option value="partial">Partial</option>
+          <option value="unpaid">Unpaid</option>
+        </select>
+      </div>
+    </div>
+    <div class="cn-modal-field" style="margin-top:16px">
+      <label class="cn-modal-label">Notes (optional)</label>
+      <input class="cn-modal-input" id="cn-notes" type="text" placeholder="e.g., Late payment, installment…"/>
+    </div>
+    <div class="cn-modal-actions">
+      <button class="cn-modal-cancel" onclick="closeCnModal()">Cancel</button>
+      <button class="cn-modal-save" onclick="saveCnRecord()"><span id="cn-save-label">Save Record</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- CONTRIBUTION DELETE CONFIRM -->
+<div class="gen-confirm-overlay" id="cn-confirm">
+  <div class="gen-confirm-box">
+    <div class="gen-confirm-icon">
+      <svg width="24" height="24" fill="none" stroke="var(--crimson)" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+    </div>
+    <div class="gen-confirm-title">Delete Record</div>
+    <div class="gen-confirm-sub" id="cn-confirm-sub">Are you sure you want to delete this contribution record?</div>
+    <div class="gen-confirm-btns">
+      <button class="gen-confirm-cancel" onclick="closeCnConfirm()">Cancel</button>
+      <button class="gen-confirm-del" onclick="confirmDeleteCn()">Delete</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

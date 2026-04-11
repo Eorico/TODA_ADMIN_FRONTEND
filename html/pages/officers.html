@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- OFFICERS MANAGEMENT PAGE -->
+    <div id="page-officers">
+
+      <!-- Header Row -->
+      <div class="off-header-row">
+        <div class="off-title-block">
+          <div class="off-term-badge">
+            <span class="off-term-dot"></span>
+            Term: 2023 – 2025 &nbsp;|&nbsp; Active
+          </div>
+          <div class="off-page-title">Officers Management</div>
+          <div class="off-page-sub">Curating the leadership of Sovereign TODA with precision and administrative excellence.</div>
+        </div>
+        <div class="off-header-right">
+          <div class="off-total-badge">
+            <div class="off-total-label">Total Force</div>
+            <div class="off-total-num" id="off-total-num">0</div>
+            <div class="off-total-unit">Officers</div>
+          </div>
+          <button class="btn-download-roster">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Official Roster
+          </button>
+        </div>
+      </div>
+
+      <!-- Action Cards -->
+      <div class="off-action-row">
+        <div class="off-action-card crimson">
+          <div class="off-card-text">
+            <div class="off-card-title">Expand Council</div>
+            <div class="off-card-sub">Register a new official into the current term.</div>
+          </div>
+          <button class="btn-off-action white-btn" onclick="openOfficerModal()">Add New Officer</button>
+        </div>
+        <div class="off-action-card olive">
+          <div class="off-card-text">
+            <div class="off-card-title">Broadcast Hub</div>
+            <div class="off-card-sub">Send emergency or general alerts to all officers.</div>
+          </div>
+          <button class="btn-off-action dark-btn" onclick="showToast('Broadcasting message to all officers…')">Message All</button>
+        </div>
+      </div>
+
+      <!-- Council Members Grid -->
+      <div class="off-council-header">
+        <div class="off-council-title">Council Members</div>
+        <div class="off-view-toggle">
+          <button class="off-view-btn active" id="off-grid-btn" onclick="setOfficerView('grid')" title="Grid View">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          </button>
+          <button class="off-view-btn" id="off-list-btn" onclick="setOfficerView('list')" title="List View">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="off-grid" id="off-grid-container"></div>
+
+      <!-- Leadership Archives -->
+      <div class="off-archives-section">
+        <div class="off-archives-header">
+          <div class="off-archives-title">
+            <svg width="22" height="22" fill="none" stroke="var(--crimson)" stroke-width="2" viewBox="0 0 24 24"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+            Leadership Archives
+          </div>
+          <div class="off-archives-sub">Honoring the previous administrators of Sovereign TODA.</div>
+        </div>
+        <table class="off-archives-table">
+          <thead>
+            <tr>
+              <th>Term Period</th>
+              <th>Lead Executive</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>2021 – 2023</span></td>
+              <td><div class="off-arch-lead"><div class="off-arch-initials" style="background:#7a0c0c">RM</div><div class="off-arch-name">Pres. Roberto V. Macaspac</div></div></span></td>
+              <td><span class="off-arch-badge">Archived</span></span></td>
+              <td><span class="off-arch-link">View Records →</span></span></td>
+            </tr>
+            <tr>
+              <td>2019 – 2021</span></td>
+              <td><div class="off-arch-lead"><div class="off-arch-initials" style="background:#2980b9">DC</div><div class="off-arch-name">Pres. Danilo C. Santos</div></div></span></td>
+              <td><span class="off-arch-badge">Archived</span></span></td>
+              <td><span class="off-arch-link">View Records →</span></span></td>
+            </tr>
+            <tr>
+              <td>2017 – 2019</span></td>
+              <td><div class="off-arch-lead"><div class="off-arch-initials" style="background:#27ae60">EG</div><div class="off-arch-name">Pres. Estela G. Garcia</div></div></span></td>
+              <td><span class="off-arch-badge">Archived</span></span></td>
+              <td><span class="off-arch-link">View Records →</span></span></td>
+            </tr>
+          </tbody>
+        </table>
+        <button class="btn-view-roll">View Complete Historical Roll</button>
+      </div>
+
+    </div>
+</body>
+</html>

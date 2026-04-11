@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- LOST & FOUND PAGE -->
+    <div id="page-lostfound">
+
+      <!-- LEFT COLUMN -->
+      <div class="lf-left">
+
+        <!-- Header -->
+        <div class="lf-header">
+          <div class="lf-icon-wrap">
+            <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          </div>
+          <div class="lf-header-text">
+            <div class="lf-title">Post Lost &amp; Found Item</div>
+            <div class="lf-subtitle">Help Reunite Passengers With Their Belongings</div>
+          </div>
+        </div>
+
+        <!-- Post Form Card -->
+        <div class="lf-form-card">
+          <div class="lf-section-label">Item Photo</div>
+          <div class="lf-photo-area" id="lf-photo-area" onclick="document.getElementById('lf-file-input').click()">
+            <svg class="photo-icon" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <div class="photo-tap">Tap to upload or take a photo</div>
+            <div class="photo-hint">High Resolution Preferred</div>
+            <div class="photo-overlay"><span>Change Photo</span></div>
+          </div>
+          <input type="file" id="lf-file-input" accept="image/*"/>
+
+          <div class="lf-field">
+            <label class="lf-label">Item Name</label>
+            <input class="lf-input" id="lf-item-name" type="text" placeholder="e.g., Black Leather Wallet"/>
+          </div>
+
+          <div class="lf-row">
+            <div class="lf-field">
+              <label class="lf-label">Tricycle Body #</label>
+              <input class="lf-input" id="lf-body-num" type="text" placeholder="e.g., 2045"/>
+            </div>
+            <div class="lf-field">
+              <label class="lf-label">Date Found</label>
+              <input class="lf-input" id="lf-date" type="date"/>
+            </div>
+          </div>
+
+          <button class="lf-submit" onclick="submitLostFound()">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            POST ITEM TO BULLETIN
+          </button>
+          <div class="lf-submit-note">Once posted, this will be visible to all members and on the public dashboard.</div>
+        </div>
+
+        <!-- Posted Items List -->
+        <div class="lf-items-list">
+          <div class="lf-items-title">Active Submissions</div>
+          <div class="lf-items-sub">14 items currently on bulletin — pending claim or return.</div>
+
+          <div id="lf-items-container">
+            <div class="lf-item-row">
+              <div class="lf-item-thumb">
+                <svg width="22" height="22" fill="none" stroke="#ccc" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+              </div>
+              <div class="lf-item-info">
+                <div class="lf-item-name">Black Leather Wallet</div>
+                <div class="lf-item-meta">Body #2045 &nbsp;•&nbsp; Found Oct 22</div>
+              </div>
+              <div class="lf-item-status status-pending">Pending</div>
+            </div>
+
+            <div class="lf-item-row">
+              <div class="lf-item-thumb">
+                <svg width="22" height="22" fill="none" stroke="#ccc" stroke-width="1.5" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+              </div>
+              <div class="lf-item-info">
+                <div class="lf-item-name">Samsung Galaxy A54</div>
+                <div class="lf-item-meta">Body #1138 &nbsp;•&nbsp; Found Oct 20</div>
+              </div>
+              <div class="lf-item-status status-claimed">Claimed</div>
+            </div>
+
+            <div class="lf-item-row">
+              <div class="lf-item-thumb">
+                <svg width="22" height="22" fill="none" stroke="#ccc" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              </div>
+              <div class="lf-item-info">
+                <div class="lf-item-name">Child's Red Backpack</div>
+                <div class="lf-item-meta">Body #3301 &nbsp;•&nbsp; Found Oct 19</div>
+              </div>
+              <div class="lf-item-status status-pending">Pending</div>
+            </div>
+
+            <div class="lf-item-row">
+              <div class="lf-item-thumb">
+                <svg width="22" height="22" fill="none" stroke="#ccc" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              </div>
+              <div class="lf-item-info">
+                <div class="lf-item-name">Silver Wristwatch</div>
+                <div class="lf-item-meta">Body #0892 &nbsp;•&nbsp; Found Oct 18</div>
+              </div>
+              <div class="lf-item-status status-pending">Pending</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT SIDEBAR -->
+      <div class="lf-sidebar">
+
+        <!-- General Assembly Card -->
+        <div class="lf-assembly-card">
+          <div class="lf-assembly-header">
+            <div class="assembly-icon">
+              <svg width="18" height="18" fill="none" stroke="#888" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div>
+              <div class="assembly-title">General Assembly</div>
+              <div class="assembly-sub">Upcoming Meetings &amp; Agendas</div>
+            </div>
+          </div>
+
+          <div class="meeting-item">
+            <div class="meeting-date">
+              <div class="meeting-month">OCT</div>
+              <div class="meeting-day">24</div>
+            </div>
+            <div class="meeting-info">
+              <div class="meeting-title">Election of Officers 2024 <span class="meeting-badge">MANDATORY</span></div>
+              <div class="meeting-venue">Venue: Brgy. Hall Multi-Purpose Court | 09:00 AM</div>
+            </div>
+          </div>
+
+          <div class="meeting-item">
+            <div class="meeting-date">
+              <div class="meeting-month">NOV</div>
+              <div class="meeting-day">07</div>
+            </div>
+            <div class="meeting-info">
+              <div class="meeting-title">Q4 Contribution Review</div>
+              <div class="meeting-venue">Venue: MAMTTODA Office | 02:00 PM</div>
+            </div>
+          </div>
+
+          <div class="meeting-item">
+            <div class="meeting-date">
+              <div class="meeting-month">NOV</div>
+              <div class="meeting-day">15</div>
+            </div>
+            <div class="meeting-info">
+              <div class="meeting-title">Route Expansion Discussion <span class="meeting-badge">MANDATORY</span></div>
+              <div class="meeting-venue">Venue: Brgy. Hall | 10:00 AM</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Emergency Alert Card -->
+        <div class="lf-emergency-card">
+          <div class="emergency-label">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            Emergency Alert
+          </div>
+          <div class="emergency-title">Road Maintenance:<br>J. Rizal Ave.</div>
+          <div class="emergency-desc">Expect heavy traffic due to drainage repairs starting Oct 20. Drivers are advised to take alternative routes via Mabini St.</div>
+          <div class="emergency-link">
+            View Map Redirects
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </div>
+        </div>
+
+      </div>
+    </div>
+</body>
+</html>
