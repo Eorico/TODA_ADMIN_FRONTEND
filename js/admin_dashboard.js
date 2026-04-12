@@ -1285,6 +1285,8 @@ class DashboardApp {
 
         // Page switching
         window.switchPage = (page) => this.switchPage(page);
+
+        window.logout = () => this.logout();
     }
 
     async IncludeHTML() {
@@ -1309,6 +1311,16 @@ class DashboardApp {
         this.initNavigation();
         this.initActiveDashboards();
         this.initModalOverlayClose();
+    }
+
+    logout() {
+        const confirmed = confirm('Are you sure you want to logout?');
+        if (!confirmed) return;
+        
+        DashboardUtils.showToast('Logging out...');
+        setTimeout(() => {
+            window.location.href = 'admin_login.html';
+        }, 1000);
     }
 
     start() {

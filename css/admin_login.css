@@ -123,6 +123,8 @@ body::after {
     font-size: 1.7rem;
     letter-spacing: 0.18em;
     color: var(--text-dark);
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .brand-sub {

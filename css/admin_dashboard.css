@@ -477,13 +477,6 @@ body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--te
 .off-total-label { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); }
 .off-total-num { font-family:'Fraunces',serif; font-size:42px; font-weight:900; color:var(--crimson); line-height:1; }
 .off-total-unit { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:.5px; color:var(--crimson); }
-.btn-download-roster {
-  display:flex; align-items:center; gap:8px; padding:10px 18px;
-  border:1.5px solid var(--border); border-radius:10px; background:var(--white);
-  font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700;
-  letter-spacing:.5px; color:var(--text-dark); cursor:pointer; transition:all .2s;
-}
-.btn-download-roster:hover { border-color:var(--crimson); color:var(--crimson); }
 
 .off-action-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:32px; }
 .off-action-card {
