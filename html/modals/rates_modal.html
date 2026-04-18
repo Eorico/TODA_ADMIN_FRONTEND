@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- FARE MODAL -->
+<div class="off-modal-overlay" id="fare-modal">
+  <div class="off-modal" style="width:480px;">
+
+    <span class="off-modal-tag">Fare Management</span>
+    <div class="off-modal-title">Modify Fare Rates</div>
+    <div class="off-modal-sub">Updates reflect immediately on the Fare Guide card.</div>
+
+    <div class="off-modal-section">Standard Fares</div>
+
+    <div class="off-modal-row">
+      <div class="off-modal-field">
+        <label class="off-modal-label">Base Fare <span style="color:var(--text-light);font-weight:400;text-transform:none;letter-spacing:0">(first 2 km)</span></label>
+        <div class="cn-modal-peso">
+          <span>₱</span>
+          <input id="fm-base" type="number" min="0" step="0.50" placeholder="15.00" />
+        </div>
+      </div>
+      <div class="off-modal-field">
+        <label class="off-modal-label">Town Proper to Hi-Way <span style="color:var(--text-light);font-weight:400;text-transform:none;letter-spacing:0">(flat)</span></label>
+        <div class="cn-modal-peso">
+          <span>₱</span>
+          <input id="fm-highway" type="number" min="0" step="0.50" placeholder="25.00" />
+        </div>
+      </div>
+    </div>
+
+    <div class="off-modal-field">
+      <label class="off-modal-label">Special / Private Trip <span style="color:var(--text-light);font-weight:400;text-transform:none;letter-spacing:0">(starting at)</span></label>
+      <div class="cn-modal-peso">
+        <span>₱</span>
+        <input id="fm-special" type="number" min="0" step="1" placeholder="50.00" />
+      </div>
+    </div>
+
+    <div class="off-modal-section">Discounts</div>
+
+    <div class="off-modal-row">
+      <div class="off-modal-field">
+        <label class="off-modal-label">Students</label>
+        <div class="cn-modal-peso">
+          <input id="fm-disc-student" type="number" min="0" max="100" step="1" placeholder="20" />
+          <span style="border-left:1.5px solid var(--border);border-right:none;padding:10px 12px;background:var(--border-light);color:var(--text-muted);font-size:14px;flex-shrink:0;">%</span>
+        </div>
+      </div>
+      <div class="off-modal-field">
+        <label class="off-modal-label">Seniors / PWD</label>
+        <div class="cn-modal-peso">
+          <input id="fm-disc-senior" type="number" min="0" max="100" step="1" placeholder="20" />
+          <span style="border-left:1.5px solid var(--border);border-right:none;padding:10px 12px;background:var(--border-light);color:var(--text-muted);font-size:14px;flex-shrink:0;">%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-note" style="margin-bottom:0;margin-top:4px;">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:1px;stroke:#d97706"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>Ensure compliance with LTFRB guidelines before updating. Changes take effect immediately.</span>
+    </div>
+
+    <div class="off-modal-actions">
+      <button class="off-modal-cancel" onclick="closeFareModal()">Cancel</button>
+      <button class="off-modal-save" onclick="saveFareRates()">Save Rates</button>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

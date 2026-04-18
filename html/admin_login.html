@@ -97,6 +97,10 @@
 
   </div>
 
-  <script src="../js/admin_login.js"></script>
+  <script type="module">
+    import { AdminLogin } from '../js/auth/admin_login.js';
+    const login = new AdminLogin();
+    login.init()
+  </script>
 </body>
 </html>
