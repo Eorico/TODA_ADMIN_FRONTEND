@@ -1,5 +1,5 @@
 import { DashboardUtils } from "../utils/utils.js";
-
+import { ApiService } from "../api/api_service.js";
 /* ============================================
    DASHBOARD 7: CONTRIBUTIONS
    ============================================ */
@@ -8,6 +8,14 @@ export class ContributionsDashboard {
         this.store = store;
         this.avatarColors = ['#7a0c0c', '#2980b9', '#27ae60', '#8e44ad', '#16a085', '#e67e22', '#c0392b', '#1a5276', '#784212', '#1f618d'];
         this.PER_PAGE = 8;
+    }
+
+    async sync() {
+        const data = await ApiService.call('/admin/contributions', 'GET');
+        if (data) {
+            this.store.cnData = data;
+            this.filterRender();
+        }
     }
 
     initials(r) { return (r.fname[0] + r.lname[0]).toUpperCase(); }
@@ -175,7 +183,7 @@ export class ContributionsDashboard {
         DashboardUtils.closeModal('cn-modal');
     }
 
-    save() {
+    async save() {
         const fname = DashboardUtils.getEl('cn-fname')?.value.trim();
         const lname = DashboardUtils.getEl('cn-lname')?.value.trim();
         const body = DashboardUtils.getEl('cn-body')?.value.trim();
@@ -187,18 +195,24 @@ export class ContributionsDashboard {
         const notes = DashboardUtils.getEl('cn-notes')?.value.trim();
         if (!fname || !lname) { DashboardUtils.getEl('cn-fname')?.focus(); return; }
 
-        const entry = { fname, lname, body: body || '—', driverid: driverid || '—', amount, period, date, status, notes };
+        const payLoad = {
+            fname, lname, body: body || '—', driverid: driverid || '—', amount, period, date, status, notes
+        };
+
+        let result;
         if (this.store.cnEditIdx !== null) {
-            this.store.cnData[this.store.cnEditIdx] = entry;
-            DashboardUtils.showToast(`${fname} ${lname}'s contribution updated.`);
+            const id = this.store.cnData[this.store.cnEditIdx].id || this.store.cnData[this.store.cnEditIdx]._id;
+            result = await ApiService.call(`/admin/contributions`, 'PUT', payLoad);
+            if (result) DashboardUtils.showToast(`${fname} ${lname}'s record updated`);
         } else {
-            this.store.cnData.unshift(entry);
-            DashboardUtils.showToast(`Contribution for ${fname} ${lname} recorded.`);
+            result = await ApiService.call('/admin/contributions', 'POST', payLoad);
+            if (result) DashboardUtils.showToast(`Contribution for ${fname} ${lname} recorded`);
         }
-        this.closeModal();
-        this.store.cnFiltered = [...this.store.cnData];
-        this.store.cnPage = 1;
-        this.render();
+
+        if (result) {
+            this.closeModal();
+            await this.sync();
+        }
     }
 
     openConfirm(idx) {
@@ -214,21 +228,22 @@ export class ContributionsDashboard {
         this.store.cnDeleteIdx = null;
     }
 
-    confirmDelete() {
+    async confirmDelete() {
         if (this.store.cnDeleteIdx === null) return;
-        const name = `${this.store.cnData[this.store.cnDeleteIdx].fname} ${this.store.cnData[this.store.cnDeleteIdx].lname}`;
-        this.store.cnData.splice(this.store.cnDeleteIdx, 1);
-        this.closeConfirm();
-        this.store.cnFiltered = [...this.store.cnData];
-        this.store.cnPage = 1;
-        this.render();
-        DashboardUtils.showToast(`Record for ${name} deleted.`);
+        const record = this.store.cnData[this.store.cnDeleteIdx];
+        const id = record.id || record._id;
+        const result = await ApiService.call(`/admin/contributions/${id}`, 'DELETE');
+        if (result) {
+            DashboardUtils.showToast('Record deleted.');
+            this.closeConfirm();
+            await this.sync
+        }
     }
 
     init() {
+        this.sync();
         this.store.cnFiltered = [...this.store.cnData];
         this.store.cnPage = 1;
-        this.render();
 
         DashboardUtils.bindOverlayClose('cn-modal', () => this.closeModal());
         DashboardUtils.bindOverlayClose('cn-confirm', () => this.closeConfirm());

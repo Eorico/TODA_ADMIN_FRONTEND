@@ -1,12 +1,19 @@
 import { DashboardUtils } from "../utils/utils.js";
+import { ApiService } from "../api/api_service.js";
 
-/* ============================================
-   DASHBOARD 5: OFFICERS MANAGEMENT
-   ============================================ */
 export class OfficersDashboard {
     constructor(store) {
         this.store = store;
         this.avatarColors = ['#7a0c0c', '#2980b9', '#27ae60', '#8e44ad', '#16a085', '#e67e22', '#c0392b', '#1a5276'];
+    }
+
+    async sync() {
+        const data = await ApiService.call('/admin/officers', 'GET');
+        if (data) {
+            // ✅ id is now a plain string from the backend (str(o.id))
+            this.store.officerData = data;
+            this.render();
+        }
     }
 
     statusLabel(s) {
@@ -38,7 +45,7 @@ export class OfficersDashboard {
                             <span class="off-chip-dot"></span>
                             ${statusLbl}
                         </span>
-                        <span class="off-card-id">ID: ${o.id}</span>
+                        <span class="off-card-id">ID: ${o.custom_id}</span>
                     </div>
                     <div class="off-avatar-area">
                         <div class="off-avatar">
@@ -102,7 +109,7 @@ export class OfficersDashboard {
             DashboardUtils.setVal('off-fname', o.fname);
             DashboardUtils.setVal('off-mi', o.mi);
             DashboardUtils.setVal('off-lname', o.lname);
-            DashboardUtils.setVal('off-id', o.id);
+            DashboardUtils.setVal('off-id', o.custom_id); // ✅ show custom_id (TODA-001)
             const roleSelect = DashboardUtils.getEl('off-role');
             const statusSelect = DashboardUtils.getEl('off-status');
             if (roleSelect) roleSelect.value = o.role;
@@ -124,7 +131,7 @@ export class OfficersDashboard {
         DashboardUtils.closeModal('officer-modal');
     }
 
-    save() {
+    async save() {
         const fname = DashboardUtils.getEl('off-fname')?.value.trim();
         const mi = DashboardUtils.getEl('off-mi')?.value.trim();
         const lname = DashboardUtils.getEl('off-lname')?.value.trim();
@@ -135,27 +142,29 @@ export class OfficersDashboard {
 
         if (!fname || !lname) { DashboardUtils.getEl('off-fname')?.focus(); return; }
 
-        const entry = {
+        const payload = {
             fname, mi, lname,
-            id: this.store.offEditIdx !== null
-                ? this.store.officerData[this.store.offEditIdx].id
-                : `TODA-${String(this.store.offNextId).padStart(3, '0')}`,
             role, status,
             phone: phone ? `+63 ${phone}` : '—',
-            email: email || '—'
+            email: email || '—',
+            custom_id: this.store.offEditIdx !== null
+                ? this.store.officerData[this.store.offEditIdx].custom_id
+                : `TODA-${String(this.store.officerData.length + 1).padStart(3, '0')}`
         };
 
+        let result;
         if (this.store.offEditIdx !== null) {
-            this.store.officerData[this.store.offEditIdx] = entry;
-            DashboardUtils.showToast(`${fname} ${lname}'s profile updated.`);
+            const id = this.store.officerData[this.store.offEditIdx].id; // ✅ plain string now
+            result = await ApiService.call(`/admin/officers/${id}`, 'PUT', payload);
         } else {
-            this.store.officerData.push(entry);
-            this.store.offNextId++;
-            DashboardUtils.showToast(`${fname} ${lname} added to the council.`);
+            result = await ApiService.call('/admin/officers', 'POST', payload);
         }
 
-        this.closeModal();
-        this.render();
+        if (result) {
+            this.closeModal();
+            DashboardUtils.showToast(`${fname} ${lname} saved.`);
+            await this.sync();
+        }
     }
 
     openConfirm(idx) {
@@ -173,17 +182,27 @@ export class OfficersDashboard {
         this.store.offDeleteIdx = null;
     }
 
-    confirmDelete() {
+    async confirmDelete() {
         if (this.store.offDeleteIdx === null) return;
-        const name = `${this.store.officerData[this.store.offDeleteIdx].fname} ${this.store.officerData[this.store.offDeleteIdx].lname}`;
-        this.store.officerData.splice(this.store.offDeleteIdx, 1);
-        this.closeConfirm();
-        this.render();
-        DashboardUtils.showToast(`${name} removed from the council.`);
+        const officer = this.store.officerData[this.store.offDeleteIdx];
+        const officerId = officer?.id; // ✅ plain string from backend
+
+        if (!officerId) {
+            console.error('Could not resolve officer ID:', officer);
+            DashboardUtils.showToast('Error: Could not find officer ID.');
+            return;
+        }
+
+        const result = await ApiService.call(`/admin/officers/${officerId}`, 'DELETE');
+        if (result) {
+            this.closeConfirm();
+            DashboardUtils.showToast('Officer removed from council.');
+            await this.sync();
+        }
     }
 
     init() {
-        this.render();
+        this.sync();
         const gridBtn = DashboardUtils.getEl('off-grid-btn');
         const listBtn = DashboardUtils.getEl('off-list-btn');
         if (gridBtn) gridBtn.onclick = () => this.setView('grid');

@@ -1,5 +1,5 @@
 import { DashboardUtils } from "../utils/utils.js";
-
+import { ApiService } from "../api/api_service.js";
 /* ============================================
    DASHBOARD 6: TRICYCLE CODING
    ============================================ */
@@ -9,12 +9,26 @@ export class CodingDashboard {
         this.statusLabels = { active: 'Active', suspended: 'Suspended', 'open-win': 'Open Window' };
     }
 
+    async sync() {
+        const data = await ApiService.call('/admin/coding', 'GET');
+        if (data) {
+            this.store.tcData = data;
+            this.render();
+
+            if (window.announcementsDashboard) {
+                window.announcementsDashboard.renderCodingGrid();
+            }
+        }
+    }
+
     render() {
         const tbody = DashboardUtils.getEl('tc-table-body');
         if (!tbody) return;
 
+        const dataList = this.store.tcData || [];
+
         const totalEl = DashboardUtils.getEl('tc-total');
-        if (totalEl) totalEl.textContent = this.store.tcData.length;
+        if (totalEl) totalEl.textContent = dataList.length;
 
         const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         const today = dayNames[new Date().getDay()];
@@ -45,6 +59,8 @@ export class CodingDashboard {
             const bodyDisplay = t.bodyRange === 'ALL'
                 ? `<span class="tc-body-tag open">ALL OPEN</span>`
                 : `<span class="tc-body-tag">${t.bodyRange}</span>`;
+
+            const entryId = t.id || t._id
             return `
                 <tr>
                     <td>
@@ -109,7 +125,7 @@ export class CodingDashboard {
         DashboardUtils.closeModal('coding-modal');
     }
 
-    save() {
+    async save() {
         const day = DashboardUtils.getEl('tc-day')?.value;
         const status = DashboardUtils.getEl('tc-status')?.value;
         const bodyRange = DashboardUtils.getEl('tc-body-range')?.value.trim();
@@ -118,16 +134,28 @@ export class CodingDashboard {
         const effectivity = DashboardUtils.getEl('tc-effectivity')?.value;
         if (!bodyRange) { DashboardUtils.getEl('tc-body-range')?.focus(); return; }
 
-        const entry = { day, bodyRange, time: time || 'Not specified', status, route: route || 'All Routes', effectivity };
-        if (this.store.tcEditIdx !== null) {
-            this.store.tcData[this.store.tcEditIdx] = entry;
-            DashboardUtils.showToast('Coding schedule updated.');
-        } else {
-            this.store.tcData.push(entry);
-            DashboardUtils.showToast(`Coding schedule for ${day} added.`);
-        }
+       const payLoad = {
+        day, bodyRange, time: time || 'Not specified', status, route: route || 'All Routes', effectivity 
+       };
+
+       let result;
+
+       if (this.store.tcEditIdx !== null) {
+        // for updating coding | put
+        const id = this.store.tcData[this.store.tcEditIdx].id || this.store.tcData[this.store.tcEditIdx]._id
+        result = await ApiService.call(`/admin/coding/${id}`, 'PUT', payLoad);
+        if (result) DashboardUtils.showToast('Coding schedule updated');
+       } else {
+        // for creating | post
+        result = await ApiService.call('/admin/coding', 'POST', payLoad);
+        if (result) DashboardUtils.showToast(`Coding schedule for ${day} added.`);
+       }
+
+       if (result) {
         this.closeModal();
-        this.render();
+        await this.sync();
+       }
+       
     }
 
     openConfirm(idx) {
@@ -144,17 +172,22 @@ export class CodingDashboard {
         this.store.tcDeleteIdx = null;
     }
 
-    confirmDelete() {
+    async confirmDelete() {
         if (this.store.tcDeleteIdx === null) return;
-        const label = `${this.store.tcData[this.store.tcDeleteIdx].day} – Body ${this.store.tcData[this.store.tcDeleteIdx].bodyRange}`;
-        this.store.tcData.splice(this.store.tcDeleteIdx, 1);
-        this.closeConfirm();
-        this.render();
-        DashboardUtils.showToast(`Schedule "${label}" deleted.`);
+
+        const entry = this.store.tcData[this.store.tcDeleteIdx];
+        const id = entry.id || entry._id;
+
+        const result = await ApiService.call(`/admin/coding/${id}`, 'DELETE');
+        if (result) {
+            DashboardUtils.showToast('Schedule deleted.');
+            this.closeConfirm();
+            await this.sync();
+        }
     }
 
     init() {
-        this.render();
+        this.sync();
         DashboardUtils.bindOverlayClose('coding-modal', () => this.closeModal());
         DashboardUtils.bindOverlayClose('coding-confirm', () => this.closeConfirm());
     }

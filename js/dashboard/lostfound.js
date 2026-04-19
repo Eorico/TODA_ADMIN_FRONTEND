@@ -1,5 +1,5 @@
 import { DashboardUtils } from "../utils/utils.js";
-
+import { ApiService } from "../api/api_service.js";
 /* ============================================
    DASHBOARD 2: LOST & FOUND
    ============================================ */
@@ -12,6 +12,14 @@ export class LostFoundDashboard {
         ];
     }
 
+    async sync() {
+        const data = await ApiService.call('/admin/lost-found', 'GET');
+        if (data) {
+            this.store.lfItems = data;
+            this.renderItems();
+        } 
+    }
+
     randomIcon() {
         return this.itemIcons[Math.floor(Math.random() * this.itemIcons.length)];
     }
@@ -20,16 +28,23 @@ export class LostFoundDashboard {
         const container = DashboardUtils.getEl('lf-items-container');
         if (!container) return;
         container.innerHTML = '';
+        
         this.store.lfItems.forEach(item => {
+            const sc = item.status.toLowerCase();
+            // Check if item has a saved image, else use icon
+            const thumb = item.image 
+                ? `<img src="${item.image}" style="width:100%;height:100%;object-fit:cover;border-radius:8px"/>`
+                : this.randomIcon();
+
             const row = document.createElement('div');
             row.className = 'lf-item-row';
             row.innerHTML = `
-                <div class="lf-item-thumb">${this.randomIcon()}</div>
+                <div class="lf-item-thumb">${thumb}</div>
                 <div class="lf-item-info">
                     <div class="lf-item-name">${item.name}</div>
                     <div class="lf-item-meta">Body #${item.body} &nbsp;•&nbsp; Found ${item.date}</div>
                 </div>
-                <div class="lf-item-status status-${item.status.toLowerCase()}">${item.status}</div>
+                <div class="lf-item-status status-${sc}">${item.status}</div>
             `;
             container.appendChild(row);
         });
@@ -55,50 +70,50 @@ export class LostFoundDashboard {
         });
     }
 
-    submit() {
+    async submit() {
         const name = DashboardUtils.getEl('lf-item-name')?.value.trim();
-        const body = DashboardUtils.getEl('lf-body-num')?.value.trim();
-        const date = DashboardUtils.getEl('lf-date')?.value;
+        const bodyNum = DashboardUtils.getEl('lf-body-num')?.value.trim();
+        const dateInput = DashboardUtils.getEl('lf-date')?.value;
+        
         if (!name) { DashboardUtils.getEl('lf-item-name')?.focus(); return; }
 
-        const photoArea = DashboardUtils.getEl('lf-photo-area');
-        const img = photoArea?.querySelector('img');
-        const thumbHTML = img?.src
-            ? `<img src="${img.src}" style="width:100%;height:100%;object-fit:cover;border-radius:8px"/>`
-            : this.randomIcon();
-
-        const dateLabel = date
-            ? new Date(date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+        const img = DashboardUtils.getEl('lf-photo-area')?.querySelector('img');
+        
+        const dateLabel = dateInput
+            ? new Date(dateInput + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
             : 'Today';
 
-        const row = document.createElement('div');
-        row.className = 'lf-item-row';
-        row.innerHTML = `
-            <div class="lf-item-thumb">${thumbHTML}</div>
-            <div class="lf-item-info">
-                <div class="lf-item-name">${name}</div>
-                <div class="lf-item-meta">Body #${body || '—'} &nbsp;•&nbsp; Found ${dateLabel}</div>
-            </div>
-            <div class="lf-item-status status-pending">Pending</div>
-        `;
-        DashboardUtils.getEl('lf-items-container')?.prepend(row);
+        const payload = {
+            name: name,
+            body: bodyNum || '—',
+            date: dateLabel,
+            status: 'Pending',
+            image: img ? img.src : null  
+        };
 
-        this.store.lfItems.unshift({ name, body: body || '—', date: dateLabel, status: 'Pending' });
+        const result = await ApiService.call('/admin/lost-found', 'POST', payload);
 
+        if (result) {
+            this.resetForm();
+            DashboardUtils.showToast(`"${name}" posted to bulletin.`);
+            await this.sync();
+        }
+    }
+
+    resetForm() {
         DashboardUtils.clearFields(['lf-item-name', 'lf-body-num', 'lf-date']);
-        if (photoArea) {
-            photoArea.classList.remove('has-image');
-            if (img) img.remove();
-            photoArea.querySelectorAll('.photo-icon,.photo-tap,.photo-hint').forEach(el => el.style.display = '');
+        const area = DashboardUtils.getEl('lf-photo-area');
+        if (area) {
+            area.classList.remove('has-image');
+            area.querySelector('img')?.remove();
+            area.querySelectorAll('.photo-icon,.photo-tap,.photo-hint').forEach(el => el.style.display = '');
         }
         const fi = DashboardUtils.getEl('lf-file-input');
         if (fi) fi.value = '';
-
-        DashboardUtils.showToast(`"${name}" posted to bulletin.`);
     }
 
     init() {
-        this.renderItems();
+        this.sync();
         this.bindPhotoUpload();
         const submitBtn = DashboardUtils.getEl('lf-submit-btn');
         if (submitBtn) submitBtn.onclick = () => this.submit();

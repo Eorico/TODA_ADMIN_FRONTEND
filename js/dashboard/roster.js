@@ -1,4 +1,5 @@
 import { DashboardUtils } from "../utils/utils.js";
+import { ApiService } from "../api/api_service.js";
 /* ============================================
    DASHBOARD 1: MEMBER ROSTER
    ============================================ */
@@ -6,6 +7,14 @@ export class RosterDashboard {
     constructor(store) {
         this.store = store;
         this.editIdx = null;
+    }
+
+    async sync() {
+        const data = await ApiService.call('/admin/roster', 'GET');
+        if (data) {
+            this.store.members = data;
+            this.renderRoster(this.store.members);
+        }
     }
 
     renderRoster(list) {
@@ -17,7 +26,7 @@ export class RosterDashboard {
                 <td>#${m.id}</td>
                 <td><span class="badge ${DashboardUtils.badgeClass(m.status)}">${m.status}</span></td>
                 <td>${m.contrib} <span style="color:var(--text-light);font-size:11px">· ${m.date}</span></td>
-                <td><button class="btn-edit" onclick="window.openModal('${m.name}', ${m.id}, '${m.status}', '${m.contrib.replace('₱', '')}', ${i})">Edit</button></td>
+                <td><button class="btn-edit" onclick="window.openModal('${m.name}', '${m.id}', '${m.status}', '${m.contrib.replace('₱', '')}', ${i})">Edit</button></td>
             </tr>
         `).join('');
     }
@@ -37,7 +46,7 @@ export class RosterDashboard {
         DashboardUtils.openModal('edit-modal');
     }
 
-    save() {
+    async save() {
         if (this.editIdx === null) return;
         const contrib = DashboardUtils.getEl('modal-contrib')?.value.trim();
         const statusEl = DashboardUtils.getEl('modal-status');
@@ -46,19 +55,25 @@ export class RosterDashboard {
         const member = this.store.members[this.editIdx];
         if (!member) return;
 
-        if (contrib) member.contrib = '₱' + contrib;
-        if (statusVal) member.status = statusVal;
-        member.date = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        const payload = {
+            ...member, 
+            contrib: contrib ? '₱' + contrib : member.contrib,
+            status: statusVal || member.status,
+            date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+        };
 
-        DashboardUtils.closeModal('edit-modal');
-        this.renderRoster(this.store.members);
-        DashboardUtils.showToast(`${member.name}'s record updated.`);
+        const id = member._id || member.id; 
+        const result = await ApiService.call(`/admin/roster/${id}`, 'PUT', payload);
+
+        if (result) {
+            DashboardUtils.closeModal('edit-modal');
+            DashboardUtils.showToast(`${member.name}'s record updated.`);
+            await this.sync(); 
+        }
     }
 
     init() {
-        const members = this.store.members;
-        this.renderRoster(members);
-
+        this.sync();
         const searchInput = DashboardUtils.getEl('member-search');
         if (searchInput) {
             searchInput.oninput = () => {

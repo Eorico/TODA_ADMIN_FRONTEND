@@ -1,5 +1,5 @@
 import { DashboardUtils } from "../utils/utils.js";
-
+import { ApiService } from "../api/api_service.js";
 
 /* ============================================
    FARE DASHBOARD
@@ -10,6 +10,14 @@ export class FaresDashboard {
     this.store = store;
     // Default fare data — extend DashboardStore with this if needed
     this.rates = { base: 15, highway: 25, special: 50, discStudent: 20, discSenior: 20 };
+  }
+
+  async sync() {
+    const data = await ApiService.call('/admin/fare', 'GET');
+    if (data && data.length > 0) {
+      this.rates = data[0];
+      this._updateFareCard();
+    }
   }
 
   openModal() {
@@ -23,29 +31,32 @@ export class FaresDashboard {
 
   closeModal() { DashboardUtils.closeModal('fare-modal'); }
 
-  save() {
+  async save() {
     const base         = parseFloat(DashboardUtils.getEl('fm-base')?.value) || 0;
     const highway      = parseFloat(DashboardUtils.getEl('fm-highway')?.value) || 0;
     const special      = parseFloat(DashboardUtils.getEl('fm-special')?.value) || 0;
     const discStudent  = parseFloat(DashboardUtils.getEl('fm-disc-student')?.value) || 0;
     const discSenior   = parseFloat(DashboardUtils.getEl('fm-disc-senior')?.value) || 0;
 
-    this.rates = { base, highway, special, discStudent, discSenior };
+    const payload = { base, highway, special, discStudent, discSenior };
 
-    // Update the Fare Guide card in the sidebar
-    this._updateFareCard();
+    let result;
+    if (this.rates._id || this.rates.id) {
+        const id = this.rates._id || this.rates.id;
+        result = await ApiService.call(`/admin/fare/${id}`, 'PUT', payload);
+    } else {
+        result = await ApiService.call('/admin/fare', 'POST', payload);
+    }
 
-    this.closeModal();
-    DashboardUtils.showToast('Fare rates updated successfully.');
+    if (result) {
+        this.closeModal();
+        DashboardUtils.showToast('Fare rates updated successfully.');
+        await this.sync(); 
+    }
   }
 
   _updateFareCard() {
     const r = this.rates;
-    const setText = (selector, text) => {
-      const el = document.querySelector(selector);
-      if (el) el.textContent = text;
-    };
-    // Update visible price numbers in .fare-item-price elements
     const prices = document.querySelectorAll('.fare-price-num');
     if (prices[0]) prices[0].textContent = `₱${r.base.toFixed(2)}`;
     if (prices[1]) prices[1].textContent = `₱${r.highway.toFixed(2)}`;
@@ -55,11 +66,14 @@ export class FaresDashboard {
     if (discEl) discEl.textContent = `-${r.discStudent}% / ${r.discSenior}% Discount`;
 
     const updatedEl = document.querySelector('.fare-updated');
-    const now = new Date();
-    if (updatedEl) updatedEl.textContent = `Updated ${now.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+    if (updatedEl) {
+        const dateSource = r.updated_at ? new Date(r.updated_at) : new Date();
+        updatedEl.textContent = `Updated ${dateSource.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+    }
   }
 
   init() {
+    this.sync()
     DashboardUtils.bindOverlayClose('fare-modal', () => this.closeModal());
   }
 }

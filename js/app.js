@@ -56,6 +56,9 @@ class DashboardApp {
     }
 
     initActiveDashboards() {
+        const token = localStorage.getItem('access_token');
+        if (!token) return;
+        
         const activePage = document.querySelector('[id^="page-"].active');
         if (activePage) {
             const pageId = activePage.id.replace('page-', '');
@@ -131,6 +134,7 @@ class DashboardApp {
         window.openCodingConfirm   = (idx) => this.dashboards.coding.openConfirm(idx);
         window.closeCodingConfirm  = ()    => this.dashboards.coding.closeConfirm();
         window.confirmDeleteCoding = ()    => this.dashboards.coding.confirmDelete();
+        window.announcementsDashboard = this.dashboards.announcements;
 
         // Contributions
         window.openCnModal     = (idx) => this.dashboards.contributions.openModal(idx);
@@ -199,6 +203,9 @@ class DashboardApp {
 /* ============================================
    BOOTSTRAP
    ============================================ */
-AdminLogin.requireAuth();
-const app = new DashboardApp();
-app.start();
+window.addEventListener('DOMContentLoaded', () => {
+    AdminLogin.requireAuth();
+
+    const app = new DashboardApp();
+    app.start();
+});

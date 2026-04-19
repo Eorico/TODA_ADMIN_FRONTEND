@@ -1,4 +1,5 @@
 // js/login.js
+import { DashboardUtils } from "../utils/utils.js";
 
 export class AdminLogin {
     constructor() {
@@ -50,41 +51,58 @@ export class AdminLogin {
         }, 1000);
     }
 
-    /* ── Validate credentials ── */
-    validate(id, pass) {
-        // Swap this out for a real API call later
-        return id === 'admin' && pass === 'admin123';
-    }
-
     /* ── Core login flow ── */
-    handleLogin() {
-        const id   = this.adminIn.value.trim();
-        const pass = this.passIn.value;
-
+    async handleLogin() {
         this.clearError();
+        
+        const userInput = this.adminIn.value.trim();
+        const passwordInput = this.passIn.value.trim();
 
-        if (!id || !pass) {
-            this.showError('Please fill in both fields.');
+        if (!userInput || !passwordInput) {
+            this.showError("Please enter both ID and Password");
+            this.shakeFields();
             return;
         }
 
-        this.loginBtn.classList.add('loading');
+        const payload = {
+            email: userInput,
+            password: passwordInput
+        }
 
-        setTimeout(() => {
-            this.loginBtn.classList.remove('loading');
+        try {
+            this.loginBtn.disabled = true;
+            this.loginBtn.querySelector('.btn-text').textContent = 'Authenticating...';
 
-            if (this.validate(id, pass)) {
-                this.grantAccess();
+            const res = await fetch('http://127.0.0.1:8000/admin/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await res.json();
+
+            if (res.ok && data.access_token) {
+                localStorage.setItem('access_token', data.access_token);
+                this.grantAccess(); 
             } else {
-                this.showError('Invalid admin ID or password. Please try again.');
+                this.showError(data.detail || "Invalid Credentials");
                 this.shakeFields();
+                this.loginBtn.disabled = false;
+                this.loginBtn.querySelector('.btn-text').textContent = 'Login';
             }
-        }, 1400);
+        } catch (err) {
+            this.showError("Connection to server failed");
+            this.loginBtn.disabled = false;
+            this.loginBtn.querySelector('.btn-text').textContent = 'Login';
+        }
     }
 
     /* ── Auth guard (static — no instance needed) ── */
     static requireAuth() {
-        if (localStorage.getItem('isLoggedIn') !== 'true') {
+        const token = localStorage.getItem('access_token');
+
+        if (!token || token === "null" || token === "undefined") {
+            localStorage.removeItem('access_token');
             window.location.href = '/frontend/web/html/admin_login.html';
         }
     }

@@ -1,5 +1,5 @@
 import { DashboardUtils } from "../utils/utils.js";
-
+import { ApiService } from "../api/api_service.js";
 /* ============================================
    DASHBOARD 3: DRIVERS REGISTRY
    ============================================ */
@@ -8,6 +8,14 @@ export class DriversDashboard {
         this.store = store;
         this.avatarColors = ['#c0392b', '#e67e22', '#2980b9', '#27ae60', '#8e44ad', '#16a085'];
         this.PER_PAGE = 4;
+    }
+
+    async sync() {
+        const data = await ApiService.call('/admin/riders', 'GET');
+        if (data) {
+            this.store.drData = data;
+            this.render();
+        }
     }
 
     statusClass(s) {
@@ -103,13 +111,17 @@ export class DriversDashboard {
         this.render();
     }
 
-    delete(idx) {
-        this.getData().splice(idx, 1);
-        if ((this.store.drPage - 1) * this.PER_PAGE >= this.getData().length && this.store.drPage > 1) {
-            this.store.drPage--;
+    async delete(idx) {
+        const driver = this.store.drData[idx];
+        const id = driver.id || driver._id;
+
+        if (!confirm(`Are you sure you want to remove ${driver.fname} ${driver.lname}`)) return;
+
+        const result = await ApiService.call(`/admin/riders/${id}`, 'DELETE');
+        if (result) {
+            DashboardUtils.showToast('Driver removed from registry.');
+            await this.sync();
         }
-        this.render();
-        DashboardUtils.showToast('Driver removed from registry.');
     }
 
     openModal(idx) {
@@ -141,7 +153,7 @@ export class DriversDashboard {
         DashboardUtils.openModal('driver-modal');
     }
 
-    save() {
+    async save() {
         const fname = DashboardUtils.getEl('drv-fname')?.value.trim();
         const lname = DashboardUtils.getEl('drv-lname')?.value.trim();
         const body = DashboardUtils.getEl('drv-body')?.value.trim();
@@ -149,32 +161,31 @@ export class DriversDashboard {
         const status = DashboardUtils.getEl('drv-status')?.value;
         if (!fname || !lname) { DashboardUtils.getEl('drv-fname')?.focus(); return; }
 
-        const entry = {
-            fname, lname,
-            id: `ID-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 9000) + 1000)}`,
-            body: body || '---',
-            status,
-            contact: contact ? `+63 ${contact}` : '—'
-        };
-
-        const drData = this.getData();
-        if (this.store.drEditIdx !== null) {
-            drData[this.store.drEditIdx] = { ...drData[this.store.drEditIdx], ...entry };
-            DashboardUtils.showToast('Driver profile updated.');
-        } else {
-            drData.unshift(entry);
-            this.store.drPage = 1;
-            DashboardUtils.showToast(`${fname} ${lname} added to registry.`);
+        const payload = {
+            fname, lname,  body: body || '---', contact: contact ? `+63 ${contact}` : '-', status: status || 'Active'
         }
 
-        DashboardUtils.closeModal('driver-modal');
-        this.render();
+        let result;
+        if (this.store.drEditIdx !== null) {
+            // UPDATE
+            const id = this.store.drData[this.store.drEditIdx].id || this.store.drData[this.store.drEditIdx]._id;
+            result = await ApiService.call(`/admin/riders/${id}`, 'PUT', payload);
+        } else {
+            // CREATE (Note: If your backend requires registration, this may vary)
+            result = await ApiService.call('/admin/riders', 'POST', payload);
+        }
+
+        if (result) {
+            DashboardUtils.closeModal('driver-modal');
+            DashboardUtils.showToast(this.store.drEditIdx !== null ? 'Profile updated' : 'Driver added');
+            await this.sync();
+        }
     }
 
     init() {
+        this.sync();
         if (!this.store.drData) this.store.drData = [...this.store.driverData];
         this.store.drPage = 1;
-        this.render();
         DashboardUtils.bindOverlayClose('driver-modal', () => DashboardUtils.closeModal('driver-modal'));
     }
 }
