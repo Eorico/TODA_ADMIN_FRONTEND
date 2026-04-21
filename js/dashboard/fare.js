@@ -1,5 +1,6 @@
 import { DashboardUtils } from "../utils/utils.js";
 import { ApiService } from "../api/api_service.js";
+import { ActivityLog } from "../utils/activity_log.js";
 
 /* ============================================
    FARE DASHBOARD
@@ -51,6 +52,11 @@ export class FaresDashboard {
     if (result) {
         this.closeModal();
         DashboardUtils.showToast('Fare rates updated successfully.');
+        ActivityLog.push({
+          icon: 'fare',
+          ttile: 'Fare List Updated',
+          desc: `Base ₱${base}`
+        })
         await this.sync(); 
     }
   }

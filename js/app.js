@@ -1,6 +1,7 @@
 // js/app.js
 import { DashboardUtils }         from './utils/utils.js';
 import { DashboardStore }         from './utils/store.js';
+import { MainDashboard }          from './dashboard/main_dashboard.js';
 import { RosterDashboard }        from './dashboard/roster.js';
 import { AnnouncementsDashboard } from './dashboard/announcements.js';
 import { CodingDashboard }        from './dashboard/coding.js';
@@ -18,6 +19,7 @@ class DashboardApp {
     constructor() {
         this.store = new DashboardStore();
         this.dashboards = {
+            dashboard:     new MainDashboard(this.store),
             roster:        new RosterDashboard(this.store),
             lostfound:     new LostFoundDashboard(this.store),
             drivers:       new DriversDashboard(this.store),
@@ -68,6 +70,7 @@ class DashboardApp {
         // Fallback: init all that exist
         Object.entries(this.dashboards).forEach(([key, db]) => {
             const exists = {
+                dashboard:      'dash-total-contrib',
                 roster:        'roster-body',
                 lostfound:     'lf-items-container',
                 drivers:       'driver-table-body',
@@ -81,7 +84,7 @@ class DashboardApp {
     }
 
     initModalOverlayClose() {
-        ['edit-modal', 'driver-modal', 'officer-modal', 'officer-confirm', 'coding-modal', 'coding-confirm', 'cn-modal', 'cn-confirm', 'fare-modal']
+        ['edit-modal', 'driver-modal', 'officer-modal', 'officer-confirm', 'coding-modal', 'coding-confirm', 'cn-modal', 'cn-confirm', 'fare-modal', 'vio-confirm']
             .forEach(id => {
                 const modal = document.getElementById(id);
                 if (modal) modal.onclick = function (e) {
@@ -134,6 +137,14 @@ class DashboardApp {
         window.openCodingConfirm   = (idx) => this.dashboards.coding.openConfirm(idx);
         window.closeCodingConfirm  = ()    => this.dashboards.coding.closeConfirm();
         window.confirmDeleteCoding = ()    => this.dashboards.coding.confirmDelete();
+        window.filterVioDrivers    = (day)=> this.dashboards.coding.filterDriversByDay(day)
+        window.openVioModal     = ()    => this.dashboards.coding.openVioModal();
+        window.closeVioModal    = ()    => this.dashboards.coding.closeVioModal();
+        window.saveViolation    = ()    => this.dashboards.coding.saveViolation();
+        window.toggleVioPenalty = ()    => this.dashboards.coding.togglePenaltyAmount();
+        window.openVioConfirm   = (idx) => this.dashboards.coding.openVioConfirm(idx);
+        window.closeVioConfirm  = ()    => this.dashboards.coding.closeVioConfirm();
+        window.confirmDeleteVio = ()    => this.dashboards.coding.confirmDeleteVio();
         window.announcementsDashboard = this.dashboards.announcements;
 
         // Contributions

@@ -1,5 +1,6 @@
 import { DashboardUtils } from "../utils/utils.js";
 import { ApiService } from "../api/api_service.js";
+import { ActivityLog } from "../utils/activity_log.js";
 /* ============================================
    DASHBOARD 3: DRIVERS REGISTRY
    ============================================ */
@@ -120,6 +121,11 @@ export class DriversDashboard {
         const result = await ApiService.call(`/admin/riders/${id}`, 'DELETE');
         if (result) {
             DashboardUtils.showToast('Driver removed from registry.');
+            ActivityLog.push({ 
+                icon: 'user', 
+                title: 'Driver Removed', 
+                desc: `${driver.fname} ${driver.lname}` 
+            });
             await this.sync();
         }
     }
@@ -178,6 +184,11 @@ export class DriversDashboard {
         if (result) {
             DashboardUtils.closeModal('driver-modal');
             DashboardUtils.showToast(this.store.drEditIdx !== null ? 'Profile updated' : 'Driver added');
+            ActivityLog.push({
+                icon: 'user',
+                title: this.store.drEditIdx !== null ? 'Driver Profile Updated' : 'New Driver Registered',
+                desc: `${fname} ${lname} · Body #${body}`
+            });
             await this.sync();
         }
     }

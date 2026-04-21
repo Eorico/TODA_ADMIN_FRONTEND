@@ -204,15 +204,26 @@ export class ContributionsDashboard {
             const id = this.store.cnData[this.store.cnEditIdx].id || this.store.cnData[this.store.cnEditIdx]._id;
             result = await ApiService.call(`/admin/contributions`, 'PUT', payLoad);
             if (result) DashboardUtils.showToast(`${fname} ${lname}'s record updated`);
+            ActivityLog.push({
+                icon: 'contrib',
+                title: 'Contribution Updated',
+                desc: `${fname} ${lname} - ${period}`
+            });
         } else {
             result = await ApiService.call('/admin/contributions', 'POST', payLoad);
             if (result) DashboardUtils.showToast(`Contribution for ${fname} ${lname} recorded`);
+            ActivityLog.push({
+                icon: 'contrib',
+                title: 'Contribution Recorded',
+                desc: `${fname} ${lname} - ₱${amount}`
+            });
         }
 
         if (result) {
             this.closeModal();
             await this.sync();
         }
+
     }
 
     openConfirm(idx) {

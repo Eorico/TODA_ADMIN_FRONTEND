@@ -17,26 +17,31 @@
         <div class="mstat total">
           <div class="mstat-label">Total Members</div>
           <div style="display:flex;align-items:flex-end;gap:10px">
-            <div class="mstat-num">400</div>
-            <svg class="silhouette" width="90" height="70" viewBox="0 0 90 70" fill="none"><ellipse cx="45" cy="20" rx="18" ry="18" fill="currentColor"/><path d="M10 68c0-19.33 15.67-35 35-35s35 15.67 35 35" fill="currentColor"/></svg>
+            <div class="mstat-num" id="stat-total">—</div>  <!-- ← id added -->
+            <svg class="silhouette" width="90" height="70" viewBox="0 0 90 70" fill="none">
+              <ellipse cx="45" cy="20" rx="18" ry="18" fill="currentColor"/>
+              <path d="M10 68c0-19.33 15.67-35 35-35s35 15.67 35 35" fill="currentColor"/>
+            </svg>
           </div>
-          <div class="mstat-badge">↑ 12%</div>
         </div>
         <div class="mstat">
           <div class="mstat-label">Active</div>
-          <div class="mstat-num" style="color:#15803d">250</div>
+          <div class="mstat-num" id="stat-active" style="color:#15803d">—</div>  <!-- ← id added -->
         </div>
         <div class="mstat">
           <div class="mstat-label">Inactive</div>
-          <div class="mstat-num" style="color:var(--text-muted)">50</div>
+          <div class="mstat-num" id="stat-inactive" style="color:var(--text-muted)">—</div>  <!-- ← id added -->
         </div>
         <div class="mstat suspended">
           <div class="mstat-label">Suspended</div>
-          <div class="mstat-num">100</div>
+          <div class="mstat-num" id="stat-suspended">—</div>  <!-- ← id added -->
           <div class="mstat-note">Requires administrative review of coding violations.</div>
-          <div class="mstat-link">View Appeals →</div>
+          <div class="mstat-link" onclick="switchPage('coding')">View Appeals →</div>
         </div>
       </div>
+
+      <!-- also add id to the subtitle for live count -->
+      <div class="roster-sub" id="roster-sub">Loading…</div>
 
       <div class="roster-section">
         <div class="roster-header">

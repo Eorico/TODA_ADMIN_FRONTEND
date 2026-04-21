@@ -70,40 +70,18 @@
                 <div class="tc-card-title">Violation Log</div>
                 <div class="tc-card-sub">Recorded coding violations this month</div>
               </div>
+              <button class="btn-tc-add" onclick="openVioModal()">        
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  Add Violation
+              </button>
             </div>
+
             <table class="tc-vio-table">
               <thead>
                 <tr><th>Driver</th><th>Body No.</th><th>Date</th><th>Violation</th><th>Penalty</th></tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td><div class="tc-vio-name">Antonio Santos</div><div class="tc-vio-body">ID-2024-0089</div></span></td>
-                  <td><strong>#345</strong></span></td>
-                  <td>Oct 22</span></td>
-                  <td>Operating during restricted hours</span></td>
-                  <td><span class="tc-penalty fine">₱500.00 Fine</span></span></td>
-                </tr>
-                <tr>
-                  <td><div class="tc-vio-name">Ricardo Gomez</div><div class="tc-vio-body">ID-2023-1102</div></span></td>
-                  <td><strong>#556</strong></span></td>
-                  <td>Oct 20</span></td>
-                  <td>No coding sticker displayed</span></td>
-                  <td><span class="tc-penalty warn">Warning</span></span></td>
-                </tr>
-                <tr>
-                  <td><div class="tc-vio-name">Rodrigo Estrada</div><div class="tc-vio-body">ID-2022-1045</div></span></td>
-                  <td><strong>#678</strong></span></td>
-                  <td>Oct 18</span></td>
-                  <td>Operating during restricted hours</span></td>
-                  <td><span class="tc-penalty fine">₱500.00 Fine</span></span></td>
-                </tr>
-                <tr>
-                  <td><div class="tc-vio-name">Juan Dela Cruz</div><div class="tc-vio-body">ID-2024-0211</div></span></td>
-                  <td><strong>#088</strong></span></td>
-                  <td>Oct 15</span></td>
-                  <td>Route deviation during coding</span></td>
-                  <td><span class="tc-penalty warn">Warning</span></span></td>
-                </tr>
+              <tbody id="vio-table-body">
+                
               </tbody>
             </table>
           </div>

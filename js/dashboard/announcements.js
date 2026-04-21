@@ -1,5 +1,6 @@
 import { DashboardUtils } from "../utils/utils.js";
 import { ApiService } from "../api/api_service.js";
+import { ActivityLog } from "../utils/activity_log.js";
 
 /* ============================================
    DASHBOARD 4: ANNOUNCEMENTS
@@ -87,6 +88,11 @@ export class AnnouncementsDashboard {
             this.store.annPosts = this.store.annPosts.filter(p => p.id !== id);
             this.render();
             DashboardUtils.showToast('Announcement removed.');
+            ActivityLog.push({
+                icon: 'announce',
+                title: 'Announcement Removed',
+                desc: `ID ${id}`
+            });
         }
     }
 
@@ -112,6 +118,11 @@ export class AnnouncementsDashboard {
             DashboardUtils.setVal('ann-new-title', '');
             DashboardUtils.setVal('ann-new-body', '');
             DashboardUtils.showToast(`Posted: ${title}`);
+            ActivityLog.push({
+                icon: 'announce',
+                title: 'Announcement Posted',
+                desc: title
+            });
         }
     }
 

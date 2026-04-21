@@ -96,6 +96,11 @@ export class LostFoundDashboard {
         if (result) {
             this.resetForm();
             DashboardUtils.showToast(`"${name}" posted to bulletin.`);
+            ActivityLog.push({ 
+                icon: 'lost', 
+                title: 'Lost Item Posted', 
+                desc: `"${name}" · Body #${bodyNum || '—'}` 
+            });
             await this.sync();
         }
     }
