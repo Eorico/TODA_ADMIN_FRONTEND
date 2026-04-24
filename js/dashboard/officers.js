@@ -23,7 +23,9 @@ export class OfficersDashboard {
     }
 
     initials(o) {
-        return (o.fname[0] + o.lname[0]).toUpperCase();
+        const f = o.full_name?.[0] ?? '?';
+        const l = o.last_name?.[0] ?? '?';
+        return (f + l).toUpperCase();
     }
 
     render() {
@@ -52,7 +54,7 @@ export class OfficersDashboard {
                             <div class="off-avatar-initials" style="background:${color}">${this.initials(o)}</div>
                         </div>
                         <div>
-                            <div class="off-name">${o.fname} ${o.mi} ${o.lname}</div>
+                            <div class="off-name">${o.full_name} ${o.mi} ${o.last_name}</div>
                             <div class="off-role">${o.role}</div>
                         </div>
                     </div>
@@ -67,11 +69,11 @@ export class OfficersDashboard {
                         </button>
                     </div>
                     <div class="off-contact-row">
-                        <button class="off-btn call-btn" onclick="window.showToast('Calling ${o.fname} ${o.lname}…')">
+                        <button class="off-btn call-btn" onclick="window.showToast('Calling ${o.full_name} ${o.last_name}…')">
                             <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.65 3.4 2 2 0 0 1 3.62 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.87a16 16 0 0 0 6.29 6.29l1.08-.94a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                             Call
                         </button>
-                        <button class="off-btn email-btn" onclick="window.showToast('Opening email to ${o.fname} ${o.lname}…')">
+                        <button class="off-btn email-btn" onclick="window.showToast('Opening email to ${o.full_name} ${o.last_name}…')">
                             <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                             Email
                         </button>
@@ -106,9 +108,9 @@ export class OfficersDashboard {
 
         if (isEdit) {
             const o = this.store.officerData[idx];
-            DashboardUtils.setVal('off-fname', o.fname);
+            DashboardUtils.setVal('off-fname', o.full_name);
             DashboardUtils.setVal('off-mi', o.mi);
-            DashboardUtils.setVal('off-lname', o.lname);
+            DashboardUtils.setVal('off-lname', o.last_name);
             DashboardUtils.setVal('off-id', o.custom_id); // ✅ show custom_id (TODA-001)
             const roleSelect = DashboardUtils.getEl('off-role');
             const statusSelect = DashboardUtils.getEl('off-status');
@@ -143,7 +145,7 @@ export class OfficersDashboard {
         if (!fname || !lname) { DashboardUtils.getEl('off-fname')?.focus(); return; }
 
         const payload = {
-            fname, mi, lname,
+            full_name: fname, mi, last_name: lname,
             role, status,
             phone: phone ? `+63 ${phone}` : '—',
             email: email || '—',
@@ -172,7 +174,7 @@ export class OfficersDashboard {
         const o = this.store.officerData[idx];
         const subEl = DashboardUtils.getEl('off-confirm-sub');
         if (subEl) {
-            subEl.textContent = `Are you sure you want to remove ${o.fname} ${o.lname} (${o.role}) from the current term? This action cannot be undone.`;
+            subEl.textContent = `Are you sure you want to remove ${o.full_name} ${o.last_name} (${o.role}) from the current term? This action cannot be undone.`;
         }
         DashboardUtils.openModal('officer-confirm');
     }

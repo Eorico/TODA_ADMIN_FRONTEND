@@ -957,6 +957,32 @@ body {
 .dr-contact { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-body); }
 .dr-contact svg { color: var(--text-muted); flex-shrink: 0; }
 
+/* Accept Button - Green Theme */
+.dr-btn-accept {
+  width: 32px; height: 32px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: #27ae60; /* Forest Green */
+  transition: all var(--t-fast);
+}
+.dr-btn-accept:hover { 
+  background: #eafaf1; 
+  border-color: #27ae60; 
+}
+
+/* Reject Button - Orange/Amber Theme */
+.dr-btn-reject {
+  width: 32px; height: 32px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: #e67e22; /* Carrot Orange */
+  transition: all var(--t-fast);
+}
+.dr-btn-reject:hover { 
+  background: #fff5e6; 
+  border-color: #e67e22; 
+}
+
 .dr-actions { display: flex; align-items: center; gap: 6px; }
 .dr-btn-edit {
   width: 32px; height: 32px; border-radius: var(--radius-sm);
@@ -1001,26 +1027,7 @@ body {
 .dr-pg-num:hover { border-color: var(--crimson); color: var(--crimson); }
 .dr-pg-num.current { background: var(--crimson); color: white; border-color: var(--crimson); }
 
-.dr-stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
-.dr-stat-card {
-  border-radius: var(--radius-lg); padding: 22px 24px;
-  position: relative; overflow: hidden;
-}
-.dr-stat-dark  { background: linear-gradient(135deg, var(--crimson-deep) 0%, #3a0505 100%); color: white; }
-.dr-stat-olive { background: linear-gradient(135deg, #5a5200 0%, #3a3500 100%); color: white; }
-.dr-stat-light { background: var(--white); border: 1px solid var(--border); box-shadow: var(--shadow-xs); }
-.dr-stat-label {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
-  text-transform: uppercase; opacity: .7; margin-bottom: 6px;
-}
-.dr-stat-num { font-family: 'Fraunces', serif; font-size: 50px; font-weight: 900; line-height: 1; }
-.dr-stat-sub { font-size: 12px; opacity: .65; margin-top: 8px; display: flex; align-items: center; gap: 5px; }
-.dr-stat-bg-icon { position: absolute; right: -8px; bottom: -8px; }
-.dr-coverage-bar {
-  width: 100%; height: 4px; background: rgba(255,255,255,.15);
-  border-radius: 4px; margin-top: 12px; overflow: hidden;
-}
+
 .dr-coverage-fill { height: 100%; background: white; border-radius: 4px; }
 
 /* Driver modal overlays */

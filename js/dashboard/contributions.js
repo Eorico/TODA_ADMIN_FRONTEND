@@ -196,7 +196,7 @@ export class ContributionsDashboard {
         if (!fname || !lname) { DashboardUtils.getEl('cn-fname')?.focus(); return; }
 
         const payLoad = {
-            fname, lname, body: body || '—', driverid: driverid || '—', amount, period, date, status, notes
+            full_name: fname, last_name: lname, body: body || '—', driverid: driverid || '—', amount, period, date, status, notes
         };
 
         let result;

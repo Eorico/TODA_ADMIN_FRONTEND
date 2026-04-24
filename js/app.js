@@ -20,7 +20,7 @@ class DashboardApp {
         this.store = new DashboardStore();
         this.dashboards = {
             dashboard:     new MainDashboard(this.store),
-            roster:        new RosterDashboard(this.store),
+            members:        new RosterDashboard(this.store),
             lostfound:     new LostFoundDashboard(this.store),
             drivers:       new DriversDashboard(this.store),
             announcements: new AnnouncementsDashboard(this.store),
@@ -71,7 +71,7 @@ class DashboardApp {
         Object.entries(this.dashboards).forEach(([key, db]) => {
             const exists = {
                 dashboard:      'dash-total-contrib',
-                roster:        'roster-body',
+                members:        'roster-body',
                 lostfound:     'lf-items-container',
                 drivers:       'driver-table-body',
                 announcements: 'ann-posts-list',
@@ -97,20 +97,31 @@ class DashboardApp {
         window.showToast = (msg) => DashboardUtils.showToast(msg);
 
         // Member roster
-        window.openModal      = (name, id, status, contrib, idx) => this.dashboards.roster.openModal(name, id, status, contrib, idx);
-        window.saveMember     = () => this.dashboards.roster.save();
+        window.openModal      = (name, id, status, contrib, idx) => this.dashboards.members.openModal(name, id, status, contrib, idx);
+        window.saveMember     = () => this.dashboards.members.save();
         window.closeEditModal = () => DashboardUtils.closeModal('edit-modal');
 
         // Lost & Found
         window.submitLostFound = () => this.dashboards.lostfound.submit();
 
         // Drivers
-        window.openDriverModal    = (idx) => this.dashboards.drivers.openModal(idx);
+        window.openDriverModal    = (name, id, status, contrib, idx) => this.dashboards.drivers.openModal(name, id, status, contrib, idx);
         window.openAddDriverModal = ()    => this.dashboards.drivers.openModal();
         window.closeDriverModal   = ()    => DashboardUtils.closeModal('driver-modal');
         window.saveDriver         = ()    => this.dashboards.drivers.save();
         window.deleteDriver       = (idx) => this.dashboards.drivers.delete(idx);
         window.drChangePage       = (dir) => this.dashboards.drivers.changePage(dir);
+        window.acceptDriver       = (idx) => this.dashboards.drivers.accept(idx);
+        window.rejectDriver       = (idx) => this.dashboards.drivers.reject(idx);
+        // License preview global handlers
+        window.previewDriverLicense = (e) => this.dashboards.drivers.previewLicense(e);
+        window.clearDriverLicense   = ()  => this.dashboards.drivers._clearLicensePreview();
+ 
+        // View license full-size
+        window.viewLicense = (url) => {
+            const w = window.open();
+            w.document.write(`<img src="${url}" style="max-width:100%;height:auto"/>`);
+        };
 
         // Announcements
         window.deleteAnnouncement = (id) => this.dashboards.announcements.delete(id);

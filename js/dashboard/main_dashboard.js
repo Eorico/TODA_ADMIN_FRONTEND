@@ -22,6 +22,8 @@ export class MainDashboard {
             ApiService.call('/admin/lost-found', 'GET'),
         ]);
 
+        this.store.members = members || [];
+
         this.updateContributions(constributions);
         this.updateLostItems(lostFound);
         this.updateActiverDrivers(members);
@@ -39,7 +41,7 @@ export class MainDashboard {
         if (!data) return;
         const active = data.filter(m => (m.status || '').toLowerCase() === 'active');
         const el = DashboardUtils.getEl('dash-active-drivers');
-        if (el) el.textContent = active;
+        if (el) el.textContent = active.length;  // ✅ .length
     }
 
     updateLostItems(data) {

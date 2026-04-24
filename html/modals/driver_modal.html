@@ -6,9 +6,9 @@
     <title>Document</title>
 </head>
 <body>
-    <!-- DRIVER ADD/EDIT MODAL -->
+   <!-- DRIVER ADD/EDIT MODAL -->
 <div class="modal-overlay" id="driver-modal">
-  <div class="modal" style="width:520px">
+  <div class="modal" style="width:540px">
     <div class="modal-tag">Driver Management</div>
     <div class="modal-title-row">
       <div class="modal-title" id="driver-modal-title">Add New Driver</div>
@@ -16,16 +16,21 @@
     </div>
     <div class="modal-sub" id="driver-modal-sub">Fill in the details to register a new fleet member.</div>
 
+    <!-- Row 1: Name -->
     <div class="modal-row" style="margin-top:0">
       <div class="modal-field">
         <label class="modal-label">First Name</label>
-        <input class="modal-input" id="drv-fname" type="text" placeholder="e.g., Antonio" style="border:1px solid var(--border);border-radius:8px;width:100%;padding:10px 12px"/>
+        <input class="modal-input" id="drv-fname" type="text" placeholder="e.g., Antonio"
+          style="border:1px solid var(--border);border-radius:8px;width:100%;padding:10px 12px"/>
       </div>
       <div class="modal-field">
         <label class="modal-label">Last Name</label>
-        <input class="modal-input" id="drv-lname" type="text" placeholder="e.g., Santos" style="border:1px solid var(--border);border-radius:8px;width:100%;padding:10px 12px"/>
+        <input class="modal-input" id="drv-lname" type="text" placeholder="e.g., Santos"
+          style="border:1px solid var(--border);border-radius:8px;width:100%;padding:10px 12px"/>
       </div>
     </div>
+
+    <!-- Row 2: Body + Contact -->
     <div class="modal-row">
       <div class="modal-field">
         <label class="modal-label">Body Number</label>
@@ -42,6 +47,15 @@
         </div>
       </div>
     </div>
+
+    <!-- Email -->
+    <div class="modal-field" style="margin-bottom:16px">
+      <label class="modal-label">Email Address</label>
+      <input class="modal-input" id="drv-email" type="email" placeholder="e.g., antonio.santos@email.com"
+        style="border:1px solid var(--border);border-radius:8px;width:100%;padding:10px 12px"/>
+    </div>
+
+    <!-- Account Status -->
     <div class="modal-field" style="margin-bottom:16px">
       <label class="modal-label">Account Status</label>
       <div class="select-wrap">
@@ -52,10 +66,43 @@
         </select>
       </div>
     </div>
+
+    <!-- License Photo Upload -->
+    <div class="modal-field" style="margin-bottom:16px">
+      <label class="modal-label">Driver's License Photo</label>
+      <div class="license-upload-zone" id="license-upload-zone" onclick="document.getElementById('drv-license-input').click()">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+          style="color:var(--text-light);margin-bottom:6px">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        <div style="font-size:13px;font-weight:500;color:var(--text-muted)">Click to upload license photo</div>
+        <div style="font-size:11px;color:var(--text-light);margin-top:2px">PNG, JPG up to 5MB</div>
+      </div>
+      <input type="file" id="drv-license-input" accept="image/*" style="display:none"
+        onchange="previewDriverLicense(event)"/>
+      <!-- Preview -->
+      <div id="drv-license-preview" style="display:none;margin-top:10px;display:none;align-items:center;gap:10px">
+        <img id="drv-license-img" src="" alt="License preview"
+          style="width:90px;height:58px;object-fit:cover;border-radius:6px;border:1px solid var(--border)"/>
+        <div>
+          <div id="drv-license-filename" style="font-size:12px;font-weight:500"></div>
+          <div id="drv-license-filesize" style="font-size:11px;color:var(--text-light)"></div>
+          <span onclick="clearDriverLicense()"
+            style="font-size:11px;color:#dc2626;cursor:pointer;text-decoration:underline">Remove</span>
+        </div>
+      </div>
+    </div>
+
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeDriverModal()">Cancel</button>
       <button class="btn-save" onclick="saveDriver()">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+          <polyline points="17 21 17 13 7 13 7 21"/>
+          <polyline points="7 3 7 8 15 8"/>
+        </svg>
         Save Driver
       </button>
     </div>
