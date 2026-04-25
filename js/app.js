@@ -206,6 +206,9 @@ class DashboardApp {
         const confirmed = confirm('Are you sure you want to logout?');
         if (!confirmed) return;
 
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('isLoggedIn');
+
         DashboardUtils.showToast('Logging out...');
         setTimeout(() => {
             window.location.href = '/frontend/web/html/admin_login.html';

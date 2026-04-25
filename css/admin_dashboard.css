@@ -875,17 +875,6 @@ body {
 .dr-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; max-width: 420px; }
 .dr-header-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; padding-top: 6px; }
 
-.dr-filter-btn {
-  display: flex; align-items: center; gap: 7px;
-  padding: 9px 16px; border: 1px solid var(--border);
-  border-radius: var(--radius); background: var(--white);
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 12px; font-weight: 700; letter-spacing: .5px;
-  color: var(--gold); cursor: pointer;
-  transition: all var(--t-fast);
-}
-.dr-filter-btn:hover { border-color: var(--gold); background: var(--gold-soft); }
-
 .dr-add-btn {
   display: flex; align-items: center; gap: 8px;
   padding: 9px 18px; background: var(--crimson); color: white;

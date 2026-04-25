@@ -247,7 +247,7 @@ export class ContributionsDashboard {
         if (result) {
             DashboardUtils.showToast('Record deleted.');
             this.closeConfirm();
-            await this.sync
+            await this.sync();
         }
     }
 
