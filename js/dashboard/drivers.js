@@ -20,6 +20,7 @@ export class DriversDashboard {
         this.store = store;
         this.avatarColors = ['#c0392b', '#e67e22', '#2980b9', '#27ae60', '#8e44ad', '#16a085'];
         this.PER_PAGE = 4;
+        this._urlMap = {};
     }
  
     // ─── DATA FETCH ──────────────────────────────────────────────────────────
@@ -49,6 +50,7 @@ export class DriversDashboard {
     // ─── RENDER TABLE ────────────────────────────────────────────────────────
  
     render() {
+        this._urlMap = {};
         const drData = this.getData();
         const total  = drData.length;
         const pages  = Math.ceil(total / this.PER_PAGE);
@@ -62,36 +64,46 @@ export class DriversDashboard {
             const sc    = this.statusClass(d.status);
             const color = this.avatarColors[(start + i) % this.avatarColors.length];
             const idx   = start + i;
-            const isApproved = d.member_status === 'approved';  // ← check approval
+            const isApproved = d.member_status === 'approved';
 
-            const fullLicenseUrl = d.license_url   
-                ? (d.license_url.startsWith('data:')  
-                    ? d.license_url
-                    : d.license_url.startsWith('http')
-                        ? d.license_url
-                        : `${CONFIG.API_URL}/${d.license_url}`)
-                : null;
+            // ── resolve full URLs ──────────────────────────────────────────
+            const resolveUrl = (url) => {
+                if (!url) return null;
+                if (url.startsWith('data:') || url.startsWith('http')) return url;
+                return `${CONFIG.API_URL}/${url}`;
+            };
 
-            const licThumb = fullLicenseUrl
-                ? `<div class="dr-license-thumb-container" style="display:flex;align-items:center;justify-content:center;">
-                    <div class="dr-license-thumb" title="View License"
+            const fullLicenseUrl = resolveUrl(d.license_url);
+            const fullOrcrUrl    = resolveUrl(d.orcr_url);
+
+            // ── store in map, use short keys ───────────────────────────────
+            const licKey  = `lic_${idx}`;
+            const orcrKey = `orcr_${idx}`;
+            if (fullLicenseUrl) this._urlMap[licKey]  = fullLicenseUrl;
+            if (fullOrcrUrl)    this._urlMap[orcrKey] = fullOrcrUrl;
+
+            // ── thumb builder ──────────────────────────────────────────────
+            const makeThumb = (key, hasUrl, altText) => hasUrl
+                ? `<div style="display:flex;align-items:center;justify-content:center;">
+                    <div title="View ${altText}"
                         style="width:48px;height:32px;border-radius:4px;overflow:hidden;border:1px solid var(--border);cursor:pointer;background:var(--white);transition:transform var(--t-fast);box-shadow:0 1px 3px rgba(0,0,0,0.05);"
                         onmouseover="this.style.transform='scale(1.05)'"
                         onmouseout="this.style.transform='scale(1)'"
-                        onclick="window.driversDashboard.viewLicenseModal('${fullLicenseUrl}')">
-                        <img src="${fullLicenseUrl}" alt="License"
+                        onclick="window.driversDashboard.viewFromKey('${key}')">
+                        <img src="${this._urlMap[key]}" alt="${altText}"
                             style="width:100%;height:100%;object-fit:cover;display:block;"
-                            onerror="this.parentElement.innerHTML='<span style=\'font-size:8px;color:var(--crimson)\'>Error</span>'"/>
+                            onerror="this.parentElement.innerHTML='<span style=\\'font-size:8px;color:var(--crimson)\\'>Error</span>'"/>
                     </div>
                 </div>`
-                : `<div class="dr-license-thumb dr-license-empty" title="No license uploaded"
+                : `<div title="No ${altText} uploaded"
                         style="width:48px;height:32px;border-radius:4px;border:1px dashed var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-light);background:var(--bg-light);">
                     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                         <rect x="2" y="5" width="20" height="14" rx="2"/>
                         <line x1="2" y1="10" x2="22" y2="10"/>
                     </svg>
                 </div>`;
-
+            const licThumb  = makeThumb(licKey,  !!fullLicenseUrl, 'License');
+            const orcrThumb = makeThumb(orcrKey, !!fullOrcrUrl,    'OR/CR');
             // ← approved badge shown when approved
             const approvedBadge = isApproved
                 ? `<span style="
@@ -191,6 +203,7 @@ export class DriversDashboard {
                     </div>
                 </td>
                 <td>${licThumb}</td>
+                <td>${orcrThumb}</td>
                 <td><div class="dr-actions">${actionButtons}</div></td>
                 </tr>`;
         }).join('');
@@ -218,6 +231,12 @@ export class DriversDashboard {
         const nextBtn = DashboardUtils.getEl('dr-next');
         if (prevBtn) prevBtn.disabled = this.store.drPage === 1;
         if (nextBtn) nextBtn.disabled = this.store.drPage >= pages;
+    }
+
+    viewFromKey(key) {
+        const url = this._urlMap?.[key];
+        if (!url) return;
+        this.viewLicenseModal(url);
     }
 
     // ─── LICENSE VIEW MODAL ──────────────────────────────────────────────────
@@ -358,6 +377,7 @@ export class DriversDashboard {
         }
 
         this._clearLicensePreview();
+        this._clearOrcrPreview();
 
         if (isEdit) {
             const d = drData[idx];
@@ -377,6 +397,15 @@ export class DriversDashboard {
                         ? d.license_url
                         : `${CONFIG.API_URL}/${d.license_url}`;
                 this._showLicensePreview(fullUrl, 'Existing license', '');
+            }
+
+            if (d.orcr_url) {
+            const fullOrcrUrl = d.orcr_url.startsWith('data:')
+                ? d.orcr_url
+                : d.orcr_url.startsWith('http')
+                    ? d.orcr_url
+                    : `${CONFIG.API_URL}/${d.orcr_url}`;
+            this._showOrcrPreview(fullOrcrUrl, 'Existing OR/CR', '');
             }
         } else {
             DashboardUtils.clearFields(['drv-fname', 'drv-lname', 'drv-body', 'drv-contact', 'drv-email']);
@@ -425,6 +454,10 @@ export class DriversDashboard {
         }
 
         if (!result) return;
+        const orcrFile = DashboardUtils.getEl('drv-orcr-input')?.files?.[0];
+        if (orcrFile && driverId) {
+            await this._uploadOrcr(driverId, orcrFile);
+        }
 
         // ✅ Upload first, then close modal, then sync
         const licenseFile = DashboardUtils.getEl('drv-license-input')?.files?.[0];
@@ -575,6 +608,47 @@ export class DriversDashboard {
         const preview = DashboardUtils.getEl('drv-license-preview');
         const input   = DashboardUtils.getEl('drv-license-input');
         const img     = DashboardUtils.getEl('drv-license-img');
+        if (preview) preview.style.display = 'none';
+        if (input)   input.value = '';
+        if (img)     img.src = '';
+    }
+
+    async _uploadOrcr(driverId, file) {
+        const formData = new FormData();
+        formData.append('orcr', file);
+        try {
+            return await ApiService.call(`/admin/riders/${driverId}/orcr`, 'POST', formData);
+        } catch (err) {
+            console.error('OR/CR upload error:', err);
+            return null;
+        }
+    }
+
+    previewOrcr(event) {
+        const file = event.target.files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            this._showOrcrPreview(e.target.result, file.name, (file.size / 1024).toFixed(1) + ' KB');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    _showOrcrPreview(src, name, size) {
+        const img     = DashboardUtils.getEl('drv-orcr-img');
+        const fname   = DashboardUtils.getEl('drv-orcr-filename');
+        const fsize   = DashboardUtils.getEl('drv-orcr-filesize');
+        const preview = DashboardUtils.getEl('drv-orcr-preview');
+        if (img)     img.src           = src;
+        if (fname)   fname.textContent = name;
+        if (fsize)   fsize.textContent = size;
+        if (preview) preview.style.display = 'flex';
+    }
+
+    _clearOrcrPreview() {
+        const preview = DashboardUtils.getEl('drv-orcr-preview');
+        const input   = DashboardUtils.getEl('drv-orcr-input');
+        const img     = DashboardUtils.getEl('drv-orcr-img');
         if (preview) preview.style.display = 'none';
         if (input)   input.value = '';
         if (img)     img.src = '';

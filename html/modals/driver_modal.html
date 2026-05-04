@@ -95,6 +95,34 @@
       </div>
     </div>
 
+    <!-- OR/CR Photo Upload -->
+    <div class="modal-field" style="margin-bottom:16px">
+      <label class="modal-label">OR / CR Photo <span style="font-size:10px;color:var(--text-light);font-weight:400">(Official Receipt / Certificate of Registration)</span></label>
+      <div class="license-upload-zone" id="orcr-upload-zone" onclick="document.getElementById('drv-orcr-input').click()">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+          style="color:var(--text-light);margin-bottom:6px">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        <div style="font-size:13px;font-weight:500;color:var(--text-muted)">Click to upload OR/CR photo</div>
+        <div style="font-size:11px;color:var(--text-light);margin-top:2px">PNG, JPG up to 5MB</div>
+      </div>
+      <input type="file" id="drv-orcr-input" accept="image/*" style="display:none"
+        onchange="previewDriverOrcr(event)"/>
+      <!-- Preview -->
+      <div id="drv-orcr-preview" style="display:none;margin-top:10px;align-items:center;gap:10px">
+        <img id="drv-orcr-img" src="" alt="OR/CR preview"
+          style="width:90px;height:58px;object-fit:cover;border-radius:6px;border:1px solid var(--border)"/>
+        <div>
+          <div id="drv-orcr-filename" style="font-size:12px;font-weight:500"></div>
+          <div id="drv-orcr-filesize" style="font-size:11px;color:var(--text-light)"></div>
+          <span onclick="clearDriverOrcr()"
+            style="font-size:11px;color:#dc2626;cursor:pointer;text-decoration:underline">Remove</span>
+        </div>
+      </div>
+    </div>
+
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeDriverModal()">Cancel</button>
       <button class="btn-save" onclick="saveDriver()">

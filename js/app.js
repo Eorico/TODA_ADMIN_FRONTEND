@@ -116,6 +116,8 @@ class DashboardApp {
         // License preview global handlers
         window.previewDriverLicense = (e) => this.dashboards.drivers.previewLicense(e);
         window.clearDriverLicense   = ()  => this.dashboards.drivers._clearLicensePreview();
+        window.previewDriverOrcr = (e) => this.dashboards.drivers.previewOrcr(e);
+        window.clearDriverOrcr   = ()  => this.dashboards.drivers._clearOrcrPreview();          
  
         // View license full-size
         window.viewLicense = (url) => {
