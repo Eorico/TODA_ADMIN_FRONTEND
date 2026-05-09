@@ -1,8 +1,10 @@
 import { DashboardUtils } from "../utils/utils.js";
 import { ApiService } from "../api/api_service.js";
+
 /* ============================================
    DASHBOARD 7: CONTRIBUTIONS
    ============================================ */
+
 export class ContributionsDashboard {
     constructor(store) {
         this.store = store;
@@ -18,7 +20,7 @@ export class ContributionsDashboard {
         }
     }
 
-    initials(r) { return (r.fname[0] + r.lname[0]).toUpperCase(); }
+    initials(r) { return (r.full_name[0] + r.last_name[0]).toUpperCase(); }
 
     amountClass(r) {
         if (r.status === 'paid') return 'paid';
@@ -50,7 +52,7 @@ export class ContributionsDashboard {
         const fStatus = DashboardUtils.getEl('cn-filter-status')?.value;
         const fPeriod = DashboardUtils.getEl('cn-filter-period')?.value;
         this.store.cnFiltered = this.store.cnData.filter(r => {
-            const name = `${r.fname} ${r.lname} ${r.body} ${r.driverid}`.toLowerCase();
+            const name = `${r.full_name} ${r.last_name} ${r.body_number} ${r.driverid}`.toLowerCase();
             return (!q || name.includes(q))
                 && (!fStatus || r.status === fStatus)
                 && (!fPeriod || r.period === fPeriod);
@@ -80,12 +82,12 @@ export class ContributionsDashboard {
                         <div class="cn-driver-cell">
                             <div class="cn-avatar" style="background:${color}">${this.initials(r)}</div>
                             <div>
-                                <div class="cn-driver-name">${r.fname} ${r.lname}</div>
+                                <div class="cn-driver-name">${r.full_name} ${r.last_name}</div>
                                 <div class="cn-driver-id">${r.driverid}</div>
                             </div>
                         </div>
                     </td>
-                    <td><strong>#${r.body}</strong></td>
+                    <td><strong>#${r.body_number}</strong></td>
                     <td><span class="cn-amount ${amtClass}">₱${Number(r.amount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</span></td>
                     <td><span class="cn-period-badge">${r.period}</span></td>
                     <td style="font-size:13px;color:var(--text-muted)">${this.formatDate(r.date)}</td>
@@ -149,16 +151,16 @@ export class ContributionsDashboard {
         if (titleEl) titleEl.textContent = isEdit ? 'Edit Contribution' : 'Add Contribution';
         if (subEl) {
             subEl.textContent = isEdit
-                ? `Editing record for ${this.store.cnData[idx].fname} ${this.store.cnData[idx].lname}.`
+                ? `Editing record for ${this.store.cnData[idx].full_name} ${this.store.cnData[idx].last_name}.`
                 : 'Record a drivers contribution for the period.';
         }
         if (saveLabel) saveLabel.textContent = isEdit ? 'Save Changes' : 'Save Record';
 
         if (isEdit) {
             const r = this.store.cnData[idx];
-            DashboardUtils.setVal('cn-fname', r.fname);
-            DashboardUtils.setVal('cn-lname', r.lname);
-            DashboardUtils.setVal('cn-body', r.body);
+            DashboardUtils.setVal('cn-fname', r.full_name);
+            DashboardUtils.setVal('cn-lname', r.last_name);
+            DashboardUtils.setVal('cn-body', r.body_number);
             DashboardUtils.setVal('cn-driverid', r.driverid);
             DashboardUtils.setVal('cn-amount', r.amount);
             const periodSelect = DashboardUtils.getEl('cn-period');
@@ -196,41 +198,41 @@ export class ContributionsDashboard {
         if (!fname || !lname) { DashboardUtils.getEl('cn-fname')?.focus(); return; }
 
         const payLoad = {
-            full_name: fname, last_name: lname, body: body || '—', driverid: driverid || '—', amount, period, date, status, notes
+            full_name: fname,
+            last_name: lname,
+            body_number: body || '—',
+            driverid: driverid || '—',
+            amount, period, date, status, notes
         };
 
         let result;
         if (this.store.cnEditIdx !== null) {
             const id = this.store.cnData[this.store.cnEditIdx].id || this.store.cnData[this.store.cnEditIdx]._id;
-            result = await ApiService.call(`/admin/contributions`, 'PUT', payLoad);
-            if (result) DashboardUtils.showToast(`${fname} ${lname}'s record updated`);
-            ActivityLog.push({
-                icon: 'contrib',
-                title: 'Contribution Updated',
-                desc: `${fname} ${lname} - ${period}`
-            });
+            result = await ApiService.call(`/admin/contributions/${id}`, 'PUT', payLoad);
+            if (result) {
+                DashboardUtils.showToast(`${fname} ${lname}'s record updated`);
+                ActivityLog.push({ icon: 'contrib', title: 'Contribution Updated', desc: `${fname} ${lname} - ${period}` });
+            }
         } else {
             result = await ApiService.call('/admin/contributions', 'POST', payLoad);
-            if (result) DashboardUtils.showToast(`Contribution for ${fname} ${lname} recorded`);
-            ActivityLog.push({
-                icon: 'contrib',
-                title: 'Contribution Recorded',
-                desc: `${fname} ${lname} - ₱${amount}`
-            });
+            if (result) {
+                DashboardUtils.showToast(`Contribution for ${fname} ${lname} recorded`);
+                ActivityLog.push({ icon: 'contrib', title: 'Contribution Recorded', desc: `${fname} ${lname} - ₱${amount}` });
+            }
         }
 
         if (result) {
             this.closeModal();
             await this.sync();
+            window.syncAll?.();
         }
-
     }
 
     openConfirm(idx) {
         this.store.cnDeleteIdx = idx;
         const r = this.store.cnData[idx];
         const subEl = DashboardUtils.getEl('cn-confirm-sub');
-        if (subEl) subEl.textContent = `Delete contribution record for ${r.fname} ${r.lname} (${r.period})?`;
+        if (subEl) subEl.textContent = `Delete contribution record for ${r.full_name} ${r.last_name} (${r.period})?`;
         DashboardUtils.openModal('cn-confirm');
     }
 
@@ -248,13 +250,16 @@ export class ContributionsDashboard {
             DashboardUtils.showToast('Record deleted.');
             this.closeConfirm();
             await this.sync();
+            window.syncAll?.();
         }
     }
 
     init() {
-        this.sync();
-        this.store.cnFiltered = [...this.store.cnData];
+        this.store.cnData = this.store.cnData || [];
+        this.store.cnFiltered = [];
         this.store.cnPage = 1;
+
+        this.sync(); // ← move sync after initializing store defaults
 
         DashboardUtils.bindOverlayClose('cn-modal', () => this.closeModal());
         DashboardUtils.bindOverlayClose('cn-confirm', () => this.closeConfirm());

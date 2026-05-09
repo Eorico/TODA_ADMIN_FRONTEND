@@ -58,6 +58,7 @@ export class FaresDashboard {
           desc: `Base ₱${base}`
         })
         await this.sync(); 
+        window.syncAll?.();
     }
   }
 

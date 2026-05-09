@@ -27,7 +27,6 @@ export class RosterDashboard {
     async sync() {
         const data = await ApiService.call('/admin/roster', 'GET');
         
-        // Accept empty arrays too, fall back to store if fetch fails
         const members = Array.isArray(data) ? data : (this.store.members || []);
         
         this.store.members = members;
@@ -43,7 +42,7 @@ export class RosterDashboard {
         const active    = members.filter(m => norm(m.status) === 'active').length;
         const inactive  = members.filter(m => norm(m.status) === 'inactive').length;
         const suspended = members.filter(m => norm(m.status) === 'suspended').length;
- 
+
         const set = (id, val) => {
             const el = DashboardUtils.getEl(id);
             if (el) el.textContent = val;
@@ -52,11 +51,7 @@ export class RosterDashboard {
         set('stat-active',    active);
         set('stat-inactive',  inactive);
         set('stat-suspended', suspended);
- 
-        const sub = DashboardUtils.getEl('roster-sub');
-        if (sub) sub.textContent = `Managing ${total} authorized transport personnel.`;
-        const subInner = DashboardUtils.getEl('roster-sub-inner');
-        if (subInner) subInner.textContent = `Managing ${total} authorized transport personnel.`;
+        // ...
     }
  
     // ─── RENDER TABLE ────────────────────────────────────────────────────────
@@ -159,6 +154,7 @@ export class RosterDashboard {
             DashboardUtils.closeModal('edit-modal');
             DashboardUtils.showToast(`${member.full_name}'s record updated.`);
             await this.sync();
+            window.syncAll?.();
         }
  
         ActivityLog.push({

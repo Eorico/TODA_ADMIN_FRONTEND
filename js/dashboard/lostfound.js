@@ -102,6 +102,7 @@ export class LostFoundDashboard {
                 desc: `"${name}" · Body #${bodyNum || '—'}` 
             });
             await this.sync();
+            window.syncAll?.();
         }
     }
 

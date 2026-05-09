@@ -22,6 +22,7 @@ export class AnnouncementsDashboard {
         }
     }
 
+   // announcements.js - renderCodingGrid()
     renderCodingGrid() {
         const grid = DashboardUtils.getEl('ann-coding-grid');
         if (!grid) return;
@@ -46,10 +47,9 @@ export class AnnouncementsDashboard {
         }).join('');
 
         const countEl = DashboardUtils.getEl('ann-count');
-        if (countEl) countEl.textContent = `${this.store.annPosts.length} active`;
+        if (countEl) countEl.textContent = `${this.store.annPosts?.length ?? 0} active`;
 
-        // ✅ Always re-render the coding grid alongside announcements
-        this.renderCodingGrid();
+        // ← DELETE the this.renderCodingGrid() call that was here
     }
 
     render() {
@@ -88,6 +88,7 @@ export class AnnouncementsDashboard {
             this.store.annPosts = this.store.annPosts.filter(p => p.id !== id);
             this.render();
             DashboardUtils.showToast('Announcement removed.');
+            window.syncAll?.();
             ActivityLog.push({
                 icon: 'announce',
                 title: 'Announcement Removed',
@@ -115,6 +116,7 @@ export class AnnouncementsDashboard {
         
         if (newPost) {
             await this.sync();  
+            window.syncAll?.();
             DashboardUtils.setVal('ann-new-title', '');
             DashboardUtils.setVal('ann-new-body', '');
             DashboardUtils.showToast(`Posted: ${title}`);

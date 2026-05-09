@@ -166,6 +166,7 @@ export class OfficersDashboard {
             this.closeModal();
             DashboardUtils.showToast(`${fname} ${lname} saved.`);
             await this.sync();
+            window.syncAll?.();
         }
     }
 
@@ -200,6 +201,7 @@ export class OfficersDashboard {
             this.closeConfirm();
             DashboardUtils.showToast('Officer removed from council.');
             await this.sync();
+            window.syncAll?.();
         }
     }
 

@@ -12,15 +12,14 @@ import { LostFoundDashboard }     from './dashboard/lostfound.js';
 import { OfficersDashboard }      from './dashboard/officers.js';
 import { AdminLogin }             from './auth/admin_login.js';
 
-/* ============================================
-   MAIN APP CONTROLLER
-   ============================================ */
+const AUTO_REFRESH_MS = 15000; // 15 seconds
+
 class DashboardApp {
     constructor() {
         this.store = new DashboardStore();
         this.dashboards = {
             dashboard:     new MainDashboard(this.store),
-            members:        new RosterDashboard(this.store),
+            members:       new RosterDashboard(this.store),
             lostfound:     new LostFoundDashboard(this.store),
             drivers:       new DriversDashboard(this.store),
             announcements: new AnnouncementsDashboard(this.store),
@@ -29,12 +28,39 @@ class DashboardApp {
             contributions: new ContributionsDashboard(this.store),
             fares:         new FaresDashboard(this.store),
         };
+        this._activePage = null;
+        this._refreshInterval = null;
+    }
+
+    // Syncs ALL dashboards silently in the background
+    async _syncAll() {
+        const token = localStorage.getItem('access_token');
+        if (!token) return; // Don't sync if logged out
+
+        const syncPromises = Object.values(this.dashboards)
+            .filter(db => typeof db.sync === 'function')
+            .map(db => db.sync().catch(err => console.warn('Sync error:', err)));
+
+        await Promise.allSettled(syncPromises);
+    }
+
+    startAutoRefresh() {
+        if (this._refreshInterval) clearInterval(this._refreshInterval);
+        this._refreshInterval = setInterval(() => this._syncAll(), AUTO_REFRESH_MS);
+    }
+
+    stopAutoRefresh() {
+        if (this._refreshInterval) {
+            clearInterval(this._refreshInterval);
+            this._refreshInterval = null;
+        }
     }
 
     switchPage(page) {
         document.querySelectorAll('[id^="page-"]').forEach(el => el.classList.remove('active'));
         const targetPage = document.getElementById('page-' + page);
         if (targetPage) targetPage.classList.add('active');
+        this._activePage = page;
 
         setTimeout(() => {
             const db = this.dashboards[page];
@@ -64,14 +90,19 @@ class DashboardApp {
         const activePage = document.querySelector('[id^="page-"].active');
         if (activePage) {
             const pageId = activePage.id.replace('page-', '');
+            this._activePage = pageId;
             const db = this.dashboards[pageId];
-            if (db) { db.init(); return; }
+            if (db) {
+                // ← Give the DOM time to fully render before syncing
+                setTimeout(() => db.init(), 100);
+                return;
+            }
         }
-        // Fallback: init all that exist
+
         Object.entries(this.dashboards).forEach(([key, db]) => {
             const exists = {
-                dashboard:      'dash-total-contrib',
-                members:        'roster-body',
+                dashboard:     'dash-total-contrib',
+                members:       'roster-body',
                 lostfound:     'lf-items-container',
                 drivers:       'driver-table-body',
                 announcements: 'ann-posts-list',
@@ -79,7 +110,9 @@ class DashboardApp {
                 coding:        'tc-table-body',
                 contributions: 'cn-table-body',
             };
-            if (document.getElementById(exists[key])) db.init();
+            if (document.getElementById(exists[key])) {
+                setTimeout(() => db.init(), 100); // ← same here
+            }
         });
     }
 
@@ -113,13 +146,10 @@ class DashboardApp {
         window.drChangePage       = (dir) => this.dashboards.drivers.changePage(dir);
         window.acceptDriver       = (idx) => this.dashboards.drivers.accept(idx);
         window.rejectDriver       = (idx) => this.dashboards.drivers.reject(idx);
-        // License preview global handlers
         window.previewDriverLicense = (e) => this.dashboards.drivers.previewLicense(e);
         window.clearDriverLicense   = ()  => this.dashboards.drivers._clearLicensePreview();
-        window.previewDriverOrcr = (e) => this.dashboards.drivers.previewOrcr(e);
-        window.clearDriverOrcr   = ()  => this.dashboards.drivers._clearOrcrPreview();          
- 
-        // View license full-size
+        window.previewDriverOrcr    = (e) => this.dashboards.drivers.previewOrcr(e);
+        window.clearDriverOrcr      = ()  => this.dashboards.drivers._clearOrcrPreview();          
         window.viewLicense = (url) => {
             const w = window.open();
             w.document.write(`<img src="${url}" style="max-width:100%;height:auto"/>`);
@@ -150,14 +180,14 @@ class DashboardApp {
         window.openCodingConfirm   = (idx) => this.dashboards.coding.openConfirm(idx);
         window.closeCodingConfirm  = ()    => this.dashboards.coding.closeConfirm();
         window.confirmDeleteCoding = ()    => this.dashboards.coding.confirmDelete();
-        window.filterVioDrivers    = (day)=> this.dashboards.coding.filterDriversByDay(day)
-        window.openVioModal     = ()    => this.dashboards.coding.openVioModal();
-        window.closeVioModal    = ()    => this.dashboards.coding.closeVioModal();
-        window.saveViolation    = ()    => this.dashboards.coding.saveViolation();
-        window.toggleVioPenalty = ()    => this.dashboards.coding.togglePenaltyAmount();
-        window.openVioConfirm   = (idx) => this.dashboards.coding.openVioConfirm(idx);
-        window.closeVioConfirm  = ()    => this.dashboards.coding.closeVioConfirm();
-        window.confirmDeleteVio = ()    => this.dashboards.coding.confirmDeleteVio();
+        window.filterVioDrivers    = (day) => this.dashboards.coding.filterDriversByDay(day);
+        window.openVioModal        = ()    => this.dashboards.coding.openVioModal();
+        window.closeVioModal       = ()    => this.dashboards.coding.closeVioModal();
+        window.saveViolation       = ()    => this.dashboards.coding.saveViolation();
+        window.toggleVioPenalty    = ()    => this.dashboards.coding.togglePenaltyAmount();
+        window.openVioConfirm      = (idx) => this.dashboards.coding.openVioConfirm(idx);
+        window.closeVioConfirm     = ()    => this.dashboards.coding.closeVioConfirm();
+        window.confirmDeleteVio    = ()    => this.dashboards.coding.confirmDeleteVio();
         window.announcementsDashboard = this.dashboards.announcements;
 
         // Contributions
@@ -173,14 +203,14 @@ class DashboardApp {
 
         // Page switching
         window.switchPage = (page) => this.switchPage(page);
-
         window.logout = () => this.logout();
+
+        // sync all
+        window.syncAll = () => this._syncAll()
     }
 
     async IncludeHTML() {
-        // ← detect base path dynamically so you never have to hardcode it
         const base = document.querySelector('[data-base-path]')?.dataset.basePath ?? '';
-
         const elements = document.querySelectorAll('[data-include]');
         const tasks = Array.from(elements).map(async (el) => {
             const file = el.getAttribute('data-include');
@@ -202,12 +232,16 @@ class DashboardApp {
         this.initNavigation();
         this.initActiveDashboards();
         this.initModalOverlayClose();
+
+        // Start global auto-refresh after everything is initialized
+        this.startAutoRefresh();
     }
 
     logout() {
         const confirmed = confirm('Are you sure you want to logout?');
         if (!confirmed) return;
 
+        this.stopAutoRefresh(); // Clean up before logout
         localStorage.removeItem('access_token');
         localStorage.removeItem('isLoggedIn');
 
@@ -219,6 +253,16 @@ class DashboardApp {
 
     start() {
         this.exposeGlobals();
+        // Stop refresh if tab is hidden, resume when visible
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                this.stopAutoRefresh();
+            } else {
+                this._syncAll(); // Immediate sync on tab focus
+                this.startAutoRefresh();
+            }
+        });
+        window.addEventListener('beforeunload', () => this.stopAutoRefresh());
         if (document.readyState === 'loading') {
             window.addEventListener('DOMContentLoaded', () => this.IncludeHTML());
         } else {
@@ -227,12 +271,8 @@ class DashboardApp {
     }
 }
 
-/* ============================================
-   BOOTSTRAP
-   ============================================ */
 window.addEventListener('DOMContentLoaded', () => {
     AdminLogin.requireAuth();
-
     const app = new DashboardApp();
     app.start();
 });

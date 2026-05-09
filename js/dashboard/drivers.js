@@ -308,6 +308,7 @@ export class DriversDashboard {
             await this.sync();
             // Re-sync the Members / Roster page so the new member appears there too
             await this._syncRoster();
+            window.syncAll?.();
         }
     }
  
@@ -331,6 +332,7 @@ export class DriversDashboard {
                 desc: `${driver.full_name} ${driver.last_name} set to Inactive.`
             });
             await this.sync();
+            window.syncAll?.();
         }
     }
  
@@ -357,6 +359,7 @@ export class DriversDashboard {
             await this.sync();
             // Also refresh Members page in case they had a roster entry
             await this._syncRoster();
+            window.syncAll?.();
         }
     }
  
@@ -481,6 +484,7 @@ export class DriversDashboard {
         });
 
         await this.sync(); // ← final sync from DB, now licenseUrl is already saved
+        window.syncAll?.();
         if ((status || 'Active') === 'Active') {
             await this._syncRoster();
         }

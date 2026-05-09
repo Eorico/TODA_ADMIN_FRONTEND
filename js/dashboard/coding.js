@@ -17,19 +17,24 @@ export class CodingDashboard {
         ]);
 
         if (codingData) {
-            this.store.tcData = codingData;
+            this.store.tcData = Array.isArray(codingData) ? codingData : [];
             this.render();
             if (window.announcementsDashboard) {
                 window.announcementsDashboard.renderCodingGrid();
             }
         }
-        if (violationData) {
-            this.store.vioData = violationData;
-            this.renderViolations();
-        }
-        if (riderData) {
-            this.store.drData = riderData;
-        }
+
+        // Handle both array response and wrapped response
+        const vioList = Array.isArray(violationData) ? violationData
+                    : Array.isArray(violationData?.items) ? violationData.items
+                    : [];
+        this.store.vioData = vioList;
+        this.renderViolations();
+
+        const riderList = Array.isArray(riderData) ? riderData
+                        : Array.isArray(riderData?.items) ? riderData.items
+                        : [];
+        this.store.drData = riderList;
     }
 
     // ── Coding schedule render ─────────────────────────────────────
@@ -104,10 +109,12 @@ export class CodingDashboard {
 
     // ── Violation render ───────────────────────────────────────────
     renderViolations() {
-        const tbody  = DashboardUtils.getEl('vio-table-body');
+        const tbody = DashboardUtils.getEl('vio-table-body');
         if (!tbody) return;
 
-        const data   = this.store.vioData || [];
+        const data = this.store.vioData || [];
+        
+        // Always update count regardless of data length
         const countEl = DashboardUtils.getEl('tc-vio-count');
         if (countEl) countEl.textContent = data.length;
 
@@ -208,6 +215,7 @@ export class CodingDashboard {
             });
             this.closeModal();
             await this.sync();
+            window.syncAll?.();
         }
     }
 
@@ -233,6 +241,7 @@ export class CodingDashboard {
             ActivityLog.push({ icon: 'coding', title: 'Coding Schedule Deleted', desc: `${entry.day} · ${entry.bodyRange}` });
             this.closeConfirm();
             await this.sync();
+            window.syncAll?.();
         }
     }
 
@@ -243,7 +252,9 @@ export class CodingDashboard {
             const riders = this.store.drData || [];
             driverSelect.innerHTML = `<option value="">— Select Driver —</option>` +
                 riders.map(d =>
-                    `<option value="${d.id}|${d.fname} ${d.lname}|${d.body}">${d.fname} ${d.lname} · #${d.body}</option>`
+                    `<option value="${d.id}|${d.full_name} ${d.last_name}|${d.body_number}">
+                        ${d.full_name} ${d.last_name} · #${d.body_number}
+                    </option>`
                 ).join('');
         }
         const dateInput = DashboardUtils.getEl('vio-date');
@@ -251,7 +262,6 @@ export class CodingDashboard {
         this.togglePenaltyAmount();
         DashboardUtils.openModal('vio-modal');
     }
-
     closeVioModal() {
         DashboardUtils.closeModal('vio-modal');
         DashboardUtils.clearFields(['vio-violation', 'vio-amount']);
@@ -291,11 +301,53 @@ export class CodingDashboard {
                 title: 'Violation Recorded',
                 desc: `${driver_name} · #${body} · ${penalty === 'fine' ? payload.penalty_amount + ' Fine' : 'Warning'}`
             });
+
+            // ── Auto-suspend the member in the roster ──────────────────
+            await this._suspendMember(driver_id, driver_name);
+
             this.closeVioModal();
             await this.sync();
+            window.syncAll?.();
         }
     }
 
+    // ── Find member in roster by driver_id and set status to suspended ──
+    async _suspendMember(driver_id, driver_name) {
+        try {
+            // Get all roster members to find the matching one
+            const members = await ApiService.call('/admin/roster', 'GET');
+            if (!Array.isArray(members)) return;
+
+            // Match by id or by name as fallback
+            const member = members.find(m =>
+                m.id === driver_id ||
+                m._id === driver_id ||
+                (`${m.full_name}`.toLowerCase() === driver_name.toLowerCase())
+            );
+
+            if (!member) {
+                console.warn('Member not found in roster for suspension:', driver_id);
+                return;
+            }
+
+            const memberId = member._id || member.id;
+            const violations = await ApiService.call('/admin/violations', 'GET');
+            const memberViolations = Array.isArray(violations)
+                ? violations.filter(v => v.driver_id === driver_id)
+                : [];
+
+            const payload = {
+                ...member,
+                status: 'suspended',
+                violation_count: memberViolations.length // track count
+            };
+
+            await ApiService.call(`/admin/roster/${memberId}`, 'PUT', payload);
+            console.log(`${driver_name} suspended in roster. Violations: ${memberViolations.length}`);
+        } catch (err) {
+            console.warn('Failed to suspend member:', err);
+        }
+    }
     // ── Violation delete ───────────────────────────────────────────
     openVioConfirm(idx) {
         this.store.vioDeleteIdx = idx;
@@ -319,7 +371,50 @@ export class CodingDashboard {
             DashboardUtils.showToast('Violation removed.');
             ActivityLog.push({ icon: 'coding', title: 'Violation Deleted', desc: `${v.driver_name} · ${v.date}` });
             this.closeVioConfirm();
+
+            // ── Check remaining violations, reinstate if none left ─────
+            await this._checkAndReinstate(v.driver_id, v.driver_name);
+
             await this.sync();
+            window.syncAll?.();
+        }
+    }
+
+    async _checkAndReinstate(driver_id, driver_name) {
+        try {
+            const [members, violations] = await Promise.all([
+                ApiService.call('/admin/roster', 'GET'),
+                ApiService.call('/admin/violations', 'GET'),
+            ]);
+
+            if (!Array.isArray(members)) return;
+
+            const member = members.find(m =>
+                m.id === driver_id ||
+                m._id === driver_id ||
+                (`${m.full_name}`.toLowerCase() === driver_name.toLowerCase())
+            );
+
+            if (!member) return;
+
+            // Count remaining violations for this driver (excluding the one just deleted)
+            const remaining = Array.isArray(violations)
+                ? violations.filter(v => v.driver_id === driver_id)
+                : [];
+
+            // Only reinstate if no violations remain
+            if (remaining.length === 0) {
+                const memberId = member._id || member.id;
+                const payload = {
+                    ...member,
+                    status: 'active',
+                    violation_count: 0
+                };
+                await ApiService.call(`/admin/roster/${memberId}`, 'PUT', payload);
+                DashboardUtils.showToast(`${driver_name} reinstated to active.`);
+            }
+        } catch (err) {
+            console.warn('Failed to reinstate member:', err);
         }
     }
 
