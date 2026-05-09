@@ -43,10 +43,13 @@ export class DashboardUtils {
         setTimeout(() => toast.classList.remove('show'), 3200);
     }
 
-    static badgeClass(s) {
-        if (s === 'Active') return 'badge-active';
-        if (s === 'Inactive') return 'badge-inactive';
-        return 'badge-suspended';
+    static badgeClass(status) {
+        switch ((status || '').toLowerCase().trim()) {
+            case 'active':    return 'badge-active';
+            case 'inactive':  return 'badge-inactive';
+            case 'suspended': return 'badge-suspended';
+            default:          return 'badge-inactive'; // fallback
+        }
     }
 
     static getEl(id) {

@@ -99,7 +99,7 @@ export class RosterDashboard {
                 </td>
                 <td>
                     <button class="btn-edit"
-                    onclick="window.openModal('${displayName}', '${memberId}', '${m.status}', '${contrib.replace('₱', '')}', ${i})">
+                    onclick="window.openModal('${displayName}', '${memberId}', '${bodyNo}', '${m.status}', '${contrib.replace('₱', '')}', ${i})">
                     Edit
                     </button>
                 </td>
@@ -109,7 +109,7 @@ export class RosterDashboard {
  
     // ─── MODAL ───────────────────────────────────────────────────────────────
  
-    openModal(name, id, status, contrib, idx) {
+    openModal(name, id, body_number, status, contrib, idx) {
         this.editIdx = idx !== undefined ? idx : null;
  
         const modalNameEl    = DashboardUtils.getEl('modal-name');
@@ -118,7 +118,7 @@ export class RosterDashboard {
         const modalStatusEl  = DashboardUtils.getEl('modal-status');
  
         if (modalNameEl)    modalNameEl.textContent = `${name} (#${id})`;
-        if (modalBodyEl)    modalBodyEl.value       = id;
+        if (modalBodyEl)    modalBodyEl.value       = body_number;
         if (modalContribEl) modalContribEl.value    = contrib;
         if (modalStatusEl) {
             Array.from(modalStatusEl.options).forEach(o => {
