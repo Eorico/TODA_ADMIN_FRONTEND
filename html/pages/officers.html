@@ -6,53 +6,69 @@
     <title>Document</title>
 </head>
 <body>
-    <!-- OFFICERS MANAGEMENT PAGE -->
-    <div id="page-officers">
+<!-- OFFICERS MANAGEMENT PAGE -->
+<div id="page-officers">
 
-      <!-- Header Row -->
-      <div class="off-header-row">
-        <div class="off-title-block">
-          
-          <div class="off-page-title">Officers Management</div>
-          <div class="off-page-sub">Curating the leadership of Sovereign TODA with precision and administrative excellence.</div>
-        </div>
-        <div class="off-header-right">
-          <div class="off-total-badge">
-            <div class="off-total-label">Total Force</div>
-            <div class="off-total-num" id="off-total-num">0</div>
-            <div class="off-total-unit">Officers</div>
-          </div>
-           
-        </div>
-      </div>
-
-      <!-- Action Cards -->
-      <div class="off-action-row">
-        <div class="off-action-card crimson">
-          <div class="off-card-text">
-            <div class="off-card-title">Expand Council</div>
-            <div class="off-card-sub">Register a new official into the current term.</div>
-          </div>
-          <button class="btn-off-action white-btn" onclick="openOfficerModal()">Add New Officer</button>
-        </div>
-      
-      </div>
-
-      <!-- Council Members Grid -->
-      <div class="off-council-header">
-        <div class="off-council-title">Council Members</div>
-        <div class="off-view-toggle">
-          <button class="off-view-btn active" id="off-grid-btn" onclick="setOfficerView('grid')" title="Grid View">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-          </button>
-          <button class="off-view-btn" id="off-list-btn" onclick="setOfficerView('list')" title="List View">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-          </button>
-        </div>
-      </div>
-
-      <div class="off-grid" id="off-grid-container"></div>
-
+  <!-- Header Row -->
+  <div class="off-header-row">
+    <div class="off-title-block">
+      <div class="off-page-title">Officers <em style="font-style:italic;color:var(--crimson)">Management</em></div>
+      <div class="off-page-sub">Curating the leadership of Sovereign TODA with precision and administrative excellence.</div>
     </div>
+    <div class="off-header-right">
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 24px;text-align:center;box-shadow:var(--shadow-sm);min-width:120px">
+        <div class="off-total-label">Total Force</div>
+        <div class="off-total-num" id="off-total-num">0</div>
+        <div class="off-total-unit">Officers</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Officer Banner -->
+  <div style="background:linear-gradient(135deg,var(--crimson) 0%,var(--crimson-deep) 100%);border-radius:var(--radius-lg);padding:24px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:28px;position:relative;overflow:hidden">
+    <div style="position:absolute;top:-50px;right:-50px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.04);pointer-events:none"></div>
+    <div style="display:flex;align-items:center;gap:16px;flex:1;min-width:0;position:relative;z-index:1">
+      <div style="width:48px;height:48px;border-radius:var(--radius);background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="22" height="22" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <line x1="19" y1="8" x2="19" y2="14"/>
+          <line x1="22" y1="11" x2="16" y2="11"/>
+        </svg>
+      </div>
+      <div>
+        <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:900;color:white;margin-bottom:3px">Expand the Council</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.6);line-height:1.5">Register a new official into the current term roster.</div>
+      </div>
+    </div>
+    <button class="btn-off-action white-btn" style="position:relative;z-index:1" onclick="openOfficerModal()">+ Add New Officer</button>
+  </div>
+
+  <!-- Council Members Header -->
+  <div class="off-council-header">
+    <div class="off-council-title">Council Members</div>
+    <div class="off-view-toggle">
+      <button class="off-view-btn active" id="off-grid-btn" onclick="setOfficerView('grid')" title="Grid View">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+        </svg>
+      </button>
+      <button class="off-view-btn" id="off-list-btn" onclick="setOfficerView('list')" title="List View">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
+          <line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/>
+          <line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Officer Cards Grid -->
+  <div class="off-grid" id="off-grid-container">
+    <!-- cards injected by JS — or paste static example below -->
+  </div>
+
+</div>
 </body>
 </html>

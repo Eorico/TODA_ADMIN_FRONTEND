@@ -203,7 +203,23 @@ export class DriversDashboard {
                     </div>
                 </td>
                 <td>${licThumb}</td>
+                <td>
+                    <div style="font-size:12px;font-weight:600;color:var(--text-dark)">
+                        ${d.expiration_date_license || '—'}
+                    </div>
+                    <div style="font-size:10px;color:var(--text-muted);margin-top:2px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.5px;text-transform:uppercase">
+                        License Expiry
+                    </div>
+                </td>
                 <td>${orcrThumb}</td>
+                <td>
+                    <div style="font-size:12px;font-weight:600;color:var(--text-dark)">
+                        ${d.expiration_date_orcr || '—'}
+                    </div>
+                    <div style="font-size:10px;color:var(--text-muted);margin-top:2px;font-family:'Barlow Condensed',sans-serif;letter-spacing:.5px;text-transform:uppercase">
+                        OR/CR Expiry
+                    </div>
+                </td>
                 <td><div class="dr-actions">${actionButtons}</div></td>
                 </tr>`;
         }).join('');
@@ -389,6 +405,8 @@ export class DriversDashboard {
             DashboardUtils.setVal('drv-body',    d.body_number);  // ← was d.body
             DashboardUtils.setVal('drv-contact', (d.contact || '').replace('+63 ', ''));
             DashboardUtils.setVal('drv-email',   d.email || '');
+            DashboardUtils.setVal('drv-license-expiry', d.expiration_date_license || '');
+            DashboardUtils.setVal('drv-orcr-expiry',    d.expiration_date_orcr    || '');               
             const statusSelect = DashboardUtils.getEl('drv-status');
             if (statusSelect) {
                 Array.from(statusSelect.options).forEach(o => o.selected = o.text === d.status);
@@ -411,7 +429,11 @@ export class DriversDashboard {
             this._showOrcrPreview(fullOrcrUrl, 'Existing OR/CR', '');
             }
         } else {
-            DashboardUtils.clearFields(['drv-fname', 'drv-lname', 'drv-body', 'drv-contact', 'drv-email']);
+            DashboardUtils.clearFields([
+                'drv-fname', 'drv-lname', 'drv-body',
+                'drv-contact', 'drv-email',
+                'drv-license-expiry', 'drv-orcr-expiry'   
+            ]);
             const statusSelect = DashboardUtils.getEl('drv-status');
             if (statusSelect) statusSelect.selectedIndex = 0;
         }
@@ -435,12 +457,14 @@ export class DriversDashboard {
         }
 
         const payload = {
-            full_name: fname,
-            last_name: lname,
-            body_number:    body    || '---',
-            contact: contact ? `+63 ${contact}` : '-',
-            email:   email   || '',
-            status:  status  || 'Active'
+            full_name:                fname,
+            last_name:                lname,
+            body_number:              body    || '---',
+            contact:                  contact ? `+63 ${contact}` : '-',
+            email:                    email   || '',
+            status:                   status  || 'Active',
+            expiration_date_license:  DashboardUtils.getEl('drv-license-expiry')?.value || null,   
+            expiration_date_orcr:     DashboardUtils.getEl('drv-orcr-expiry')?.value    || null,  
         };
 
         let result;

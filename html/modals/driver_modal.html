@@ -95,6 +95,15 @@
       </div>
     </div>
 
+    <!-- After the license preview div, before closing the license modal-field div -->
+  <div class="modal-row" style="margin-top:12px">
+    <div class="modal-field">
+      <label class="modal-label">License Expiry Date</label>
+      <input type="date" id="drv-license-expiry" class="modal-input"
+        style="border:1px solid var(--border);border-radius:8px;width:100%;padding:10px 12px"/>
+    </div>
+  </div>
+
     <!-- OR/CR Photo Upload -->
     <div class="modal-field" style="margin-bottom:16px">
       <label class="modal-label">OR / CR Photo <span style="font-size:10px;color:var(--text-light);font-weight:400">(Official Receipt / Certificate of Registration)</span></label>
@@ -120,6 +129,15 @@
           <span onclick="clearDriverOrcr()"
             style="font-size:11px;color:#dc2626;cursor:pointer;text-decoration:underline">Remove</span>
         </div>
+      </div>
+    </div>
+
+    <!-- After the OR/CR preview div, before closing the orcr modal-field div -->
+    <div class="modal-row" style="margin-top:12px">
+      <div class="modal-field">
+        <label class="modal-label">OR/CR Expiry Date</label>
+        <input type="date" id="drv-orcr-expiry" class="modal-input"
+          style="border:1px solid var(--border);border-radius:8px;width:100%;padding:10px 12px"/>
       </div>
     </div>
 

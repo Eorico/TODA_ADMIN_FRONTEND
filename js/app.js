@@ -10,9 +10,10 @@ import { DriversDashboard }       from './dashboard/drivers.js';
 import { FaresDashboard }         from './dashboard/fare.js';
 import { LostFoundDashboard }     from './dashboard/lostfound.js';
 import { OfficersDashboard }      from './dashboard/officers.js';
+import { AnalysisDashboard }      from './dashboard/analysis.js';   // ← add
 import { AdminLogin }             from './auth/admin_login.js';
 
-const AUTO_REFRESH_MS = 15000; // 15 seconds
+const AUTO_REFRESH_MS = 15000;
 
 class DashboardApp {
     constructor() {
@@ -27,20 +28,18 @@ class DashboardApp {
             coding:        new CodingDashboard(this.store),
             contributions: new ContributionsDashboard(this.store),
             fares:         new FaresDashboard(this.store),
+            analysis:      new AnalysisDashboard(this.store),        // ← add
         };
         this._activePage = null;
         this._refreshInterval = null;
     }
 
-    // Syncs ALL dashboards silently in the background
     async _syncAll() {
         const token = localStorage.getItem('access_token');
-        if (!token) return; // Don't sync if logged out
-
+        if (!token) return;
         const syncPromises = Object.values(this.dashboards)
             .filter(db => typeof db.sync === 'function')
             .map(db => db.sync().catch(err => console.warn('Sync error:', err)));
-
         await Promise.allSettled(syncPromises);
     }
 
@@ -62,10 +61,12 @@ class DashboardApp {
         if (targetPage) targetPage.classList.add('active');
         this._activePage = page;
 
+        // Analysis needs a longer delay so Chart.js can measure canvas dimensions
+        const delay = page === 'analysis' ? 150 : 50;
         setTimeout(() => {
             const db = this.dashboards[page];
             if (db) db.init();
-        }, 50);
+        }, delay);
     }
 
     initNavigation() {
@@ -86,38 +87,41 @@ class DashboardApp {
     initActiveDashboards() {
         const token = localStorage.getItem('access_token');
         if (!token) return;
-        
+
         const activePage = document.querySelector('[id^="page-"].active');
         if (activePage) {
             const pageId = activePage.id.replace('page-', '');
             this._activePage = pageId;
             const db = this.dashboards[pageId];
             if (db) {
-                // ← Give the DOM time to fully render before syncing
                 setTimeout(() => db.init(), 100);
                 return;
             }
         }
 
+        const exists = {
+            dashboard:     'dash-total-contrib',
+            members:       'roster-body',
+            lostfound:     'lf-items-container',
+            drivers:       'driver-table-body',
+            announcements: 'ann-posts-list',
+            officers:      'off-grid-container',
+            coding:        'tc-table-body',
+            contributions: 'cn-table-body',
+            // analysis intentionally excluded — init only on switchPage
+        };
+
         Object.entries(this.dashboards).forEach(([key, db]) => {
-            const exists = {
-                dashboard:     'dash-total-contrib',
-                members:       'roster-body',
-                lostfound:     'lf-items-container',
-                drivers:       'driver-table-body',
-                announcements: 'ann-posts-list',
-                officers:      'off-grid-container',
-                coding:        'tc-table-body',
-                contributions: 'cn-table-body',
-            };
             if (document.getElementById(exists[key])) {
-                setTimeout(() => db.init(), 100); // ← same here
+                setTimeout(() => db.init(), 100);
             }
         });
     }
 
     initModalOverlayClose() {
-        ['edit-modal', 'driver-modal', 'officer-modal', 'officer-confirm', 'coding-modal', 'coding-confirm', 'cn-modal', 'cn-confirm', 'fare-modal', 'vio-confirm']
+        ['edit-modal', 'driver-modal', 'officer-modal', 'officer-confirm',
+         'coding-modal', 'coding-confirm', 'cn-modal', 'cn-confirm',
+         'fare-modal', 'vio-confirm']
             .forEach(id => {
                 const modal = document.getElementById(id);
                 if (modal) modal.onclick = function (e) {
@@ -138,18 +142,18 @@ class DashboardApp {
         window.submitLostFound = () => this.dashboards.lostfound.submit();
 
         // Drivers
-        window.openDriverModal    = (name, id, status, contrib, idx) => this.dashboards.drivers.openModal(name, id, status, contrib, idx);
-        window.openAddDriverModal = ()    => this.dashboards.drivers.openModal();
-        window.closeDriverModal   = ()    => DashboardUtils.closeModal('driver-modal');
-        window.saveDriver         = ()    => this.dashboards.drivers.save();
-        window.deleteDriver       = (idx) => this.dashboards.drivers.delete(idx);
-        window.drChangePage       = (dir) => this.dashboards.drivers.changePage(dir);
-        window.acceptDriver       = (idx) => this.dashboards.drivers.accept(idx);
-        window.rejectDriver       = (idx) => this.dashboards.drivers.reject(idx);
-        window.previewDriverLicense = (e) => this.dashboards.drivers.previewLicense(e);
-        window.clearDriverLicense   = ()  => this.dashboards.drivers._clearLicensePreview();
-        window.previewDriverOrcr    = (e) => this.dashboards.drivers.previewOrcr(e);
-        window.clearDriverOrcr      = ()  => this.dashboards.drivers._clearOrcrPreview();          
+        window.openDriverModal      = (idx) => this.dashboards.drivers.openModal(idx);
+        window.openAddDriverModal   = ()    => this.dashboards.drivers.openModal();
+        window.closeDriverModal     = ()    => DashboardUtils.closeModal('driver-modal');
+        window.saveDriver           = ()    => this.dashboards.drivers.save();
+        window.deleteDriver         = (idx) => this.dashboards.drivers.delete(idx);
+        window.drChangePage         = (dir) => this.dashboards.drivers.changePage(dir);
+        window.acceptDriver         = (idx) => this.dashboards.drivers.accept(idx);
+        window.rejectDriver         = (idx) => this.dashboards.drivers.reject(idx);
+        window.previewDriverLicense = (e)   => this.dashboards.drivers.previewLicense(e);
+        window.clearDriverLicense   = ()    => this.dashboards.drivers._clearLicensePreview();
+        window.previewDriverOrcr    = (e)   => this.dashboards.drivers.previewOrcr(e);
+        window.clearDriverOrcr      = ()    => this.dashboards.drivers._clearOrcrPreview();
         window.viewLicense = (url) => {
             const w = window.open();
             w.document.write(`<img src="${url}" style="max-width:100%;height:auto"/>`);
@@ -180,7 +184,6 @@ class DashboardApp {
         window.openCodingConfirm   = (idx) => this.dashboards.coding.openConfirm(idx);
         window.closeCodingConfirm  = ()    => this.dashboards.coding.closeConfirm();
         window.confirmDeleteCoding = ()    => this.dashboards.coding.confirmDelete();
-        window.filterVioDrivers    = (day) => this.dashboards.coding.filterDriversByDay(day);
         window.openVioModal        = ()    => this.dashboards.coding.openVioModal();
         window.closeVioModal       = ()    => this.dashboards.coding.closeVioModal();
         window.saveViolation       = ()    => this.dashboards.coding.saveViolation();
@@ -201,12 +204,13 @@ class DashboardApp {
         window.cnChangePage    = (dir) => this.dashboards.contributions.changePage(dir);
         window.cnFilterRender  = ()    => this.dashboards.contributions.filterRender();
 
+        // Analysis                                                  // ← add
+        window.analysisDashboard = this.dashboards.analysis;
+
         // Page switching
         window.switchPage = (page) => this.switchPage(page);
         window.logout = () => this.logout();
-
-        // sync all
-        window.syncAll = () => this._syncAll()
+        window.syncAll = () => this._syncAll();
     }
 
     async IncludeHTML() {
@@ -226,25 +230,19 @@ class DashboardApp {
                 console.error('Error loading component:', err);
             }
         });
-
         await Promise.all(tasks);
-
         this.initNavigation();
         this.initActiveDashboards();
         this.initModalOverlayClose();
-
-        // Start global auto-refresh after everything is initialized
         this.startAutoRefresh();
     }
 
     logout() {
         const confirmed = confirm('Are you sure you want to logout?');
         if (!confirmed) return;
-
-        this.stopAutoRefresh(); // Clean up before logout
+        this.stopAutoRefresh();
         localStorage.removeItem('access_token');
         localStorage.removeItem('isLoggedIn');
-
         DashboardUtils.showToast('Logging out...');
         setTimeout(() => {
             window.location.href = '/frontend/web/html/admin_login.html';
@@ -253,12 +251,11 @@ class DashboardApp {
 
     start() {
         this.exposeGlobals();
-        // Stop refresh if tab is hidden, resume when visible
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
                 this.stopAutoRefresh();
             } else {
-                this._syncAll(); // Immediate sync on tab focus
+                this._syncAll();
                 this.startAutoRefresh();
             }
         });

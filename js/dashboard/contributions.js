@@ -13,10 +13,19 @@ export class ContributionsDashboard {
     }
 
     async sync() {
-        const data = await ApiService.call('/admin/contributions', 'GET');
-        if (data) {
-            this.store.cnData = data;
+        const [cnData, riderData] = await Promise.all([
+            ApiService.call('/admin/contributions', 'GET'),
+            ApiService.call('/admin/riders',        'GET'),   // ← add this
+        ]);
+
+        if (cnData) {
+            this.store.cnData = cnData;
             this.filterRender();
+        }
+
+        // Share rider data with the store so openModal can use it
+        if (riderData) {
+            this.store.drData = Array.isArray(riderData) ? riderData : [];
         }
     }
 
@@ -72,7 +81,7 @@ export class ContributionsDashboard {
         const start = (this.store.cnPage - 1) * this.PER_PAGE;
         const slice = filtered.slice(start, start + this.PER_PAGE);
 
-        tbody.innerHTML = slice.map(r => {
+       tbody.innerHTML = slice.map(r => {
             const realIdx = this.store.cnData.indexOf(r);
             const color = this.avatarColors[realIdx % this.avatarColors.length];
             const amtClass = this.amountClass(r);
@@ -89,7 +98,6 @@ export class ContributionsDashboard {
                     </td>
                     <td><strong>#${r.body_number}</strong></td>
                     <td><span class="cn-amount ${amtClass}">₱${Number(r.amount).toLocaleString('en-PH', { minimumFractionDigits: 2 })}</span></td>
-                    <td><span class="cn-period-badge">${r.period}</span></td>
                     <td style="font-size:13px;color:var(--text-muted)">${this.formatDate(r.date)}</td>
                     <td>
                         <span class="cn-pay-status ${r.status}">
@@ -109,7 +117,6 @@ export class ContributionsDashboard {
                     </td>
                 </tr>`;
         }).join('');
-
         const showingEl = DashboardUtils.getEl('cn-showing');
         if (showingEl) {
             showingEl.innerHTML = total
@@ -144,40 +151,72 @@ export class ContributionsDashboard {
 
     openModal(idx) {
         this.store.cnEditIdx = idx !== undefined ? idx : null;
-        const isEdit = this.store.cnEditIdx !== null;
-        const titleEl = DashboardUtils.getEl('cn-modal-title');
-        const subEl = DashboardUtils.getEl('cn-modal-sub');
+        const isEdit    = this.store.cnEditIdx !== null;
+        const titleEl   = DashboardUtils.getEl('cn-modal-title');
+        const subEl     = DashboardUtils.getEl('cn-modal-sub');
         const saveLabel = DashboardUtils.getEl('cn-save-label');
-        if (titleEl) titleEl.textContent = isEdit ? 'Edit Contribution' : 'Add Contribution';
-        if (subEl) {
-            subEl.textContent = isEdit
-                ? `Editing record for ${this.store.cnData[idx].full_name} ${this.store.cnData[idx].last_name}.`
-                : 'Record a drivers contribution for the period.';
-        }
+
+        if (titleEl)   titleEl.textContent   = isEdit ? 'Edit Contribution' : 'Add Contribution';
+        if (subEl)     subEl.textContent     = isEdit
+            ? `Editing record for ${this.store.cnData[idx].full_name} ${this.store.cnData[idx].last_name}.`
+            : 'Record a driver\'s butaw/contribution.';
         if (saveLabel) saveLabel.textContent = isEdit ? 'Save Changes' : 'Save Record';
+
+        // ── Populate driver dropdown from riders store ──────────────
+        const driverSelect = DashboardUtils.getEl('cn-driver-select');
+        if (driverSelect) {
+            const riders = this.store.drData || [];
+            driverSelect.innerHTML =
+                `<option value="">— Select Driver —</option>` +
+                riders.map(d =>
+                    `<option value="${d.id || d._id}|${d.full_name}|${d.last_name}|${d.body_number}">
+                        ${d.full_name} ${d.last_name} · #${d.body_number}
+                    </option>`
+                ).join('');
+
+            // Auto-fill body number on driver change
+            driverSelect.onchange = () => {
+                const parts = driverSelect.value.split('|');
+                const bodyInput = DashboardUtils.getEl('cn-body');
+                if (bodyInput) bodyInput.value = parts[3] || '';
+            };
+        }
 
         if (isEdit) {
             const r = this.store.cnData[idx];
-            DashboardUtils.setVal('cn-fname', r.full_name);
-            DashboardUtils.setVal('cn-lname', r.last_name);
-            DashboardUtils.setVal('cn-body', r.body_number);
-            DashboardUtils.setVal('cn-driverid', r.driverid);
-            DashboardUtils.setVal('cn-amount', r.amount);
+
+            // Pre-select the driver in the dropdown
+            const driverSelect = DashboardUtils.getEl('cn-driver-select');
+            if (driverSelect) {
+                Array.from(driverSelect.options).forEach(o => {
+                    const parts = o.value.split('|');
+                    if (parts[1] === r.full_name && parts[2] === r.last_name) {
+                        o.selected = true;
+                    }
+                });
+            }
+
+            DashboardUtils.setVal('cn-body',     r.body_number);
+            DashboardUtils.setVal('cn-amount',   r.amount);
+            DashboardUtils.setVal('cn-date',     r.date);
+            DashboardUtils.setVal('cn-notes',    r.notes);
+
             const periodSelect = DashboardUtils.getEl('cn-period');
-            if (periodSelect) periodSelect.value = r.period;
-            DashboardUtils.setVal('cn-date', r.date);
             const statusSelect = DashboardUtils.getEl('cn-paystatus');
+            if (periodSelect) periodSelect.value = r.period;
             if (statusSelect) statusSelect.value = r.status;
-            DashboardUtils.setVal('cn-notes', r.notes);
         } else {
-            DashboardUtils.clearFields(['cn-fname', 'cn-lname', 'cn-body', 'cn-driverid', 'cn-notes']);
+            const driverSelect = DashboardUtils.getEl('cn-driver-select');
+            if (driverSelect) driverSelect.selectedIndex = 0;
+            DashboardUtils.setVal('cn-body',   '');
             DashboardUtils.setVal('cn-amount', '250');
+            DashboardUtils.setVal('cn-date',   new Date().toISOString().split('T')[0]);
             const periodSelect = DashboardUtils.getEl('cn-period');
             const statusSelect = DashboardUtils.getEl('cn-paystatus');
             if (periodSelect) periodSelect.selectedIndex = 0;
             if (statusSelect) statusSelect.selectedIndex = 0;
-            DashboardUtils.setVal('cn-date', new Date().toISOString().split('T')[0]);
         }
+
         DashboardUtils.openModal('cn-modal');
     }
 
@@ -186,38 +225,51 @@ export class ContributionsDashboard {
     }
 
     async save() {
-        const fname = DashboardUtils.getEl('cn-fname')?.value.trim();
-        const lname = DashboardUtils.getEl('cn-lname')?.value.trim();
-        const body = DashboardUtils.getEl('cn-body')?.value.trim();
-        const driverid = DashboardUtils.getEl('cn-driverid')?.value.trim();
-        const amount = parseFloat(DashboardUtils.getEl('cn-amount')?.value) || 0;
-        const period = DashboardUtils.getEl('cn-period')?.value;
-        const date = DashboardUtils.getEl('cn-date')?.value;
-        const status = DashboardUtils.getEl('cn-paystatus')?.value;
-        const notes = DashboardUtils.getEl('cn-notes')?.value.trim();
-        if (!fname || !lname) { DashboardUtils.getEl('cn-fname')?.focus(); return; }
+        const driverVal = DashboardUtils.getEl('cn-driver-select')?.value;
+        const amount    = parseFloat(DashboardUtils.getEl('cn-amount')?.value) || 0;
+        const date      = DashboardUtils.getEl('cn-date')?.value;
+        const status    = DashboardUtils.getEl('cn-paystatus')?.value;
+
+        if (!driverVal) {
+            DashboardUtils.getEl('cn-driver-select')?.focus();
+            return;
+        }
+
+        const [driverId, fname, lname, body] = driverVal.split('|');
 
         const payLoad = {
-            full_name: fname,
-            last_name: lname,
+            full_name:   fname,
+            last_name:   lname,
             body_number: body || '—',
-            driverid: driverid || '—',
-            amount, period, date, status, notes
+            driverid:    driverId,
+            amount,
+            date,
+            status,
+            notes: null,
         };
 
         let result;
         if (this.store.cnEditIdx !== null) {
-            const id = this.store.cnData[this.store.cnEditIdx].id || this.store.cnData[this.store.cnEditIdx]._id;
+            const id = this.store.cnData[this.store.cnEditIdx].id
+                    || this.store.cnData[this.store.cnEditIdx]._id;
             result = await ApiService.call(`/admin/contributions/${id}`, 'PUT', payLoad);
             if (result) {
                 DashboardUtils.showToast(`${fname} ${lname}'s record updated`);
-                ActivityLog.push({ icon: 'contrib', title: 'Contribution Updated', desc: `${fname} ${lname} - ${period}` });
+                window.ActivityLog?.push({
+                    icon: 'contrib',
+                    title: 'Contribution Updated',
+                    desc: `${fname} ${lname} - ₱${amount}`  // ← also fixed: was using undefined `period`
+                });
             }
         } else {
             result = await ApiService.call('/admin/contributions', 'POST', payLoad);
             if (result) {
                 DashboardUtils.showToast(`Contribution for ${fname} ${lname} recorded`);
-                ActivityLog.push({ icon: 'contrib', title: 'Contribution Recorded', desc: `${fname} ${lname} - ₱${amount}` });
+                window.ActivityLog?.push({
+                    icon: 'contrib',
+                    title: 'Contribution Recorded',
+                    desc: `${fname} ${lname} - ₱${amount}`
+                });
             }
         }
 
@@ -232,7 +284,7 @@ export class ContributionsDashboard {
         this.store.cnDeleteIdx = idx;
         const r = this.store.cnData[idx];
         const subEl = DashboardUtils.getEl('cn-confirm-sub');
-        if (subEl) subEl.textContent = `Delete contribution record for ${r.full_name} ${r.last_name} (${r.period})?`;
+        if (subEl) subEl.textContent = `Delete contribution record for ${r.full_name} ${r.last_name}?`;
         DashboardUtils.openModal('cn-confirm');
     }
 

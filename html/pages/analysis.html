@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+</head>
+<body>
+   <!-- ANALYSIS PAGE -->
+<div id="page-analysis">
+
+  <!-- Page Header -->
+  <div class="page-header" style="margin-bottom:24px">
+    <div class="meta">
+      <span class="status-dot"></span>
+      TODA Sovereign · Analytics Suite
+    </div>
+    <h1 style="font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:var(--text-dark)">
+      System <em style="color:var(--crimson);font-style:italic">Analysis</em>
+    </h1>
+    <p style="font-size:13px;color:var(--text-muted);margin-top:4px">
+      Comprehensive overview of all TODA Sovereign operations — contributions, violations, drivers, and more.
+    </p>
+  </div>
+
+  <!-- Period Toggle + Print -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px">
+    <div style="display:flex;gap:4px;background:var(--surface-2);border-radius:var(--radius);padding:4px;border:1px solid var(--border)">
+      <button id="an-period-week" class="an-period-btn active" onclick="window.analysisDashboard?.setPeriod('week')">Weekly</button>
+      <button id="an-period-month" class="an-period-btn" onclick="window.analysisDashboard?.setPeriod('month')">Monthly</button>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="an-print-btn" onclick="window.analysisDashboard?.printSection('all')">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Print Full Report
+      </button>
+      <button class="an-print-btn" onclick="window.analysisDashboard?.printSection('contributions')">Print Contributions</button>
+      <button class="an-print-btn" onclick="window.analysisDashboard?.printSection('violations')">Print Violations</button>
+      <button class="an-print-btn" onclick="window.analysisDashboard?.printSection('drivers')">Print Drivers</button>
+      <button class="an-print-btn" onclick="window.analysisDashboard?.printSection('lostfound')">Print Lost &amp; Found</button>
+    </div>
+  </div>
+
+  <!-- KPI Summary Row -->
+  <div class="an-kpi-row" id="an-kpi-row">
+    <div class="an-kpi-card an-kpi-crimson">
+      <div class="an-kpi-label">Total Contributions</div>
+      <div class="an-kpi-num" id="an-kpi-contrib">₱0.00</div>
+      <div class="an-kpi-sub" id="an-kpi-contrib-sub">0 records</div>
+    </div>
+    <div class="an-kpi-card">
+      <div class="an-kpi-label">Active Drivers</div>
+      <div class="an-kpi-num" id="an-kpi-drivers">0</div>
+      <div class="an-kpi-sub" id="an-kpi-drivers-sub">0 pending</div>
+    </div>
+    <div class="an-kpi-card">
+      <div class="an-kpi-label">Violations</div>
+      <div class="an-kpi-num" id="an-kpi-violations">0</div>
+      <div class="an-kpi-sub" id="an-kpi-violations-sub">this period</div>
+    </div>
+    <div class="an-kpi-card">
+      <div class="an-kpi-label">Lost Items</div>
+      <div class="an-kpi-num" id="an-kpi-lost">0</div>
+      <div class="an-kpi-sub" id="an-kpi-lost-sub">0 pending</div>
+    </div>
+    <div class="an-kpi-card">
+      <div class="an-kpi-label">New Drivers</div>
+      <div class="an-kpi-num" id="an-kpi-new-drivers">0</div>
+      <div class="an-kpi-sub">registered this period</div>
+    </div>
+  </div>
+
+  <!-- Charts Row 1: Contributions + Violations -->
+  <div class="an-charts-row" style="margin-bottom:20px">
+
+    <!-- Contributions Bar Chart -->
+    <div class="an-chart-card" id="an-section-contributions">
+      <div class="an-chart-header">
+        <div>
+          <div class="an-chart-title">Contribution Overview</div>
+          <div class="an-chart-sub">Paid vs Partial vs Unpaid this period</div>
+        </div>
+        <button class="an-print-btn-sm" onclick="window.analysisDashboard?.printSection('contributions')">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Print
+        </button>
+      </div>
+      <!-- ✅ fixed-height wrapper -->
+      <div style="position:relative;height:220px;width:100%">
+        <canvas id="an-contrib-chart"></canvas>
+      </div>
+      <div class="an-chart-legend">
+        <span class="an-legend-dot" style="background:#15803d"></span> Paid
+        <span class="an-legend-dot" style="background:#d97706;margin-left:12px"></span> Partial
+        <span class="an-legend-dot" style="background:var(--crimson);margin-left:12px"></span> Unpaid
+      </div>
+    </div>
+
+    <!-- Violations Donut Chart -->
+    <div class="an-chart-card" id="an-section-violations">
+      <div class="an-chart-header">
+        <div>
+          <div class="an-chart-title">Violations Breakdown</div>
+          <div class="an-chart-sub">Fine vs Warning distribution</div>
+        </div>
+        <button class="an-print-btn-sm" onclick="window.analysisDashboard?.printSection('violations')">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Print
+        </button>
+      </div>
+      <!-- ✅ fixed-height wrapper -->
+      <div style="position:relative;height:220px;width:100%">
+        <canvas id="an-vio-chart"></canvas>
+      </div>
+      <div class="an-chart-legend">
+        <span class="an-legend-dot" style="background:var(--crimson)"></span> Fine
+        <span class="an-legend-dot" style="background:#d97706;margin-left:12px"></span> Warning
+      </div>
+      <div style="margin-top:16px;border-top:1px solid var(--border-light);padding-top:14px">
+        <table style="width:100%;border-collapse:collapse;font-size:12px">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border-light)">
+              <th style="text-align:left;padding:6px 8px;color:var(--text-muted);font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase">Driver</th>
+              <th style="text-align:left;padding:6px 8px;color:var(--text-muted);font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase">Violation</th>
+              <th style="text-align:left;padding:6px 8px;color:var(--text-muted);font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase">Penalty</th>
+              <th style="text-align:left;padding:6px 8px;color:var(--text-muted);font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase">Date</th>
+            </tr>
+          </thead>
+          <tbody id="an-vio-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row 2: Drivers + Lost & Found -->
+  <div class="an-charts-row" style="margin-bottom:20px">
+
+    <!-- Driver Status Pie -->
+    <div class="an-chart-card" id="an-section-drivers">
+      <div class="an-chart-header">
+        <div>
+          <div class="an-chart-title">Driver Registry</div>
+          <div class="an-chart-sub">Status distribution + new registrations</div>
+        </div>
+        <button class="an-print-btn-sm" onclick="window.analysisDashboard?.printSection('drivers')">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Print
+        </button>
+      </div>
+      <!-- ✅ fixed-height wrapper -->
+      <div style="position:relative;height:200px;width:100%">
+        <canvas id="an-drivers-chart"></canvas>
+      </div>
+      <div class="an-chart-legend">
+        <span class="an-legend-dot" style="background:#15803d"></span> Active
+        <span class="an-legend-dot" style="background:#b8b8b8;margin-left:12px"></span> Inactive
+        <span class="an-legend-dot" style="background:var(--crimson);margin-left:12px"></span> Suspended
+        <span class="an-legend-dot" style="background:#d97706;margin-left:12px"></span> Pending
+      </div>
+      <div style="margin-top:16px;border-top:1px solid var(--border-light);padding-top:14px">
+        <div style="font-size:11px;font-weight:700;color:var(--text-muted);font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">
+          Newly Registered This Period
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border-light)">
+              <th style="text-align:left;padding:6px 8px;color:var(--text-muted);font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase">Name</th>
+              <th style="text-align:left;padding:6px 8px;color:var(--text-muted);font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase">Body #</th>
+              <th style="text-align:left;padding:6px 8px;color:var(--text-muted);font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase">Status</th>
+            </tr>
+          </thead>
+          <tbody id="an-new-drivers-table"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Lost & Found Status -->
+    <div class="an-chart-card" id="an-section-lostfound">
+      <div class="an-chart-header">
+        <div>
+          <div class="an-chart-title">Lost &amp; Found</div>
+          <div class="an-chart-sub">Pending vs Claimed vs Resolved</div>
+        </div>
+        <button class="an-print-btn-sm" onclick="window.analysisDashboard?.printSection('lostfound')">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Print
+        </button>
+      </div>
+      <!-- ✅ fixed-height wrapper -->
+      <div style="position:relative;height:200px;width:100%">
+        <canvas id="an-lf-chart"></canvas>
+      </div>
+      <div class="an-chart-legend">
+        <span class="an-legend-dot" style="background:#d97706"></span> Pending
+        <span class="an-legend-dot" style="background:#15803d;margin-left:12px"></span> Claimed
+        <span class="an-legend-dot" style="background:#0369a1;margin-left:12px"></span> Resolved
+      </div>
+      <div style="margin-top:16px;border-top:1px solid var(--border-light);padding-top:14px">
+        <table style="width:100%;border-collapse:collapse;font-size:12px">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border-light)">
+              <th style="text-align:left;padding:6px 8px;color:var(--text-muted);font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase">Item</th>
+              <th style="text-align:left;padding:6px 8px;color:var(--text-muted);font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase">Body #</th>
+              <th style="text-align:left;padding:6px 8px;color:var(--text-muted);font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase">Date</th>
+              <th style="text-align:left;padding:6px 8px;color:var(--text-muted);font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase">Status</th>
+            </tr>
+          </thead>
+          <tbody id="an-lf-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fare Matrix Section -->
+  <div class="an-chart-card" id="an-section-fare" style="margin-bottom:20px">
+    <div class="an-chart-header">
+      <div>
+        <div class="an-chart-title">Fare Matrix</div>
+        <div class="an-chart-sub">Current fare rates — Base, Highway, Special, Discounts</div>
+      </div>
+      <button class="an-print-btn-sm" onclick="window.analysisDashboard?.printSection('fare')">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Print
+      </button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start">
+      <!-- ✅ fixed-height wrapper -->
+      <div style="position:relative;height:200px;width:100%">
+        <canvas id="an-fare-chart"></canvas>
+      </div>
+      <div id="an-fare-table-wrap">
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead>
+            <tr style="background:var(--crimson)">
+              <th style="text-align:left;padding:10px 12px;color:rgba(255,255,255,0.8);font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase">Fare Type</th>
+              <th style="text-align:right;padding:10px 12px;color:rgba(255,255,255,0.8);font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase">Amount</th>
+            </tr>
+          </thead>
+          <tbody id="an-fare-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
