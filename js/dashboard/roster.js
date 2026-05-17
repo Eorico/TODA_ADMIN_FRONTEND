@@ -1,41 +1,22 @@
 import { DashboardUtils } from "../utils/utils.js";
 import { ApiService } from "../api/api_service.js";
 import { ActivityLog } from "../utils/activity_log.js";
- 
-/* ============================================
-   DASHBOARD: MEMBERS / ROSTER
-   ============================================
-   Endpoints used:
-     GET /admin/roster         → fetch all members
-     PUT /admin/roster/:id     → update a member record
-   ============================================
-   Members are added here automatically when a
-   driver is Accepted via DriversDashboard.
-   The backend's PUT /admin/riders/:id/accept
-   should create or update the corresponding
-   roster entry so this page reflects it on sync.
-   ============================================ */
- 
+import { cache } from "../utils/data_cache.js";
+
 export class RosterDashboard {
     constructor(store) {
         this.store   = store;
         this.editIdx = null;
     }
- 
-    // ─── DATA FETCH ──────────────────────────────────────────────────────────
- 
+
     async sync() {
-        const data = await ApiService.call('/admin/roster', 'GET');
-        
+        const data = await cache.fetch('/admin/roster');
         const members = Array.isArray(data) ? data : (this.store.members || []);
-        
         this.store.members = members;
         this.renderRoster(members);
         this.updateStats(members);
     }
- 
-    // ─── STATS ───────────────────────────────────────────────────────────────
- 
+
     updateStats(members) {
         const norm      = s => (s || '').toLowerCase();
         const total     = members.length;
@@ -51,11 +32,8 @@ export class RosterDashboard {
         set('stat-active',    active);
         set('stat-inactive',  inactive);
         set('stat-suspended', suspended);
-        // ...
     }
- 
-    // ─── RENDER TABLE ────────────────────────────────────────────────────────
- 
+
     renderRoster(list) {
         const tbody = DashboardUtils.getEl('roster-body');
         if (!tbody) return;
@@ -63,7 +41,7 @@ export class RosterDashboard {
         if (!list || !list.length) {
             tbody.innerHTML = `
                 <tr>
-                    <td colspan="6" style="text-align:center;color:var(--text-muted);padding:2rem">
+                    <td colspan="5" style="text-align:center;color:var(--text-muted);padding:2rem">
                         No members found.
                     </td>
                 </tr>`;
@@ -74,9 +52,7 @@ export class RosterDashboard {
             const displayName = m.full_name || '';
             const memberId    = m.id || m._id || '—';
             const bodyNo      = m.body_number || memberId;
-            const contrib     = m.contrib || '—';
-            const date        = m.date || '';
-            const email       = m.email || '—';
+            const email       = m.email   || '—';
             const contact     = m.contact || '—';
 
             return `
@@ -94,74 +70,77 @@ export class RosterDashboard {
                     <div style="font-size:12px;color:var(--text-light)">${contact}</div>
                 </td>
                 <td>
-                    ${contrib}
-                    <span style="color:var(--text-light);font-size:11px">· ${date}</span>
-                </td>
-                <td>
                     <button class="btn-edit"
-                    onclick="window.openModal('${displayName}', '${memberId}', '${bodyNo}', '${m.status}', '${contrib.replace('₱', '')}', ${i})">
+                    onclick="window.openModal('${displayName}', '${memberId}', '${bodyNo}', '${m.status}', '', ${i})">
                     Edit
                     </button>
                 </td>
                 </tr>`;
         }).join('');
     }
- 
-    // ─── MODAL ───────────────────────────────────────────────────────────────
- 
+
     openModal(name, id, body_number, status, contrib, idx) {
         this.editIdx = idx !== undefined ? idx : null;
- 
-        const modalNameEl    = DashboardUtils.getEl('modal-name');
-        const modalBodyEl    = DashboardUtils.getEl('modal-body');
-        const modalContribEl = DashboardUtils.getEl('modal-contrib');
-        const modalStatusEl  = DashboardUtils.getEl('modal-status');
- 
-        if (modalNameEl)    modalNameEl.textContent = `${name} (#${id})`;
-        if (modalBodyEl)    modalBodyEl.value       = body_number;
-        if (modalContribEl) modalContribEl.value    = contrib;
+
+        const modalNameEl   = DashboardUtils.getEl('modal-name');
+        const modalBodyEl   = DashboardUtils.getEl('modal-body');
+        const modalStatusEl = DashboardUtils.getEl('modal-status');
+
+        if (modalNameEl)  modalNameEl.textContent = `${name} (#${id})`;
+        if (modalBodyEl)  modalBodyEl.value       = body_number;
         if (modalStatusEl) {
             Array.from(modalStatusEl.options).forEach(o => {
                 o.selected = o.text.startsWith(status);
             });
         }
- 
+
         DashboardUtils.openModal('edit-modal');
     }
- 
-    // ─── SAVE ────────────────────────────────────────────────────────────────
- 
+
     async save() {
         if (this.editIdx === null) return;
- 
-        const contrib   = DashboardUtils.getEl('modal-contrib')?.value.trim();
+
         const statusEl  = DashboardUtils.getEl('modal-status');
         const statusVal = statusEl?.value || '';
         const member    = this.store.members[this.editIdx];
         if (!member) return;
- 
+
         const payload = {
             ...member,
-            contrib: contrib ? '₱' + contrib : member.contrib,
-            status:  statusVal || member.status,
-            date:    new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+            status: statusVal || member.status,
         };
- 
-        const id     = member._id || member.id;
-        const result = await ApiService.call(`/admin/roster/${id}`, 'PUT', payload);
- 
-        if (result) {
-            DashboardUtils.closeModal('edit-modal');
-            DashboardUtils.showToast(`${member.full_name}'s record updated.`);
-            await this.sync();
-            window.syncAll?.();
-        }
- 
+
+        // ── 1. Close modal immediately ───────────────────────────────
+        DashboardUtils.closeModal('edit-modal');
+
+        // ── 2. Optimistic update ─────────────────────────────────────
+        this.store.members[this.editIdx] = {
+            ...member,
+            status: statusVal || member.status,
+        };
+        this.renderRoster(this.store.members);
+        this.updateStats(this.store.members);
+
+        DashboardUtils.showToast(`${member.full_name}'s record updated.`);
         ActivityLog.push({
             icon:  'User',
             title: 'Member Record Updated',
-            desc:  `${member.full_name}'s status set to ${statusVal || member.status}`
+            desc:  `${member.full_name}'s status set to ${statusVal || member.status}`,
         });
+
+        // ── 3. Send to server in background ─────────────────────────
+        const id     = member._id || member.id;
+        const result = await ApiService.call(`/admin/roster/${id}`, 'PUT', payload);
+
+        if (result) {
+            cache.invalidate('/admin/roster');
+            await this.sync();
+        } else {
+            // Revert on failure
+            this.store.members[this.editIdx] = member;
+            this.renderRoster(this.store.members);
+            DashboardUtils.showToast('Update failed — changes reverted.');
+        }
     }
 
     init() {
@@ -172,8 +151,10 @@ export class RosterDashboard {
                 const q = searchInput.value.toLowerCase();
                 this.renderRoster(
                     this.store.members.filter(m => {
-                        const name = (`${m.full_name} ${m.last_name}`).toLowerCase();
-                        return name.includes(q) || String(m.id).includes(q) || String(m.body || '').includes(q);
+                        const name = (`${m.full_name} ${m.last_name || ''}`).toLowerCase();
+                        return name.includes(q)
+                            || String(m.id || '').includes(q)
+                            || String(m.body_number || '').includes(q);
                     })
                 );
             };

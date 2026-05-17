@@ -2,6 +2,7 @@ import { DashboardUtils } from "../utils/utils.js";
 import { ApiService } from "../api/api_service.js";
 import { ActivityLog } from "../utils/activity_log.js";
 import { CONFIG } from "../api/BASE_URL.js";
+import { cache } from "../utils/data_cache.js";
 /* ============================================
    DASHBOARD 3: DRIVERS REGISTRY
    ============================================
@@ -25,9 +26,9 @@ export class DriversDashboard {
  
     // ─── DATA FETCH ──────────────────────────────────────────────────────────
  
-    async sync() {
-        const data = await ApiService.call('/admin/riders', 'GET');
-        if (data) {
+     async sync() {
+        const data = await cache.fetch('/admin/riders');
+        if (Array.isArray(data)) {
             this.store.drData = data;
             this.render();
         }
@@ -311,20 +312,18 @@ export class DriversDashboard {
     async accept(idx) {
         const driver = this.store.drData[idx];
         const id     = driver._id || driver.id;
- 
+
         const result = await ApiService.call(`/admin/riders/${id}/accept`, 'PUT');
         if (result) {
+            cache.invalidate('/admin/riders', '/admin/roster');
             DashboardUtils.showToast(`${driver.full_name} ${driver.last_name} accepted and added to roster.`);
             ActivityLog.push({
-                icon: 'UserCheck',
+                icon:  'UserCheck',
                 title: 'Driver Accepted',
-                desc: `${driver.full_name} ${driver.last_name} · Body #${driver.body_number} is now an active member.`
+                desc:  `${driver.full_name} ${driver.last_name} · Body #${driver.body_number} is now an active member.`
             });
-            // Re-sync drivers list
             await this.sync();
-            // Re-sync the Members / Roster page so the new member appears there too
             await this._syncRoster();
-            window.syncAll?.();
         }
     }
  
@@ -341,6 +340,7 @@ export class DriversDashboard {
  
         const result = await ApiService.call(`/admin/riders/${id}/reject`, 'PUT');
         if (result) {
+            cache.invalidate('/admin/riders');
             DashboardUtils.showToast(`${driver.full_name} ${driver.last_name} has been rejected.`);
             ActivityLog.push({
                 icon: 'UserX',
@@ -348,34 +348,47 @@ export class DriversDashboard {
                 desc: `${driver.full_name} ${driver.last_name} set to Inactive.`
             });
             await this.sync();
-            window.syncAll?.();
         }
     }
  
     // ─── DELETE ──────────────────────────────────────────────────────────────
- 
     async delete(idx) {
         const driver = this.store.drData[idx];
         const id     = driver._id || driver.id;
- 
+
         if (!confirm(`Remove ${driver.full_name} ${driver.last_name} from the registry?`)) return;
- 
+
         const result = await ApiService.call(`/admin/riders/${id}`, 'DELETE');
         if (result) {
+            cache.invalidate('/admin/riders', '/admin/roster');
 
-            await ApiService.call(`/admin/roster/${id}`, 'DELETE')
-                    .catch(err => { console.log("Member record might not exist or already deleted", err); })
+            // Find the real roster _id by matching email or body_number
+            // instead of using the driver's id which is a different document
+            await this._deleteRosterEntry(driver);
 
             DashboardUtils.showToast('Driver removed from registry.');
             ActivityLog.push({
-                icon: 'user',
+                icon:  'user',
                 title: 'Driver Removed',
-                desc: `${driver.full_name} ${driver.last_name}`
+                desc:  `${driver.full_name} ${driver.last_name}`
             });
             await this.sync();
-            // Also refresh Members page in case they had a roster entry
             await this._syncRoster();
-            window.syncAll?.();
+        }
+    }
+
+    // ─── Find roster entry by email/body_number and delete it ────────────────
+    // The roster document has its OWN _id separate from the driver's _id.
+    // We must look it up first, not assume they share the same id.
+    async _deleteRosterEntry(driver) {
+        if (!driver.email) return;
+        try {
+            await ApiService.call(
+                `/admin/roster/by-email/${encodeURIComponent(driver.email)}`,
+                'DELETE'
+            );
+        } catch (err) {
+            console.warn('Roster entry delete failed:', err);
         }
     }
  
@@ -457,14 +470,14 @@ export class DriversDashboard {
         }
 
         const payload = {
-            full_name:                fname,
-            last_name:                lname,
-            body_number:              body    || '---',
-            contact:                  contact ? `+63 ${contact}` : '-',
-            email:                    email   || '',
-            status:                   status  || 'Active',
-            expiration_date_license:  DashboardUtils.getEl('drv-license-expiry')?.value || null,   
-            expiration_date_orcr:     DashboardUtils.getEl('drv-orcr-expiry')?.value    || null,  
+            full_name:               fname,
+            last_name:               lname,
+            body_number:             body    || '---',
+            contact:                 contact ? `+63 ${contact}` : '-',
+            email:                   email   || '',
+            status:                  status  || 'Active',
+            expiration_date_license: DashboardUtils.getEl('drv-license-expiry')?.value || null,
+            expiration_date_orcr:    DashboardUtils.getEl('drv-orcr-expiry')?.value    || null,
         };
 
         let result;
@@ -477,25 +490,27 @@ export class DriversDashboard {
         } else {
             result = await ApiService.call('/admin/riders', 'POST', payload);
             driverId = result?._id || result?.id;
-            console.log('New driver ID:', driverId); // ← confirm this is not undefined
         }
 
         if (!result) return;
+
+        // Complete all uploads BEFORE invalidating cache
         const orcrFile = DashboardUtils.getEl('drv-orcr-input')?.files?.[0];
         if (orcrFile && driverId) {
             await this._uploadOrcr(driverId, orcrFile);
         }
 
-        // ✅ Upload first, then close modal, then sync
         const licenseFile = DashboardUtils.getEl('drv-license-input')?.files?.[0];
         if (licenseFile && driverId) {
             const uploadResult = await this._uploadLicense(driverId, licenseFile);
-            // ✅ Patch the local store immediately so render shows the image right away
             if (uploadResult?.license_url) {
                 const idx = this.store.drData.findIndex(d => (d._id || d.id) === driverId);
                 if (idx !== -1) this.store.drData[idx].license_url = uploadResult.license_url;
             }
         }
+
+        // Invalidate AFTER all uploads finish, then sync once
+        cache.invalidate('/admin/riders');
 
         DashboardUtils.closeModal('driver-modal');
         DashboardUtils.showToast(
@@ -507,8 +522,7 @@ export class DriversDashboard {
             desc: `${fname} ${lname} · Body #${body}`
         });
 
-        await this.sync(); // ← final sync from DB, now licenseUrl is already saved
-        window.syncAll?.();
+        await this.sync();  // ← single sync after invalidate
         if ((status || 'Active') === 'Active') {
             await this._syncRoster();
         }
@@ -552,7 +566,7 @@ export class DriversDashboard {
      */
     async _syncRoster() {
         try {
-            const data = await ApiService.call('/admin/roster', 'GET');
+            const data = await cache.fetch('/admin/roster');
             const members = Array.isArray(data) ? data : []
             this._updateMemberStats(members);
             this._renderRosterTable(members);

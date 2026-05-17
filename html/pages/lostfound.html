@@ -6,109 +6,144 @@
     <title>Document</title>
 </head>
 <body>
-    <!-- LOST & FOUND PAGE -->
-    <div id="page-lostfound">
+  <!-- LOST & FOUND PAGE -->
+<div id="page-lostfound">
 
-      <!-- LEFT COLUMN -->
-      <div class="lf-left">
+  <!-- ── HEADER ── -->
+  <div class="lf-page-header">
+    <div>
+      <div class="lf-page-breadcrumb">Administration · Lost &amp; Found</div>
+      <h1 class="lf-page-title">Lost &amp; Found Registry</h1>
+      <p class="lf-page-desc">Post recovered items and track claim statuses.</p>
+    </div>
+    <div class="lf-page-stats">
+      <div class="lf-stat-pill" id="lf-count">0 items</div>
+    </div>
+  </div>
 
-        <!-- Header -->
-        <div class="lf-header">
-          <div class="lf-icon-wrap">
-            <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          </div>
-          <div class="lf-header-text">
-            <div class="lf-title">Post Lost &amp; Found Item</div>
-            <div class="lf-subtitle">Help Reunite Passengers With Their Belongings</div>
-          </div>
+  <div class="lf-layout">
+
+    <!-- ── LEFT: FORM ── -->
+    <div class="lf-form-col">
+      <div class="lf-form-card">
+        <div class="lf-form-card-title">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"
+              viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Post New Item
         </div>
 
-        <!-- Post Form Card -->
-        <div class="lf-form-card">
-          <div class="lf-section-label">Item Photo</div>
-          <div class="lf-photo-area" id="lf-photo-area" onclick="document.getElementById('lf-file-input').click()">
-            <svg class="photo-icon" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-            <div class="photo-tap">Tap to upload or take a photo</div>
-            <div class="photo-hint">High Resolution Preferred</div>
-            <div class="photo-overlay"><span>Change Photo</span></div>
-          </div>
-          <input type="file" id="lf-file-input" accept="image/*"/>
+        <!-- Photo upload -->
+        <div class="lf-photo-area" id="lf-photo-area"
+            onclick="document.getElementById('lf-file-input').click()">
+          <svg class="photo-icon" width="32" height="32" fill="none" stroke="currentColor"
+              stroke-width="1.5" viewBox="0 0 24 24">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+          <div class="photo-tap">Tap to upload photo</div>
+          <div class="photo-hint">Optional · High resolution preferred</div>
+          <div class="photo-overlay"><span>Change Photo</span></div>
+        </div>
+        <input type="file" id="lf-file-input" accept="image/*" style="display:none"/>
 
+        <div class="lf-field">
+          <label class="lf-label">Item Name *</label>
+          <input class="lf-input" id="lf-item-name" type="text" placeholder="e.g., Black Leather Wallet"/>
+        </div>
+
+        <div class="lf-row">
           <div class="lf-field">
-            <label class="lf-label">Item Name</label>
-            <input class="lf-input" id="lf-item-name" type="text" placeholder="e.g., Black Leather Wallet"/>
+            <label class="lf-label">Tricycle Body #</label>
+            <input class="lf-input" id="lf-body-num" type="text" placeholder="e.g., 2045"/>
           </div>
-
-          <div class="lf-row">
-            <div class="lf-field">
-              <label class="lf-label">Tricycle Body #</label>
-              <input class="lf-input" id="lf-body-num" type="text" placeholder="e.g., 2045"/>
-            </div>
-            <div class="lf-field">
-              <label class="lf-label">Date Found</label>
-              <input class="lf-input" id="lf-date" type="date"/>
-            </div>
+          <div class="lf-field">
+            <label class="lf-label">Date Found</label>
+            <input class="lf-input" id="lf-date" type="date"/>
           </div>
-
-          <button class="lf-submit" onclick="submitLostFound()">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-            POST ITEM TO BULLETIN
-          </button>
-          <div class="lf-submit-note">Once posted, this will be visible to all members and on the public dashboard.</div>
         </div>
 
-        <!-- Posted Items List -->
-        <div class="lf-items-list">
-          <div class="lf-items-title">Active Submissions</div>
+        <button class="lf-submit-btn" onclick="window.lfDashboard.submit()">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"
+              viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Post to Bulletin
+        </button>
+        <p class="lf-submit-note">Visible to all association members once posted.</p>
+      </div>
+    </div>
 
-          <div id="lf-items-container">
-            <div class="lf-item-row">
-              <div class="lf-item-thumb">
-                <svg width="22" height="22" fill="none" stroke="#ccc" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
-              </div>
-              <div class="lf-item-info">
-                <div class="lf-item-name">Black Leather Wallet</div>
-                <div class="lf-item-meta">Body #2045 &nbsp;•&nbsp; Found Oct 22</div>
-              </div>
-              <div class="lf-item-status status-pending">Pending</div>
-            </div>
+    <!-- ── RIGHT: ITEMS GRID ── -->
+    <div class="lf-grid-col">
+      <div class="lf-grid-header">
+        <div class="lf-grid-title">Active Submissions</div>
+      </div>
+      <div class="lf-items-grid" id="lf-items-container">
+        <!-- Rendered by LostFoundDashboard.renderItems() -->
+      </div>
+    </div>
 
-            <div class="lf-item-row">
-              <div class="lf-item-thumb">
-                <svg width="22" height="22" fill="none" stroke="#ccc" stroke-width="1.5" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-              </div>
-              <div class="lf-item-info">
-                <div class="lf-item-name">Samsung Galaxy A54</div>
-                <div class="lf-item-meta">Body #1138 &nbsp;•&nbsp; Found Oct 20</div>
-              </div>
-              <div class="lf-item-status status-claimed">Claimed</div>
-            </div>
+  </div><!-- end .lf-layout -->
 
-            <div class="lf-item-row">
-              <div class="lf-item-thumb">
-                <svg width="22" height="22" fill="none" stroke="#ccc" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-              </div>
-              <div class="lf-item-info">
-                <div class="lf-item-name">Child's Red Backpack</div>
-                <div class="lf-item-meta">Body #3301 &nbsp;•&nbsp; Found Oct 19</div>
-              </div>
-              <div class="lf-item-status status-pending">Pending</div>
-            </div>
+  <!-- ── EDIT MODAL ── -->
+  <div class="modal-overlay" id="lf-edit-modal">
+    <div class="modal-box" style="max-width:480px">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">Edit Lost &amp; Found Item</div>
+          <div class="modal-sub">Update the item's details or status.</div>
+        </div>
+        <button class="modal-close" onclick="window.lfDashboard.closeEditModal()">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+              viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
 
-            <div class="lf-item-row">
-              <div class="lf-item-thumb">
-                <svg width="22" height="22" fill="none" stroke="#ccc" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-              </div>
-              <div class="lf-item-info">
-                <div class="lf-item-name">Silver Wristwatch</div>
-                <div class="lf-item-meta">Body #0892 &nbsp;•&nbsp; Found Oct 18</div>
-              </div>
-              <div class="lf-item-status status-pending">Pending</div>
-            </div>
+      <div class="modal-body">
+        <div class="lf-field" style="margin-bottom:12px">
+          <label class="lf-label">Replace Photo (optional)</label>
+          <input type="file" id="lf-edit-file" accept="image/*" class="lf-input"
+              style="padding:6px;font-size:12px"/>
+          <img id="lf-edit-img-preview" style="width:100%;border-radius:8px;margin-top:8px;
+              display:none;max-height:160px;object-fit:cover;border:1px solid var(--border)"/>
+        </div>
+
+        <div class="lf-field">
+          <label class="lf-label">Item Name *</label>
+          <input class="lf-input" id="lf-edit-name" type="text" placeholder="Item name"/>
+        </div>
+
+        <div class="lf-row">
+          <div class="lf-field">
+            <label class="lf-label">Body #</label>
+            <input class="lf-input" id="lf-edit-body" type="text" placeholder="Body number"/>
           </div>
+          <div class="lf-field">
+            <label class="lf-label">Date</label>
+            <input class="lf-input" id="lf-edit-date" type="text" placeholder="e.g., Oct 22"/>
+          </div>
+        </div>
+
+        <div class="lf-field">
+          <label class="lf-label">Status</label>
+          <select class="lf-input" id="lf-edit-status">
+            <option value="Pending">Pending</option>
+            <option value="Claimed">Claimed</option>
+            <option value="Resolved">Resolved</option>
+          </select>
         </div>
       </div>
 
+      <div class="modal-footer">
+        <button class="modal-btn-secondary"
+            onclick="window.lfDashboard.closeEditModal()">Cancel</button>
+        <button class="modal-btn-primary"
+            onclick="window.lfDashboard.saveEdit()">Save Changes</button>
+      </div>
     </div>
+  </div>
+
+</div><!-- end #page-lostfound -->
 </body>
 </html>

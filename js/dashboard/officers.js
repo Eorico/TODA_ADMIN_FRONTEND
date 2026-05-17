@@ -1,5 +1,6 @@
 import { DashboardUtils } from "../utils/utils.js";
 import { ApiService } from "../api/api_service.js";
+import { cache } from "../utils/data_cache.js";
 
 export class OfficersDashboard {
     constructor(store) {
@@ -8,9 +9,8 @@ export class OfficersDashboard {
     }
 
     async sync() {
-        const data = await ApiService.call('/admin/officers', 'GET');
-        if (data) {
-            // ✅ id is now a plain string from the backend (str(o.id))
+        const data = await cache.fetch('/admin/officers');  // ← was ApiService.call
+        if (Array.isArray(data)) {
             this.store.officerData = data;
             this.render();
         }
@@ -163,10 +163,10 @@ export class OfficersDashboard {
         }
 
         if (result) {
+            cache.invalidate('/admin/officers');
             this.closeModal();
             DashboardUtils.showToast(`${fname} ${lname} saved.`);
             await this.sync();
-            window.syncAll?.();
         }
     }
 
@@ -198,10 +198,10 @@ export class OfficersDashboard {
 
         const result = await ApiService.call(`/admin/officers/${officerId}`, 'DELETE');
         if (result) {
+            cache.invalidate('/admin/officers');
             this.closeConfirm();
             DashboardUtils.showToast('Officer removed from council.');
             await this.sync();
-            window.syncAll?.();
         }
     }
 

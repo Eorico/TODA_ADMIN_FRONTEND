@@ -1,5 +1,6 @@
 import { DashboardUtils } from "../utils/utils.js";
 import { ApiService } from "../api/api_service.js";
+import { cache } from "../utils/data_cache.js";
 
 /* ============================================
    DASHBOARD 7: CONTRIBUTIONS
@@ -13,19 +14,19 @@ export class ContributionsDashboard {
     }
 
     async sync() {
+        // Both riders and contributions share the cache —
+        // if DriversDashboard already fetched riders this tick, this is free
         const [cnData, riderData] = await Promise.all([
-            ApiService.call('/admin/contributions', 'GET'),
-            ApiService.call('/admin/riders',        'GET'),   // ← add this
+            cache.fetch('/admin/contributions'),
+            cache.fetch('/admin/riders'),
         ]);
 
-        if (cnData) {
+        if (Array.isArray(cnData)) {
             this.store.cnData = cnData;
             this.filterRender();
         }
-
-        // Share rider data with the store so openModal can use it
-        if (riderData) {
-            this.store.drData = Array.isArray(riderData) ? riderData : [];
+        if (Array.isArray(riderData)) {
+            this.store.drData = riderData;
         }
     }
 
@@ -274,9 +275,12 @@ export class ContributionsDashboard {
         }
 
         if (result) {
+            cache.invalidate('/admin/contributions');
             this.closeModal();
+            // Invalidate only the endpoints this save affected
             await this.sync();
-            window.syncAll?.();
+            // Don't call syncAll — only sync pages that care about contributions
+            this.dashboards?.analysis?.sync();
         }
     }
 
@@ -299,10 +303,10 @@ export class ContributionsDashboard {
         const id = record.id || record._id;
         const result = await ApiService.call(`/admin/contributions/${id}`, 'DELETE');
         if (result) {
+            cache.invalidate('/admin/contributions');
             DashboardUtils.showToast('Record deleted.');
             this.closeConfirm();
             await this.sync();
-            window.syncAll?.();
         }
     }
 

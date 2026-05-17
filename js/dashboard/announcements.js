@@ -1,6 +1,7 @@
 import { DashboardUtils } from "../utils/utils.js";
 import { ApiService } from "../api/api_service.js";
 import { ActivityLog } from "../utils/activity_log.js";
+import { cache } from "../utils/data_cache.js";
 
 /* ============================================
    DASHBOARD 4: ANNOUNCEMENTS
@@ -11,14 +12,10 @@ export class AnnouncementsDashboard {
     }
 
     async sync() {
-        try {
-            const data = await ApiService.call('/admin/announcements', 'GET');
-            if (data) {
-                this.store.annPosts = data;
-                this.render();
-            }
-        } catch (error) {
-            DashboardUtils.showToast('Failed to load announcements', 'error');
+        const data = await cache.fetch('/admin/announcements');  // ← was ApiService.call
+        if (Array.isArray(data)) {
+            this.store.annPosts = data;
+            this.render();
         }
     }
 
@@ -88,7 +85,7 @@ export class AnnouncementsDashboard {
             this.store.annPosts = this.store.annPosts.filter(p => p.id !== id);
             this.render();
             DashboardUtils.showToast('Announcement removed.');
-            window.syncAll?.();
+            cache.invalidate('/admin/announcements');
             ActivityLog.push({
                 icon: 'announce',
                 title: 'Announcement Removed',
@@ -115,8 +112,8 @@ export class AnnouncementsDashboard {
         const newPost = await ApiService.call('/admin/announcements', 'POST', payload);
         
         if (newPost) {
-            await this.sync();  
-            window.syncAll?.();
+            cache.invalidate('/admin/announcements');
+            await this.sync();
             DashboardUtils.setVal('ann-new-title', '');
             DashboardUtils.setVal('ann-new-body', '');
             DashboardUtils.showToast(`Posted: ${title}`);

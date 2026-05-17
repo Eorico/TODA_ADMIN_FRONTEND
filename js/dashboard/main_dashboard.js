@@ -1,6 +1,8 @@
 import { DashboardUtils } from "../utils/utils.js";
 import { ApiService } from "../api/api_service.js";
 import { ActivityLog } from "../utils/activity_log.js";
+import { cache } from "../utils/data_cache.js";
+
 const ICONS = {
     user:     `<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>`,
     contrib:  `<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`,
@@ -16,15 +18,13 @@ export class MainDashboard {
     }
     
     async sync() {
-        const [constributions, members, lostFound] = await Promise.all([
-            ApiService.call('/admin/contributions', 'GET'),
-            ApiService.call('/admin/roster', 'GET'),
-            ApiService.call('/admin/lost-found', 'GET'),
+        const [contributions, members, lostFound] = await Promise.all([
+            cache.fetch('/admin/contributions'),
+            cache.fetch('/admin/roster'),
+            cache.fetch('/admin/lost-found'),
         ]);
-
         this.store.members = members || [];
-
-        this.updateContributions(constributions);
+        this.updateContributions(contributions);
         this.updateLostItems(lostFound);
         this.updateActiverDrivers(members);
         this.renderActivity();

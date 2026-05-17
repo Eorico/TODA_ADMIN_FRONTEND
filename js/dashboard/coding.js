@@ -1,6 +1,7 @@
 import { DashboardUtils } from "../utils/utils.js";
 import { ApiService }     from "../api/api_service.js";
 import { ActivityLog }    from "../utils/activity_log.js";
+import { cache } from "../utils/data_cache.js";
 
 export class CodingDashboard {
     constructor(store) {
@@ -11,9 +12,9 @@ export class CodingDashboard {
     // ── sync: fetch coding + violations + riders in parallel ──────
     async sync() {
         const [codingData, violationData, riderData] = await Promise.all([
-            ApiService.call('/admin/coding',     'GET'),
-            ApiService.call('/admin/violations', 'GET'),
-            ApiService.call('/admin/riders',     'GET'),
+            cache.fetch('/admin/coding'),      // ← was ApiService.call
+            cache.fetch('/admin/violations'),  // ← was ApiService.call
+            cache.fetch('/admin/riders'),      // ← was ApiService.call
         ]);
 
         if (codingData) {
@@ -207,6 +208,7 @@ export class CodingDashboard {
         }
 
         if (result) {
+            cache.invalidate('/admin/coding');
             DashboardUtils.showToast(isEdit ? 'Coding schedule updated' : `Coding schedule for ${day} added.`);
             ActivityLog.push({
                 icon: 'coding',
@@ -215,7 +217,6 @@ export class CodingDashboard {
             });
             this.closeModal();
             await this.sync();
-            window.syncAll?.();
         }
     }
 
@@ -237,11 +238,11 @@ export class CodingDashboard {
         const id     = entry.id || entry._id;
         const result = await ApiService.call(`/admin/coding/${id}`, 'DELETE');
         if (result) {
+            cache.invalidate('/admin/coding');
             DashboardUtils.showToast('Schedule deleted.');
             ActivityLog.push({ icon: 'coding', title: 'Coding Schedule Deleted', desc: `${entry.day} · ${entry.bodyRange}` });
             this.closeConfirm();
             await this.sync();
-            window.syncAll?.();
         }
     }
 
@@ -295,6 +296,7 @@ export class CodingDashboard {
 
         const result = await ApiService.call('/admin/violations', 'POST', payload);
         if (result) {
+            cache.invalidate('/admin/coding');
             DashboardUtils.showToast(`Violation recorded for ${driver_name}.`);
             ActivityLog.push({
                 icon: 'coding',
@@ -307,7 +309,7 @@ export class CodingDashboard {
 
             this.closeVioModal();
             await this.sync();
-            window.syncAll?.();
+         
         }
     }
 
@@ -374,9 +376,8 @@ export class CodingDashboard {
 
             // ── Check remaining violations, reinstate if none left ─────
             await this._checkAndReinstate(v.driver_id, v.driver_name);
-
+            cache.invalidate('/admin/coding');
             await this.sync();
-            window.syncAll?.();
         }
     }
 

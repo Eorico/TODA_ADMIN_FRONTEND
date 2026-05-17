@@ -1,5 +1,6 @@
 import { ApiService } from "../api/api_service.js";
 import { DashboardUtils } from "../utils/utils.js";
+import { cache } from "../utils/data_cache.js";
 
 /* ============================================
    ANALYSIS DASHBOARD
@@ -16,11 +17,11 @@ export class AnalysisDashboard {
     // ── sync all data in parallel ─────────────────────────────────
     async sync() {
         const [contrib, riders, violations, lostfound, fare] = await Promise.all([
-            ApiService.call('/admin/contributions', 'GET'),
-            ApiService.call('/admin/riders',        'GET'),
-            ApiService.call('/admin/violations',    'GET'),
-            ApiService.call('/admin/lost-found',    'GET'),
-            ApiService.call('/admin/fare',          'GET'),
+            cache.fetch('/admin/contributions'),
+            cache.fetch('/admin/riders'),
+            cache.fetch('/admin/violations'),
+            cache.fetch('/admin/lost-found'),
+            cache.fetch('/admin/fare'),
         ]);
 
         this.store.anContrib     = Array.isArray(contrib)     ? contrib     : [];
